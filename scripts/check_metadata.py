@@ -73,6 +73,8 @@ def check(rules_dir: Path, tests_dir: Path, policy_file: Path) -> list[str]:
                 errors.append(f"{where}: listed in no_technique but has a technique tag")
         elif not techniques:
             errors.append(f"{where}: missing attack.tNNNN tag (add one or list the rule in policy.yml with a reason)")
+        if techniques and not any(re.match(r"^attack\.[a-z][a-z-]+$", t) for t in tags):
+            errors.append(f"{where}: has a technique tag but no attack.<tactic> tag")
 
         if doc.is_correlation:
             for ref in doc.references:

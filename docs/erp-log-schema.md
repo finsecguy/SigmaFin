@@ -68,7 +68,11 @@ Payment proposals, runs and releases.
 ## Planned services
 
 `user_admin`, `system_audit` and `reporting` are reserved. Their fields will be documented here in the same commit as
-the first rule that uses them, so the schema never lists fields that no rule or test exercises.
+the first rule that uses them, so reserved services never list fields that no rule or test exercises.
+
+Some fields and values in the services above are defined ahead of use by later rules (`initiator`, `approver`,
+`payment_run_modified`, `outside_business_hours`). Today's rules use only `action`, `status`, `vendor_id` and
+`field_changed`.
 
 ## How this relates to real ERP audit data
 

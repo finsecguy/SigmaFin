@@ -5,7 +5,8 @@ payable, treasury, payroll, financial reporting and the ERP systems behind them.
 SOC analysts who need finance-specific coverage on top of generic rule sets, and it is a portfolio project, so
 testing and documentation come before rule count.
 
-**Status: work in progress.** 3 of the planned 25 rules exist. The table below lists only what is built.
+**Status: work in progress.** 3 of the planned 25 rules exist, plus one support rule used only as a correlation
+input. The table lists what is built, so it has 4 rows.
 
 ## Rules
 
@@ -63,7 +64,10 @@ and runs the query. Positive samples must match and negative samples must not. C
 same backend, which supports `event_count`, `value_count`, `temporal` and `temporal_ordered`, so no custom evaluator
 is used. Details that keep a negative from passing by accident: a SQL error or an unparseable timestamp fails the
 test instead of counting as no match, and `tests/test_harness.py` and `tests/test_gates.py` prove the harness and
-every CI gate can fail.
+the CI gates can fail: the em dash gate, the metadata gate (missing references, technique tag, tactic tag, negative
+sample, duplicate id), `sigma check` on an unknown technique and tactic, strict SPL conversion (unlisted failure and
+stale entry) and the generated docs check. Not self-tested: the pytest and `sigma check` steps are exercised only by
+running them, and the upload step is not exercised at all.
 
 ## Finance scoping and the ERP schema
 

@@ -47,14 +47,11 @@ def test_null_timestamp_is_an_error_not_a_non_match():
         lib.build_database([{"timestamp": "not a time", "action": "x"}], {"action"})
 
 
-def test_missing_timestamp_is_an_error():
-    path = lib.ROOT / "scripts" / "_tmp_no_ts.json"
+def test_missing_timestamp_is_an_error(tmp_path):
+    path = tmp_path / "no_ts.json"
     path.write_text('{"action": "x"}', encoding="utf-8")
-    try:
-        with pytest.raises(lib.SampleError):
-            lib.load_events(path)
-    finally:
-        path.unlink()
+    with pytest.raises(lib.SampleError):
+        lib.load_events(path)
 
 
 def test_sample_without_rule_field_is_a_non_match_not_an_error():

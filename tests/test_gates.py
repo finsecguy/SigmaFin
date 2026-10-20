@@ -20,6 +20,7 @@ sys.path.insert(0, str(SCRIPTS))
 import build_spl  # noqa: E402
 import check_metadata  # noqa: E402
 import check_no_em_dash  # noqa: E402
+import gen_docs  # noqa: E402
 import sigmafin_lib as lib  # noqa: E402
 
 BANK = "erp_vendor_payment/erp_vendor_bank_details_changed.yml"
@@ -77,6 +78,11 @@ def test_metadata_gate_fails_on_missing_technique_tag(tree):
     assert _meta(tree) != 0
 
 
+def test_metadata_gate_fails_on_missing_tactic_tag(tree):
+    _edit(tree / "rules" / BANK, "    - attack.impact\n", "")
+    assert _meta(tree) != 0
+
+
 def test_metadata_gate_fails_on_missing_negative_sample(tree):
     shutil.rmtree(tree / "tests" / "erp_vendor_payment" / "erp_vendor_bank_details_changed" / "negative")
     assert _meta(tree) != 0
@@ -112,3 +118,16 @@ def test_em_dash_gate_fails_on_em_dash(tmp_path):
     ok.write_text("plain text\n", encoding="utf-8")
     assert check_no_em_dash.scan([str(ok)]) == 0
     assert check_no_em_dash.scan([str(bad)]) != 0
+
+
+def test_generated_docs_gate_fails_when_docs_are_stale(tmp_path, monkeypatch):
+    docs = tmp_path / "docs"
+    shutil.copytree(gen_docs.DOCS, docs)
+    readme = tmp_path / "README.md"
+    shutil.copy(gen_docs.README, readme)
+    monkeypatch.setattr(gen_docs, "DOCS", docs)
+    monkeypatch.setattr(gen_docs, "README", readme)
+    monkeypatch.setattr(gen_docs, "OVERLAP", docs / "sigmahq_overlap.yml")
+    assert gen_docs.main(["--check"]) == 0
+    (docs / "attack-coverage.md").write_text("stale\n", encoding="utf-8")
+    assert gen_docs.main(["--check"]) != 0
