@@ -1,0 +1,41 @@
+title: Finance Account Sign-in From Country Outside Allowed List
+id: 5c7e2a91-3b48-4f06-8d1a-9e0b6f4c2d83
+name: entra_finance_signin_unlisted_country
+status: experimental
+description: |
+    Detects a successful Microsoft Entra sign-in by a finance user from a country that is not on an allowed list.
+    Attackers who steal a finance user's credentials or session token usually sign in from infrastructure in other
+    countries than the user's, and Microsoft reports attackers using proxies and VPNs in various countries during a
+    business email compromise campaign.
+    Two SigmaHQ rules (adf9f4d2-559e-4f5c-95be-c28dff0b1476 and 0f2468a2-5055-4212-a368-7321198ee706) wrap Microsoft
+    "new country" detections, which learn a baseline per user and need premium licenses. This rule needs neither:
+    it compares the sign-in country with a fixed list (allowed_countries) for a list of finance accounts
+    (finance_users). Both lists are placeholders defined in pipelines/finance_scope.yml and must be edited before use.
+    The sign-in log itself does not contain department or group membership.
+    It detects "outside the list", not "new for this user". Sigma cannot keep a baseline. Staff who travel, or work
+    from a country that is missing from the list, will alert until the list is tuned.
+    Assumes the Location column of the SigninLogs table, a two letter country code (see docs/entra-fields.md).
+references:
+    - https://attack.mitre.org/techniques/T1078/004/
+    - https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables/signinlogs
+    - https://www.microsoft.com/en-us/security/blog/2022/07/12/from-cookie-theft-to-bec-attackers-use-aitm-phishing-sites-as-entry-point-to-further-financial-fraud/
+author: SigmaFin Contributors
+date: 2026-10-20
+tags:
+    - attack.initial-access
+    - attack.t1078.004
+logsource:
+    product: azure
+    service: signinlogs
+detection:
+    selection:
+        UserPrincipalName|expand: '%finance_users%'
+        ResultType: 0
+    filter_allowed_country:
+        Location|expand: '%allowed_countries%'
+    condition: selection and not filter_allowed_country
+falsepositives:
+    - Finance staff travelling or working remotely from a country that is not in the allowed list
+    - Approved offshore or outsourced finance teams whose country has not been added to the list
+    - Sign-ins through a corporate VPN or SASE service whose exit point is in another country
+level: medium

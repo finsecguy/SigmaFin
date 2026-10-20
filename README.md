@@ -42,6 +42,7 @@ exists, and the rule's description says so.
 <!-- RULES:START -->
 | Rule | Theme | ATT&CK technique | Log source | Level | Notes |
 |---|---|---|---|---|---|
+| Finance Account Sign-in From Country Outside Allowed List (`entra_finance_signin_unlisted_country`) | 1. BEC and payment fraud | T1078.004 Cloud Accounts | azure/signinlogs | medium |  |
 | Finance Mailbox Inbox Rule Forwards Mail to External Address (`m365_inbox_rule_external_forward_finance`) | 1. BEC and payment fraud | T1114.003 Email Forwarding Rule | m365/audit | high |  |
 | Finance Mailbox Inbox Rule Hides or Deletes Finance Keyword Mail (`m365_inbox_rule_hides_finance_mail`) | 1. BEC and payment fraud | T1564.008 Email Hiding Rules | m365/audit | medium |  |
 | Finance Mailbox Forwarding Set to External Address (`m365_mailbox_forwarding_external_finance`) | 1. BEC and payment fraud | T1114.003 Email Forwarding Rule | m365/audit | high |  |
@@ -102,9 +103,10 @@ instead of silently producing an unscoped query.
 | Source | Rules use | Notes |
 |---|---|---|
 | Microsoft 365 audit and Exchange admin audit | `product: m365`, `service: audit` | Needs the `Parameters` flattening below |
+| Microsoft Entra sign-in logs | `product: azure`, `service: signinlogs` | Column names of the `SigninLogs` table, see [docs/entra-fields.md](docs/entra-fields.md) |
 | ERP application audit | `product: erp`, `service: vendor_master` or `payments` | Custom, vendor-neutral logsource |
 
-Planned sources not yet used by any rule: Entra ID sign-in and audit logs, proxy and DNS logs, Sysmon on finance
+Planned sources not yet used by any rule: Entra ID audit logs, proxy and DNS logs, Sysmon on finance
 workstations, and the reserved ERP services `user_admin`, `system_audit` and `reporting`.
 
 **ERP logsource.** Sigma has almost no ERP coverage, so SigmaFin defines its own logsource and field schema in
@@ -209,6 +211,8 @@ whether the URL resolves or supports the rule. That was done by hand when each r
   recipient per field or per event. The gap is asserted in `tests/known_gaps/`.
 - **Known inbox rule hiding gap.** `m365_inbox_rule_hides_finance_mail` requires a finance keyword. A hiding rule that
   selects mail by sender only is missed. The gap is asserted in `tests/known_gaps/`.
+- **Country rule is a list, not a baseline.** `entra_finance_signin_unlisted_country` alerts on "outside the list", not
+  on "new for this user".
 - **ATT&CK tags show intent, not coverage.** A tag does not mean the rule detects every procedure of the technique.
 - **CI has to pass on GitHub to count.** The badge at the top shows the state of the latest run.
 

@@ -57,3 +57,14 @@ rules:
         note: Its Set-Mailbox branch matches ForwardingSmtpAddress or ForwardingAddress on any mailbox, with no recipient domain check and no account scoping. Level medium, threat hunting.
     decision: keep-scoped
     scoping_added: Finance mailbox scope (finance_mailboxes placeholder, on the actor or the target mailbox) and an external recipient check (internal_domains placeholder).
+  entra_finance_signin_unlisted_country:
+    search_terms: [country, countryOrRegion, Location, infrequent, new country, signinlogs]
+    overlap:
+      - id: adf9f4d2-559e-4f5c-95be-c28dff0b1476
+        path: rules/cloud/azure/identity_protection/azure_identity_protection_new_coutry_region.yml
+        note: Wraps the Entra ID Protection "New country" risk detection, which needs a P2 and Defender for Cloud Apps license and learns a per user baseline. It has no finance scope and no fixed country list.
+      - id: 0f2468a2-5055-4212-a368-7321198ee706
+        path: rules/cloud/m365/threat_management/microsoft365_activity_from_infrequent_country.yml
+        note: Wraps the Defender for Cloud Apps infrequent country alert. Same difference.
+    decision: keep-scoped
+    scoping_added: Finance account scope (finance_users placeholder) and a fixed country allowlist (allowed_countries placeholder) that needs no baseline or premium license.

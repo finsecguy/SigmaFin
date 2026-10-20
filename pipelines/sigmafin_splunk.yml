@@ -2,7 +2,8 @@
 #
 # The sourcetype values are assumptions: change them to match how your data is
 # onboarded. "sigmafin:erp:*" is a made-up naming scheme for the vendor-neutral
-# ERP schema in docs/erp-log-schema.md. To map the generic ERP field names to
+# ERP schema in docs/erp-log-schema.md, and "sigmafin:entra:*" is a made-up name
+# for sign-in data shaped like the SigninLogs table (docs/entra-fields.md). To map the generic ERP field names to
 # the columns of a specific ERP audit log, add a field_name_mapping
 # transformation conditioned on the same logsource (see the commented example).
 name: SigmaFin Splunk logsource mapping
@@ -34,6 +35,14 @@ transformations:
       - type: logsource
         product: m365
         service: audit
+  - id: entra_signinlogs_sourcetype
+    type: add_condition
+    conditions:
+      sourcetype: sigmafin:entra:signinlogs
+    rule_conditions:
+      - type: logsource
+        product: azure
+        service: signinlogs
   # Illustrative only, not tested against any real ERP:
   # - id: erp_vendor_master_field_names
   #   type: field_name_mapping

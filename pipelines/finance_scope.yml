@@ -13,6 +13,17 @@ vars:
     - treasury@finance.example.com
     - payroll@finance.example.com
     - alice.ledger@finance.example.com
+  # Finance user principal names that sign in (AP, treasury, payroll staff).
+  finance_users:
+    - ap.clerk@finance.example.com
+    - treasury.analyst@finance.example.com
+    - payroll.lead@finance.example.com
+    - alice.ledger@finance.example.com
+  # Two letter country codes finance staff normally sign in from. Matches the
+  # SigninLogs Location column. Anything else is outside the list.
+  allowed_countries:
+    - US
+    - GB
   # Recipient domains treated as internal. Match is on the end of the value.
   internal_domains:
     - "@corp.example.com"
