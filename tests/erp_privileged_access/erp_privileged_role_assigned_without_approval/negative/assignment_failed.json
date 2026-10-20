@@ -1,0 +1,12 @@
+{
+  "timestamp": "2026-03-04T15:00:00Z",
+  "event_id": "ua-0002",
+  "source_system": "erp-test-01",
+  "user": "erp.admin1",
+  "action": "role_assigned",
+  "status": "failure",
+  "channel": "ui",
+  "target_user": "ap.clerk1",
+  "role_name": "PAYMENT_APPROVER",
+  "approval_status": "pending"
+}

@@ -101,3 +101,14 @@ rules:
     overlap: []
     decision: keep
     scoping_added: SigmaHQ has no ERP rules. The only break glass match is a GCP container deployment rule (different product and purpose).
+  erp_privileged_role_assigned_without_approval:
+    search_terms: [privileged role, role assign, role assigned]
+    overlap:
+      - id: b1bc08d1-8224-4758-a0e6-fbcfc98c73bb
+        path: rules/cloud/azure/privileged_identity_management/azure_pim_role_assigned_outside_of_pim.yml
+        note: Entra roles assigned outside Privileged Identity Management. Same idea (assignment outside the approval process) on a different product and log source.
+      - id: 49a268a4-72f4-4e38-8a7b-885be690c5b5
+        path: rules/cloud/azure/audit_logs/azure_priviledged_role_assignment_add.yml
+        note: Entra user added to a privileged role. Different product and log source.
+    decision: keep
+    scoping_added: SigmaHQ has no ERP rules. The related rules cover Entra roles, not ERP roles.

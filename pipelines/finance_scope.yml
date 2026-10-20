@@ -24,6 +24,13 @@ vars:
   allowed_countries:
     - US
     - GB
+  # Names of ERP roles that approve payments, maintain vendor master data or
+  # administer the ERP. These synthetic names are placeholders: use your own.
+  privileged_erp_roles:
+    - ERP_SUPER_ADMIN
+    - PAYMENT_APPROVER
+    - PAYMENT_RUN_ADMIN
+    - VENDOR_MASTER_MAINTAINER
   # Recipient domains treated as internal. Match is on the end of the value.
   internal_domains:
     - "@corp.example.com"

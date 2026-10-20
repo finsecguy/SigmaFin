@@ -56,6 +56,7 @@ exists, and the rule's description says so.
 | Vendor Master Bank Details Changed (`erp_vendor_bank_details_changed`) | 2. Vendor and payment manipulation (ERP) | T1657 Financial Theft | erp/vendor_master | medium |  |
 | Vendor Payment Released (`erp_vendor_payment_released`) | 2. Vendor and payment manipulation (ERP) | none (support rule) | erp/payments | informational | Support rule, not deployed alone |
 | ERP Emergency Access Started (`erp_emergency_access_started`) | 3. Privileged ERP and finance app abuse | T1078 Valid Accounts | erp/user_admin | medium |  |
+| ERP Privileged Role Assigned Without Approval (`erp_privileged_role_assigned_without_approval`) | 3. Privileged ERP and finance app abuse | T1098 Account Manipulation | erp/user_admin | high |  |
 <!-- RULES:END -->
 
 What each theme protects:

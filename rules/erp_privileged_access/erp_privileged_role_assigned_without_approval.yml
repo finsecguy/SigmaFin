@@ -1,0 +1,42 @@
+title: ERP Privileged Role Assigned Without Approval
+id: 7b8e720d-d21c-442d-a7a5-093fa3ac2cb0
+name: erp_privileged_role_assigned_without_approval
+status: experimental
+description: |
+    Detects a successful assignment of a privileged ERP role (role_name in the privileged_erp_roles list) whose
+    approval_status is anything other than approved, including a missing value. Roles that approve payments, maintain
+    vendor master data or administer the ERP let one account move money or hide it. An attacker or insider who can
+    assign such a role to themselves or an accomplice has bypassed the access request process. ATT&CK maps adding
+    roles or permissions to an account to Account Manipulation (T1098).
+    The list privileged_erp_roles is a placeholder defined in pipelines/finance_scope.yml with synthetic role names.
+    Replace it with your own privileged ERP roles before use. The ERP log does not say which roles are privileged.
+    Assumes your ERP records, or your ingestion joins in, the approval state of the access request as approval_status.
+    If it is never populated, every privileged assignment alerts. Tell this apart from a real finding before
+    deploying.
+    SigmaHQ has related rules for cloud identity roles (for example b1bc08d1-8224-4758-a0e6-fbcfc98c73bb for roles
+    assigned outside PIM). They work on Entra and not on ERP role assignments.
+references:
+    - https://attack.mitre.org/techniques/T1098/
+    - https://csf.tools/reference/nist-sp-800-53/r5/ac/ac-5/
+author: SigmaFin Contributors
+date: 2026-10-20
+tags:
+    - attack.persistence
+    - attack.privilege-escalation
+    - attack.t1098
+logsource:
+    product: erp
+    service: user_admin
+detection:
+    selection:
+        action: role_assigned
+        status: success
+        role_name|expand: '%privileged_erp_roles%'
+    filter_approved:
+        approval_status: approved
+    condition: selection and not filter_approved
+falsepositives:
+    - Emergency assignments approved after the fact by a manager, recorded as pending at the time of the event
+    - Bulk role changes from an identity governance migration or ERP upgrade that do not carry the approval status
+    - Assignments made by the identity governance tool, where the approval was recorded in another system
+level: high
