@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - name: Install pinned dependencies
+        run: pip install -r requirements.txt
+      - name: No em dashes
+        run: python scripts/check_no_em_dash.py
+      - name: Metadata gate (references, tags, samples, ids)
+        run: python scripts/check_metadata.py
+      - name: Validate rules with sigma-cli
+        run: sigma check --fail-on-issues --fail-on-error rules
+      - name: Tests (rule samples, harness and gate self-tests)
+        run: python -m pytest -q tests
+      - name: Generated docs are up to date
+        run: python scripts/gen_docs.py --check
+      - name: Convert rules to Splunk SPL
+        run: python scripts/build_spl.py
+      - name: Publish SPL as build artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: splunk-spl
+          path: build/spl
+          if-no-files-found: warn
