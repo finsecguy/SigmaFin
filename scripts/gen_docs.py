@@ -57,10 +57,10 @@ def kind(doc: lib.RuleDoc, support: set[str]) -> str:
     return "support rule" if doc.name in support else "single event"
 
 
-def technique_cell(doc: lib.RuleDoc) -> str:
+def technique_cell(doc: lib.RuleDoc, support: set[str]) -> str:
     ts = techniques(doc.data)
     if not ts:
-        return "none (fraud or support rule)"
+        return "none (support rule)" if doc.name in support else "fraud, no technique"
     return ", ".join(f"{t} {mitre_attack_techniques.get(t, '?')}" for t in ts)
 
 
@@ -77,7 +77,7 @@ def build_readme_table(docs, index, support, unsupported) -> str:
     lines = ["| Rule | Theme | ATT&CK technique | Log source | Level | Notes |", "|---|---|---|---|---|---|"]
     for doc in sorted(docs, key=lambda d: (list(THEMES).index(d.theme) if d.theme in THEMES else 99, d.name)):
         lines.append(
-            f"| {doc.data['title']} (`{doc.name}`) | {THEMES.get(doc.theme, doc.theme)} | {technique_cell(doc)} "
+            f"| {doc.data['title']} (`{doc.name}`) | {THEMES.get(doc.theme, doc.theme)} | {technique_cell(doc, support)} "
             f"| {logsource(doc, index)} | {doc.data['level']} | {note(doc, unsupported, support)} |"
         )
     return "\n".join(lines)
