@@ -1,0 +1,21 @@
+# Finance scoping for rules that use |expand placeholders.
+#
+# Sign-in, audit and ERP logs do not carry department or group membership, so
+# SigmaFin scopes finance rules with explicit lists. Replace every value below
+# with your own finance accounts and domains before deploying. The values here
+# are synthetic (RFC 2606 reserved domains) and are what the test harness uses.
+name: SigmaFin finance scope placeholders
+priority: 30
+vars:
+  # Finance user principal names and shared mailboxes (AP, treasury, payroll).
+  finance_mailboxes:
+    - ap@finance.example.com
+    - treasury@finance.example.com
+    - payroll@finance.example.com
+    - alice.ledger@finance.example.com
+  # Recipient domains treated as internal. Match is on the end of the value.
+  internal_domains:
+    - "@corp.example.com"
+transformations:
+  - id: expand_finance_scope
+    type: value_placeholders
