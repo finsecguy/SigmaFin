@@ -1,0 +1,9 @@
+# Exact set verified to install together on 2026-10-20.
+# sigma-cli 3.1.0 requires pySigma < 2.0, so pySigma 2.x and the newest
+# SQLite backend (2.1.x) cannot be used with it yet.
+pysigma==1.5.1
+sigma-cli==3.1.0
+pysigma-backend-sqlite==2.0.0
+pysigma-backend-splunk==2.1.0
+pytest==9.1.1
+PyYAML==6.0.3
