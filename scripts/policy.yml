@@ -21,6 +21,12 @@ no_technique:
     reason: Support rule for a correlation. A payment release alone is not a technique.
   - name: erp_new_vendor_paid_quickly
     reason: Business process fraud (fictitious vendor scheme). No ATT&CK technique maps cleanly.
+  - name: erp_sod_vendor_created_event
+    reason: Support rule for a correlation. A vendor creation alone is not a technique.
+  - name: erp_sod_payment_approved_event
+    reason: Support rule for a correlation. A payment approval alone is not a technique.
+  - name: erp_vendor_created_and_payment_approved_by_same_user
+    reason: Business process fraud (segregation of duties break). No ATT&CK technique maps cleanly.
 
 # Rules that exist only as correlation inputs. They are converted as part of
 # their correlation but never written out as standalone queries.
@@ -30,6 +36,8 @@ support_rules:
   - entra_finance_anonymous_signin_event
   - erp_new_vendor_created_event
   - erp_new_vendor_payment_released_event
+  - erp_sod_vendor_created_event
+  - erp_sod_payment_approved_event
   - m365_inbox_rule_change_event
 
 # Support rules that must keep the same logsource and detection as a standalone
@@ -41,6 +49,8 @@ mirrors:
     of: entra_finance_signin_anonymous_ip
   - support: erp_new_vendor_payment_released_event
     of: erp_vendor_payment_released
+  - support: erp_sod_vendor_created_event
+    of: erp_new_vendor_created_event
 
 # Rules the pySigma Splunk backend cannot convert. CI fails if a rule fails to
 # convert and is not listed here, and also if a listed rule starts converting.

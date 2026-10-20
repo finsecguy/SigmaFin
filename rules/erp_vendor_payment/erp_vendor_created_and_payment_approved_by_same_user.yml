@@ -1,0 +1,90 @@
+title: Vendor Created (Segregation of Duties Correlation Input)
+id: d7d1350e-65d8-4b44-8c94-e736187e6f0f
+name: erp_sod_vendor_created_event
+status: experimental
+description: |
+    Support rule for erp_vendor_created_and_payment_approved_by_same_user. Its detection must stay identical to
+    erp_new_vendor_created_event; scripts/check_metadata.py fails the build if the two diverge.
+    It is a separate copy because a support rule that two correlations share makes pySigma fail when the whole
+    rules directory is converted. Do not deploy this rule standalone.
+    No ATT&CK technique applies to a vendor creation by itself, so no technique tag is set.
+references:
+    - https://csf.tools/reference/nist-sp-800-53/r5/ac/ac-5/
+author: SigmaFin Contributors
+date: 2026-10-20
+logsource:
+    product: erp
+    service: vendor_master
+detection:
+    selection:
+        action: vendor_created
+        status: success
+    condition: selection
+falsepositives:
+    - Every legitimate vendor onboarding matches, which is why this is only used as a correlation input
+level: informational
+---
+title: Vendor Payment Approved (Correlation Input)
+id: 705abc5c-ae0b-44d1-ac4e-5530b3a81f79
+name: erp_sod_payment_approved_event
+status: experimental
+description: |
+    Support rule for erp_vendor_created_and_payment_approved_by_same_user. Matches every successful payment approval in
+    the vendor-neutral ERP schema (logsource product erp, service payments). The account that approved is the user
+    field of the event.
+    It is not an alert on its own: every legitimate approval matches it. Do not deploy it standalone.
+    No ATT&CK technique applies to a payment approval by itself, so no technique tag is set.
+references:
+    - https://csf.tools/reference/nist-sp-800-53/r5/ac/ac-5/
+author: SigmaFin Contributors
+date: 2026-10-20
+logsource:
+    product: erp
+    service: payments
+detection:
+    selection:
+        action: payment_approved
+        status: success
+    condition: selection
+falsepositives:
+    - Every legitimate payment approval matches, which is why this is only used as a correlation input
+level: informational
+---
+title: Same User Created a Vendor and Approved a Payment to It
+id: e61a55ef-585a-4b7e-bc43-f0558626f3d5
+name: erp_vendor_created_and_payment_approved_by_same_user
+status: experimental
+description: |
+    Detects one account creating a vendor and approving a payment to that vendor within 30 days, grouped by vendor_id
+    and user. This breaks segregation of duties: the person who can add a supplier should not also release money to
+    it, because together those two steps are what a fictitious vendor scheme needs. NIST SP 800-53 control AC-5
+    expects access authorizations that support separation of duties, and describes it as reducing the risk of abuse
+    without collusion.
+    The correlation is unordered (temporal): approving a payment to a vendor that does not exist yet cannot happen,
+    so the order adds nothing, and unordered correlations convert to Splunk.
+    No ATT&CK technique applies. This is business process fraud, tagged with no ATT&CK technique.
+    It only sees the approval event. If your ERP puts the approving account in a different field than user, map it
+    into user at ingestion (docs/erp-log-schema.md). Small teams where one person legitimately does both need an
+    exception list, or a compensating review.
+    The 30 day window is a starting point. SQLite evaluates a sliding window. The generated SPL groups events into
+    fixed time bins, so a pair that straddles a bin boundary is not seen by the SPL. The SPL has not been executed.
+references:
+    - https://csf.tools/reference/nist-sp-800-53/r5/ac/ac-5/
+    - https://www.criadv.com/insight/unearthing-occupational-fraud-in-your-business
+author: SigmaFin Contributors
+date: 2026-10-20
+correlation:
+    type: temporal
+    rules:
+        - erp_sod_vendor_created_event
+        - erp_sod_payment_approved_event
+    group-by:
+        - vendor_id
+        - user
+    timespan: 30d
+    generate: false
+falsepositives:
+    - Very small finance teams where one person legitimately creates vendors and approves payments, with a compensating review
+    - A system or migration account that creates vendors in bulk and also approves a payment run
+    - Test or training environments that share the log
+level: high

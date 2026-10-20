@@ -127,3 +127,18 @@ rules:
     overlap: []
     decision: keep
     scoping_added: SigmaHQ has no ERP or accounts payable rules.
+  erp_sod_vendor_created_event:
+    search_terms: [vendor, new vendor, separation of duties, segregation]
+    overlap: []
+    decision: keep
+    scoping_added: Support rule that mirrors erp_new_vendor_created_event for use inside its own correlation. SigmaHQ has no ERP rules.
+  erp_sod_payment_approved_event:
+    search_terms: [payment approval, separation of duties, segregation, accounts payable]
+    overlap: []
+    decision: keep
+    scoping_added: Support rule for erp_vendor_created_and_payment_approved_by_same_user. SigmaHQ has no ERP rules.
+  erp_vendor_created_and_payment_approved_by_same_user:
+    search_terms: [separation of duties, segregation, vendor, payment approval]
+    overlap: []
+    decision: keep
+    scoping_added: SigmaHQ has no ERP rules and no segregation of duties rules.
