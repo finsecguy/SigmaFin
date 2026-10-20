@@ -85,6 +85,15 @@ def check(rules_dir: Path, tests_dir: Path, policy_file: Path) -> list[str]:
             if not lib.sample_files(doc.theme, doc.name, kind, tests_dir):
                 errors.append(f"{where}: no {kind} sample in tests/{doc.theme}/{doc.name}/{kind}/")
 
+    for mirror in policy.get("mirrors", []):
+        support, original = index.get(mirror["support"]), index.get(mirror["of"])
+        if support is None or original is None:
+            errors.append(f"policy.yml mirror lists unknown rule: {mirror}")
+            continue
+        for key in ("logsource", "detection"):
+            if support.data.get(key) != original.data.get(key):
+                errors.append(f"{support.name}: {key} differs from {original.name} (mirrored rules must match)")
+
     for entry in policy.get("no_technique", []) + policy.get("support_rules", []) + policy.get("splunk_unsupported", []):
         name = entry["name"] if isinstance(entry, dict) else entry
         if name not in index:

@@ -1,0 +1,14 @@
+{
+  "timestamp": "2026-03-02T09:00:00Z",
+  "event_id": "vm-0001",
+  "source_system": "erp-test-01",
+  "user": "ap.clerk1",
+  "action": "vendor_updated",
+  "status": "success",
+  "channel": "ui",
+  "vendor_id": "V100234",
+  "field_changed": "payment_terms",
+  "old_value_masked": "****4321",
+  "new_value_masked": "****9876",
+  "approval_status": "pending"
+}

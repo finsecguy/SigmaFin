@@ -1,3 +1,37 @@
+title: Vendor Bank Details Changed (Correlation Input)
+id: b5d7c2f1-3a98-4e60-8c4d-1f6a9e0b7d33
+name: erp_vendor_bank_change_event
+status: experimental
+description: |
+    Support rule for erp_vendor_bank_change_then_payment. Its detection must stay identical to the standalone rule
+    erp_vendor_bank_details_changed; scripts/check_metadata.py fails the build if the two diverge.
+    It exists because pySigma does not output a rule that a correlation references. Keeping the correlation on its own
+    copy lets erp_vendor_bank_details_changed alert on its own even when the whole rules directory is converted at once.
+    Do not deploy this rule standalone. No ATT&CK technique is tagged on this support rule because the standalone rule
+    carries it.
+references:
+    - https://attack.mitre.org/techniques/T1657/
+author: SigmaFin Contributors
+date: 2026-10-20
+logsource:
+    product: erp
+    service: vendor_master
+detection:
+    selection:
+        action: vendor_updated
+        status: success
+        field_changed:
+            - bank_account_number
+            - iban
+            - bank_routing_number
+            - swift_bic
+            - bank_name
+            - bank_country
+    condition: selection
+falsepositives:
+    - Every legitimate bank detail change matches, which is why this is only used as a correlation input
+level: informational
+---
 title: Vendor Payment Released
 id: d2e6b9a4-1c73-4f58-b0a9-6e8f3c5d7a12
 name: erp_vendor_payment_released
@@ -34,11 +68,11 @@ description: |
     followed by payments to the new account. ATT&CK maps this to Financial Theft (T1657).
     The 3 day window is a starting point. Tune it to your payment run schedule: weekly runs can need 7 days, daily
     runs can use less.
-    The base rule erp_vendor_bank_details_changed also stays useful alone as a medium level alert; this correlation
-    raises the severity when money moves. Because pySigma suppresses base rules referenced by a correlation unless
-    generate is true, and generate: true would also emit the noisy payment rule, deploy the bank change rule from its
-    own file when you want the standalone alert (see README).
-    Needs a backend with temporal_ordered correlation support. The pySigma Splunk backend 2.1.0 does not convert it.
+    The standalone rule erp_vendor_bank_details_changed keeps alerting at medium level on its own; this correlation
+    raises the severity when money moves. The correlation uses its own copy of the bank change condition
+    (erp_vendor_bank_change_event) so both can be deployed together.
+    Needs a backend with temporal_ordered correlation support. The pySigma Splunk backend 2.1.0 does not convert it,
+    so this rule is tested on the SQLite backend only and has no SPL output.
 references:
     - https://attack.mitre.org/techniques/T1657/
     - https://www.ic3.gov/PSA/2017/PSA170504
@@ -51,7 +85,7 @@ tags:
 correlation:
     type: temporal_ordered
     rules:
-        - erp_vendor_bank_details_changed
+        - erp_vendor_bank_change_event
         - erp_vendor_payment_released
     group-by:
         - vendor_id

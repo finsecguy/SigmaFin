@@ -32,3 +32,8 @@ rules:
     overlap: []
     decision: keep
     scoping_added: SigmaHQ has no ERP or accounts payable rules.
+  erp_vendor_bank_change_event:
+    search_terms: [vendor, "bank account", "bank detail", vendor_master]
+    overlap: []
+    decision: keep
+    scoping_added: Support rule that mirrors erp_vendor_bank_details_changed for use inside a correlation. SigmaHQ has no ERP or accounts payable rules.

@@ -7,14 +7,23 @@
 no_technique:
   - name: erp_vendor_payment_released
     reason: Support rule for a correlation. A payment release alone is not a technique.
+  - name: erp_vendor_bank_change_event
+    reason: Support rule for a correlation. The standalone rule erp_vendor_bank_details_changed carries the technique.
 
 # Rules that exist only as correlation inputs. They are converted as part of
 # their correlation but never written out as standalone queries.
 support_rules:
   - erp_vendor_payment_released
+  - erp_vendor_bank_change_event
+
+# Support rules that must keep the same logsource and detection as a standalone
+# rule, so the correlation input cannot drift from the alerting rule.
+mirrors:
+  - support: erp_vendor_bank_change_event
+    of: erp_vendor_bank_details_changed
 
 # Rules the pySigma Splunk backend cannot convert. CI fails if a rule fails to
 # convert and is not listed here, and also if a listed rule starts converting.
 splunk_unsupported:
   - name: erp_vendor_bank_change_then_payment
-    reason: pySigma Splunk backend 2.1.0 does not support temporal_ordered correlation.
+    reason: Splunk backend 2.1.0 lacks temporal_ordered correlation support. Sigma + SQLite tested, no SPL.

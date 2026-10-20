@@ -83,6 +83,12 @@ def test_metadata_gate_fails_on_missing_tactic_tag(tree):
     assert _meta(tree) != 0
 
 
+def test_metadata_gate_fails_when_mirrored_support_rule_diverges(tree):
+    path = tree / "rules" / "erp_vendor_payment" / "erp_vendor_bank_change_then_payment.yml"
+    _edit(path, "        field_changed:\n            - bank_account_number\n", "        field_changed:\n            - iban\n")
+    assert _meta(tree) != 0
+
+
 def test_metadata_gate_fails_on_missing_negative_sample(tree):
     shutil.rmtree(tree / "tests" / "erp_vendor_payment" / "erp_vendor_bank_details_changed" / "negative")
     assert _meta(tree) != 0
