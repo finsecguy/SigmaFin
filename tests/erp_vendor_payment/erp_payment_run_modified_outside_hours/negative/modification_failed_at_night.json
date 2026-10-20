@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-03-07T02:10:00Z",
+  "event_id": "pay-0100",
+  "source_system": "erp-test-01",
+  "user": "treasury.analyst1",
+  "action": "payment_run_modified",
+  "status": "failure",
+  "channel": "ui",
+  "payment_run_id": "RUN-2026-0307",
+  "outside_business_hours": true
+}

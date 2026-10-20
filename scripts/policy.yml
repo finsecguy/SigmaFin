@@ -13,6 +13,8 @@ no_technique:
     reason: Support rule for a correlation. The standalone rule entra_finance_signin_anonymous_ip carries the technique.
   - name: m365_inbox_rule_change_event
     reason: Support rule for a correlation. An inbox rule change by itself is not a technique.
+  - name: erp_payment_run_modified_outside_hours
+    reason: Business process fraud. A payment run change is a normal business action, so no ATT&CK technique maps cleanly.
 
 # Rules that exist only as correlation inputs. They are converted as part of
 # their correlation but never written out as standalone queries.

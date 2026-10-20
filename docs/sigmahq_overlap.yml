@@ -91,3 +91,8 @@ rules:
     overlap: []
     decision: keep
     scoping_added: No SigmaHQ rule correlates an anonymous sign-in with a following inbox rule change on a finance account.
+  erp_payment_run_modified_outside_hours:
+    search_terms: [payment run, payment_run, outside business hours, after hours, off-hours]
+    overlap: []
+    decision: keep
+    scoping_added: SigmaHQ has no ERP or accounts payable rules and no time-of-day rules for payment runs.

@@ -1,0 +1,36 @@
+title: Payment Run Modified Outside Business Hours
+id: 7e02b5c5-c752-498b-b5bb-b773a6d4d2b4
+name: erp_payment_run_modified_outside_hours
+status: experimental
+description: |
+    Detects a successful modification of a payment run in the vendor-neutral ERP schema (logsource product erp,
+    service payments) at a time the enrichment field outside_business_hours marks as outside business hours.
+    A payment run is the batch that moves supplier money. Changing it when few people are watching gives an attacker
+    or a dishonest insider time before anyone notices. The Bangladesh Bank case is a public example of timing:
+    reporting says the attackers sent their fraudulent payment orders at the start of a weekend so that no one could
+    answer the queries quickly. That was a different system (SWIFT), so this is an analogy for the timing, not a
+    claim about ERP payment runs.
+    No ATT&CK technique applies cleanly. A payment run change is a business action, so this rule is tagged as
+    business process fraud, with no ATT&CK technique.
+    Needs the outside_business_hours field, which Sigma cannot compute. Your ingestion must set it to true or false
+    from the event time, the ERP time zone, your working calendar and your holidays (see docs/erp-log-schema.md). If
+    the field is missing, the rule never matches. SigmaFin does not compute it.
+references:
+    - https://www.thedailystar.net/frontpage/hackers-chose-weekend-break-bb-systems-788368
+    - https://www.ic3.gov/PSA/2020/PSA200406
+author: SigmaFin Contributors
+date: 2026-10-20
+logsource:
+    product: erp
+    service: payments
+detection:
+    selection:
+        action: payment_run_modified
+        status: success
+        outside_business_hours: true
+    condition: selection
+falsepositives:
+    - Month-end or quarter-end close, when treasury legitimately works late or at weekends
+    - Finance teams in several time zones, where the enrichment calendar does not match the person's working day
+    - Scheduled jobs that adjust payment runs overnight (filter on the service account)
+level: medium
