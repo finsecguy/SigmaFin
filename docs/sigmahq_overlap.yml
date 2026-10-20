@@ -76,3 +76,18 @@ rules:
         note: Matches the riskdetection log for riskEventType anonymizedIPAddress. No account scoping and no check that the sign-in succeeded. Level high.
     decision: keep-scoped
     scoping_added: Finance account scope (finance_users placeholder) and a successful sign-in requirement, read from the sign-in log RiskEventTypes_V2 column instead of the risk detection log.
+  entra_finance_anonymous_signin_event:
+    search_terms: [anonymous, anonymizedIPAddress, RiskEventTypes, signinlogs]
+    overlap: []
+    decision: keep
+    scoping_added: Support rule that mirrors entra_finance_signin_anonymous_ip for use inside a correlation. See that rule for the overlap with SigmaHQ.
+  m365_inbox_rule_change_event:
+    search_terms: [inbox rule, InboxRule, New-InboxRule, Set-InboxRule]
+    overlap: []
+    decision: keep
+    scoping_added: Support rule for a correlation. It matches every inbox rule change. See m365_inbox_rule_hides_finance_mail for the overlap with SigmaHQ.
+  entra_anonymous_signin_then_inbox_rule:
+    search_terms: [anonymous, anonymizedIPAddress, inbox rule, correlation, temporal]
+    overlap: []
+    decision: keep
+    scoping_added: No SigmaHQ rule correlates an anonymous sign-in with a following inbox rule change on a finance account.

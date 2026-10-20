@@ -1,0 +1,105 @@
+title: Finance Anonymous Sign-in Correlation Input
+id: 7a4f1c92-5d08-4b36-9e71-c3b8a0d2f645
+name: entra_finance_anonymous_signin_event
+status: experimental
+description: |
+    Support rule for entra_anonymous_signin_then_inbox_rule. Its detection must stay identical to the standalone rule
+    entra_finance_signin_anonymous_ip; scripts/check_metadata.py fails the build if the two diverge.
+    It exists because pySigma does not output a rule that a correlation references. Keeping the correlation on its own
+    copy lets entra_finance_signin_anonymous_ip alert on its own even when the whole rules directory is converted at
+    once. Do not deploy this rule standalone. No ATT&CK technique is tagged on this support rule because the
+    standalone rule carries it.
+references:
+    - https://learn.microsoft.com/en-us/entra/id-protection/concept-identity-protection-risks
+author: SigmaFin Contributors
+date: 2026-10-20
+logsource:
+    product: azure
+    service: signinlogs
+detection:
+    selection:
+        UserPrincipalName|expand: '%finance_users%'
+        ResultType: 0
+        RiskEventTypes_V2|contains: anonymizedIPAddress
+    condition: selection
+falsepositives:
+    - Every match of the standalone rule is a match here, which is why this is only used as a correlation input
+level: informational
+---
+title: Inbox Rule Change (Correlation Input)
+id: 0e6b3d57-8c21-4a94-b5f0-7d1a9c4e2368
+name: m365_inbox_rule_change_event
+status: experimental
+description: |
+    Support rule for entra_anonymous_signin_then_inbox_rule. Matches every New-InboxRule or Set-InboxRule, whatever
+    the rule does and whose mailbox it is. Hiding and forwarding rules have their own standalone rules
+    (m365_inbox_rule_hides_finance_mail and m365_inbox_rule_external_forward_finance), but the correlation needs the
+    plain event because an attacker's rule may do neither (for example a rule that only moves mail from one sender).
+    It is not an alert on its own: every legitimate inbox rule matches it. Do not deploy it standalone.
+    No ATT&CK technique applies to an inbox rule change by itself, so no technique tag is set.
+    It has no finance scope on purpose. The correlation scopes to finance on the sign-in side (finance_users) and
+    joins both sides on the same user, so only an account that had an anonymous sign-in can produce a match.
+references:
+    - https://learn.microsoft.com/en-us/defender-office-365/responding-to-a-compromised-email-account
+author: SigmaFin Contributors
+date: 2026-10-20
+logsource:
+    product: m365
+    service: audit
+detection:
+    selection:
+        Operation:
+            - New-InboxRule
+            - Set-InboxRule
+    condition: selection
+falsepositives:
+    - Every legitimate inbox rule change matches, which is why this is only used as a correlation input
+level: informational
+---
+title: Finance Anonymous Sign-in Followed by Inbox Rule Change
+id: c3f8a1d6-2e59-4b70-8a4c-6d0e9b7f1235
+name: entra_anonymous_signin_then_inbox_rule
+status: experimental
+description: |
+    Detects an inbox rule created or changed by a user within 1 hour after a successful sign-in by a finance
+    user to the same account from an anonymous IP address. The sign-in must come first (temporal_ordered). Accounts are matched by
+    the user principal name in the sign-in log and the UserId in the Exchange audit log, through the alias "user".
+    This is the takeover pattern Microsoft documented in a business email compromise campaign: the attacker signs in
+    through proxies or VPNs, then creates an inbox rule that hides the fraud target's replies. Microsoft reports that
+    the rule in that campaign came after days of reading finance mail, so a 1 hour window catches only fast actors.
+    A longer window finds slower ones and raises noise, because inbox rule changes by finance users are common.
+    Tune it before use.
+    The standalone rule entra_finance_signin_anonymous_ip (medium) keeps alerting on its own; this correlation raises
+    the severity when an inbox rule change follows. The correlation uses its own copies of both conditions
+    (entra_finance_anonymous_signin_event and m365_inbox_rule_change_event) so everything can be deployed together.
+    Needs a backend with temporal_ordered correlation support. The pySigma Splunk backend 2.1.0 does not convert it,
+    so this rule is tested on the SQLite backend only and has no SPL output.
+references:
+    - https://www.microsoft.com/en-us/security/blog/2022/07/12/from-cookie-theft-to-bec-attackers-use-aitm-phishing-sites-as-entry-point-to-further-financial-fraud/
+    - https://learn.microsoft.com/en-us/defender-office-365/responding-to-a-compromised-email-account
+    - https://attack.mitre.org/techniques/T1564/008/
+    - https://attack.mitre.org/techniques/T1078/004/
+author: SigmaFin Contributors
+date: 2026-10-20
+tags:
+    - attack.initial-access
+    - attack.stealth
+    - attack.t1078.004
+    - attack.t1564.008
+correlation:
+    type: temporal_ordered
+    rules:
+        - entra_finance_anonymous_signin_event
+        - m365_inbox_rule_change_event
+    group-by:
+        - user
+    aliases:
+        user:
+            entra_finance_anonymous_signin_event: UserPrincipalName
+            m365_inbox_rule_change_event: UserId
+    timespan: 1h
+    generate: false
+falsepositives:
+    - A finance user on a privacy VPN who tidies their mailbox rules in the same session
+    - A finance user travelling through a network Microsoft classifies as anonymous who sets an out-of-office style rule
+level: high

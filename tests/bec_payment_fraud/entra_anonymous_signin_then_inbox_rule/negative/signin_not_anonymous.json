@@ -1,0 +1,17 @@
+[
+  {
+    "timestamp": "2026-03-02T09:00:00Z",
+    "UserPrincipalName": "ap.clerk@finance.example.com",
+    "ResultType": "0",
+    "Location": "NL",
+    "IPAddress": "203.0.113.77",
+    "RiskEventTypes_V2": "[\"unfamiliarFeatures\"]"
+  },
+  {
+    "timestamp": "2026-03-02T09:10:00Z",
+    "Operation": "New-InboxRule",
+    "UserId": "ap.clerk@finance.example.com",
+    "ClientIP": "203.0.113.77",
+    "Parameters.Name": "."
+  }
+]

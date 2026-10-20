@@ -96,3 +96,12 @@ def _pay(ts, vendor="V1"):
 )
 def test_temporal_ordered_semantics(events, expected):
     assert (lib.count_matches(CORR, INDEX, events, PIPELINE) >= 1) == bool(expected)
+
+
+def test_alias_target_fields_are_discovered_for_a_correlation():
+    # A correlation reads its group-by fields through aliases. A sample with
+    # only one side must not die on a missing column, so the alias targets
+    # have to be part of the discovered fields.
+    corr = INDEX["entra_anonymous_signin_then_inbox_rule"]
+    fields = lib.rule_fields(corr, INDEX)
+    assert {"UserPrincipalName", "UserId"} <= fields

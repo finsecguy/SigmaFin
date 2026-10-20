@@ -1,0 +1,7 @@
+{
+  "timestamp": "2026-03-02T09:10:00Z",
+  "Operation": "Set-InboxRule",
+  "UserId": "ap.clerk@finance.example.com",
+  "ClientIP": "198.51.100.23",
+  "Parameters.Name": "."
+}

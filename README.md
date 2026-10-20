@@ -42,8 +42,11 @@ exists, and the rule's description says so.
 <!-- RULES:START -->
 | Rule | Theme | ATT&CK technique | Log source | Level | Notes |
 |---|---|---|---|---|---|
+| Finance Anonymous Sign-in Followed by Inbox Rule Change (`entra_anonymous_signin_then_inbox_rule`) | 1. BEC and payment fraud | T1078.004 Cloud Accounts, T1564.008 Email Hiding Rules | azure/signinlogs + m365/audit | high | Sigma + SQLite tested, no SPL (Splunk backend lacks temporal_ordered) |
+| Finance Anonymous Sign-in Correlation Input (`entra_finance_anonymous_signin_event`) | 1. BEC and payment fraud | none (support rule) | azure/signinlogs | informational | Support rule, not deployed alone |
 | Finance Account Signs In From Anonymous IP Address (`entra_finance_signin_anonymous_ip`) | 1. BEC and payment fraud | T1078.004 Cloud Accounts, T1090.003 Multi-hop Proxy | azure/signinlogs | medium |  |
 | Finance Account Sign-in From Country Outside Allowed List (`entra_finance_signin_unlisted_country`) | 1. BEC and payment fraud | T1078.004 Cloud Accounts | azure/signinlogs | medium |  |
+| Inbox Rule Change (Correlation Input) (`m365_inbox_rule_change_event`) | 1. BEC and payment fraud | none (support rule) | m365/audit | informational | Support rule, not deployed alone |
 | Finance Mailbox Inbox Rule Forwards Mail to External Address (`m365_inbox_rule_external_forward_finance`) | 1. BEC and payment fraud | T1114.003 Email Forwarding Rule | m365/audit | high |  |
 | Finance Mailbox Inbox Rule Hides or Deletes Finance Keyword Mail (`m365_inbox_rule_hides_finance_mail`) | 1. BEC and payment fraud | T1564.008 Email Hiding Rules | m365/audit | medium |  |
 | Finance Mailbox Forwarding Set to External Address (`m365_mailbox_forwarding_external_finance`) | 1. BEC and payment fraud | T1114.003 Email Forwarding Rule | m365/audit | high |  |

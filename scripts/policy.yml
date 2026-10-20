@@ -9,21 +9,31 @@ no_technique:
     reason: Support rule for a correlation. A payment release alone is not a technique.
   - name: erp_vendor_bank_change_event
     reason: Support rule for a correlation. The standalone rule erp_vendor_bank_details_changed carries the technique.
+  - name: entra_finance_anonymous_signin_event
+    reason: Support rule for a correlation. The standalone rule entra_finance_signin_anonymous_ip carries the technique.
+  - name: m365_inbox_rule_change_event
+    reason: Support rule for a correlation. An inbox rule change by itself is not a technique.
 
 # Rules that exist only as correlation inputs. They are converted as part of
 # their correlation but never written out as standalone queries.
 support_rules:
   - erp_vendor_payment_released
   - erp_vendor_bank_change_event
+  - entra_finance_anonymous_signin_event
+  - m365_inbox_rule_change_event
 
 # Support rules that must keep the same logsource and detection as a standalone
 # rule, so the correlation input cannot drift from the alerting rule.
 mirrors:
   - support: erp_vendor_bank_change_event
     of: erp_vendor_bank_details_changed
+  - support: entra_finance_anonymous_signin_event
+    of: entra_finance_signin_anonymous_ip
 
 # Rules the pySigma Splunk backend cannot convert. CI fails if a rule fails to
 # convert and is not listed here, and also if a listed rule starts converting.
 splunk_unsupported:
   - name: erp_vendor_bank_change_then_payment
+    reason: Splunk backend 2.1.0 lacks temporal_ordered correlation support. Sigma + SQLite tested, no SPL.
+  - name: entra_anonymous_signin_then_inbox_rule
     reason: Splunk backend 2.1.0 lacks temporal_ordered correlation support. Sigma + SQLite tested, no SPL.

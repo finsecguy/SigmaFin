@@ -122,6 +122,8 @@ def rule_fields(doc: RuleDoc, index: dict[str, RuleDoc]) -> set[str]:
         if target.is_correlation:
             corr = target.data["correlation"]
             fields |= set(corr.get("group-by", []))
+            for per_rule in (corr.get("aliases") or {}).values():
+                fields |= set(per_rule.values())
             cond = corr.get("condition") or {}
             if isinstance(cond, dict) and cond.get("field"):
                 fields.add(cond["field"])
