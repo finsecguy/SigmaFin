@@ -1,5 +1,6 @@
 # Record of the SigmaHQ overlap check done before each rule was written.
-# Source: https://github.com/SigmaHQ/sigma, shallow clone at commit f083329 (2026-10-19).
+# Source: https://github.com/SigmaHQ/sigma, shallow clones. Rules up to erp_vendor_bank_change_event were checked at
+# commit f083329 (2026-10-19). Rules added later were checked at commit e3f4662 (2026-10-20).
 # Searched directories: rules, rules-threat-hunting, rules-emerging-threats.
 # decision is one of: keep (no equivalent), keep-scoped (equivalent exists, our rule adds finance scoping), drop.
 rules:
@@ -37,3 +38,14 @@ rules:
     overlap: []
     decision: keep
     scoping_added: Support rule that mirrors erp_vendor_bank_details_changed for use inside a correlation. SigmaHQ has no ERP or accounts payable rules.
+  m365_inbox_rule_hides_finance_mail:
+    search_terms: [inbox rule, InboxRule, MoveToFolder, DeleteMessage, mailbox]
+    overlap:
+      - id: d3577be1-42c9-44a7-b56e-2e8de97349d3
+        path: rules-threat-hunting/cloud/m365/audit/microsoft365_susp_inbox_rule_creation_or_update_activity.yml
+        note: Matches any New-InboxRule or Set-InboxRule whose parameters mention DeleteMessage, MarkAsRead, MoveToFolder or SubjectOrBodyContainsWords. No account scoping, no finance keywords, no check of the destination folder. Level medium, threat hunting.
+      - id: 27e4f1d6-ae72-4ea0-8a67-77a73a289c3d
+        path: rules/cloud/azure/identity_protection/azure_identity_protection_inbox_forwarding_rule.yml
+        note: Wraps an Entra ID Protection risk detection about forwarding. Different log source and purpose.
+    decision: keep-scoped
+    scoping_added: Finance account scope (finance_mailboxes placeholder), a finance keyword requirement and a check that the rule deletes mail or moves it to a rarely read folder.

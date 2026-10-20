@@ -43,6 +43,7 @@ exists, and the rule's description says so.
 | Rule | Theme | ATT&CK technique | Log source | Level | Notes |
 |---|---|---|---|---|---|
 | Finance Mailbox Inbox Rule Forwards Mail to External Address (`m365_inbox_rule_external_forward_finance`) | 1. BEC and payment fraud | T1114.003 Email Forwarding Rule | m365/audit | high |  |
+| Finance Mailbox Inbox Rule Hides or Deletes Finance Keyword Mail (`m365_inbox_rule_hides_finance_mail`) | 1. BEC and payment fraud | T1564.008 Email Hiding Rules | m365/audit | medium |  |
 | Vendor Bank Details Changed (Correlation Input) (`erp_vendor_bank_change_event`) | 2. Vendor and payment manipulation (ERP) | none (support rule) | erp/vendor_master | informational | Support rule, not deployed alone |
 | Vendor Bank Details Changed Then Payment Released (`erp_vendor_bank_change_then_payment`) | 2. Vendor and payment manipulation (ERP) | T1657 Financial Theft | erp/vendor_master + erp/payments | high | Sigma + SQLite tested, no SPL (Splunk backend lacks temporal_ordered) |
 | Vendor Master Bank Details Changed (`erp_vendor_bank_details_changed`) | 2. Vendor and payment manipulation (ERP) | T1657 Financial Theft | erp/vendor_master | medium |  |
@@ -205,6 +206,8 @@ whether the URL resolves or supports the rule. That was done by hand when each r
 - **Known M365 forwarding gap.** `m365_inbox_rule_external_forward_finance` judges only the end of a field value. If
   one field holds several recipients and the last is internal, an earlier external recipient is missed. Ingest one
   recipient per field or per event. The gap is asserted in `tests/known_gaps/`.
+- **Known inbox rule hiding gap.** `m365_inbox_rule_hides_finance_mail` requires a finance keyword. A hiding rule that
+  selects mail by sender only is missed. The gap is asserted in `tests/known_gaps/`.
 - **ATT&CK tags show intent, not coverage.** A tag does not mean the rule detects every procedure of the technique.
 - **CI has to pass on GitHub to count.** The badge at the top shows the state of the latest run.
 

@@ -1,0 +1,74 @@
+title: Finance Mailbox Inbox Rule Hides or Deletes Finance Keyword Mail
+id: 8e3c1a57-6d24-4b9f-a0c8-5f27d9b4e611
+name: m365_inbox_rule_hides_finance_mail
+status: experimental
+description: |
+    Detects creation or modification of an Exchange Online inbox rule on a finance mailbox that matches finance
+    keywords in the subject or body and then deletes the message or moves it to a folder users rarely read
+    (Archive, Conversation History, Deleted Items, Junk Email, RSS Feeds or RSS Subscriptions).
+    Attackers who control a finance mailbox use such rules to hide replies from vendors, banks and colleagues while
+    they run invoice or bank detail fraud. Microsoft documented an attacker moving a fraud target's replies to the
+    Archive folder after taking over a mailbox, and Red Canary lists money, finance and payroll terms among the
+    keywords seen in hiding rules.
+    A generic SigmaHQ threat hunting rule (d3577be1-42c9-44a7-b56e-2e8de97349d3) matches any hiding or moving inbox
+    rule. This rule adds scoping to a list of finance accounts and shared mailboxes (finance_mailboxes) and requires a
+    finance keyword. The list is a placeholder defined in pipelines/finance_scope.yml and must be edited before use.
+    The audit log itself does not contain department or group membership.
+    The keywords "bank", "vendor", "payroll", "direct deposit", "ACH request" and "payment election" come from the
+    Red Canary list. The others ("invoice", "remittance", "wire transfer", "iban") are the author's finance additions.
+    Assumes Parameters are flattened to one field per parameter name (see docs/m365-fields.md).
+    Known limitation: a rule that selects mail by sender domain only, without keywords (the pattern in the Microsoft
+    report), is not matched. This is asserted in tests/known_gaps/.
+references:
+    - https://attack.mitre.org/techniques/T1564/008/
+    - https://redcanary.com/threat-detection-report/techniques/email-hiding-rules/
+    - https://www.microsoft.com/en-us/security/blog/2022/07/12/from-cookie-theft-to-bec-attackers-use-aitm-phishing-sites-as-entry-point-to-further-financial-fraud/
+    - https://learn.microsoft.com/en-us/defender-office-365/responding-to-a-compromised-email-account
+author: SigmaFin Contributors
+date: 2026-10-20
+tags:
+    - attack.stealth
+    - attack.t1564.008
+logsource:
+    product: m365
+    service: audit
+detection:
+    selection_rule_change:
+        Operation:
+            - New-InboxRule
+            - Set-InboxRule
+        UserId|expand: '%finance_mailboxes%'
+    selection_keyword_subject_or_body:
+        Parameters.SubjectOrBodyContainsWords|contains: &finance_keywords
+            - bank
+            - vendor
+            - payroll
+            - direct deposit
+            - ACH request
+            - payment election
+            - invoice
+            - remittance
+            - wire transfer
+            - iban
+    selection_keyword_subject:
+        Parameters.SubjectContainsWords|contains: *finance_keywords
+    selection_keyword_body:
+        Parameters.BodyContainsWords|contains: *finance_keywords
+    selection_delete:
+        Parameters.DeleteMessage: 'True'
+    selection_hiding_folder:
+        Parameters.MoveToFolder|contains:
+            - Archive
+            - Conversation History
+            - Deleted Items
+            - Junk
+            - RSS
+    condition: >
+        selection_rule_change and
+        1 of selection_keyword_* and
+        (selection_delete or selection_hiding_folder)
+falsepositives:
+    - A finance user who files vendor or invoice mail into an Archive folder with a rule of their own
+    - Mail clean-up rules that move newsletters or bank notification mail to Junk or Deleted Items
+    - Rules created by an administrator or migration tool on behalf of a finance user, where UserId is the actor
+level: medium
