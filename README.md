@@ -222,6 +222,9 @@ whether the URL resolves or supports the rule. That was done by hand when each r
 - **Known M365 forwarding gap.** `m365_inbox_rule_external_forward_finance` judges only the end of a field value. If
   one field holds several recipients and the last is internal, an earlier external recipient is missed. Ingest one
   recipient per field or per event. The gap is asserted in `tests/known_gaps/`.
+- **Business hours rule fails open without enrichment.** `erp_payment_run_modified_outside_hours` reads only the
+  `outside_business_hours` field. If ingestion does not set it, the rule never matches and gives no sign that it is
+  blind. The miss is asserted in `tests/known_gaps/`.
 - **Known inbox rule hiding gap.** `m365_inbox_rule_hides_finance_mail` requires a finance keyword. A hiding rule that
   selects mail by sender only is missed. The gap is asserted in `tests/known_gaps/`.
 - **Country rule is a list, not a baseline.** `entra_finance_signin_unlisted_country` alerts on "outside the list", not
