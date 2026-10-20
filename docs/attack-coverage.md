@@ -13,4 +13,5 @@ Coverage here means a rule is tagged with the technique. It does not claim the r
 
 Allowed only when listed in `scripts/policy.yml` with a reason.
 
+- `erp_vendor_bank_change_event`
 - `erp_vendor_payment_released`

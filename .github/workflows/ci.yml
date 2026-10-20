@@ -10,17 +10,21 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.12", "3.14"]
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with:
-          python-version: "3.12"
+          python-version: ${{ matrix.python-version }}
           cache: pip
       - name: Install pinned dependencies
         run: pip install -r requirements.txt
       - name: No em dashes
         run: python scripts/check_no_em_dash.py
-      - name: Metadata gate (references, tags, samples, ids)
+      - name: Metadata gate (references, tags, samples, ids, mirrors)
         run: python scripts/check_metadata.py
       - name: Validate rules with sigma-cli
         run: sigma check --fail-on-issues --fail-on-error rules
@@ -31,7 +35,7 @@ jobs:
       - name: Convert rules to Splunk SPL
         run: python scripts/build_spl.py
       - name: Publish SPL as build artifact
-        if: always()
+        if: always() && matrix.python-version == '3.12'
         uses: actions/upload-artifact@v7
         with:
           name: splunk-spl

@@ -5,18 +5,19 @@ payable, treasury, payroll, financial reporting and the ERP systems behind them.
 SOC analysts who need finance-specific coverage on top of generic rule sets, and it is a portfolio project, so
 testing and documentation come before rule count.
 
-**Status: work in progress.** 3 of the planned 25 rules exist, plus one support rule used only as a correlation
-input. The table lists what is built, so it has 4 rows.
+**Status: work in progress.** 3 of the planned 25 rules exist, plus two support rules used only as correlation
+inputs. The table lists what is built, so it has 5 rows.
 
 ## Rules
 
 <!-- RULES:START -->
-| Rule | Theme | ATT&CK technique | Log source | Level |
-|---|---|---|---|---|
-| Finance Mailbox Inbox Rule Forwards Mail to External Address (`m365_inbox_rule_external_forward_finance`) | 1. BEC and payment fraud | T1114.003 Email Forwarding Rule | m365/audit | high |
-| Vendor Bank Details Changed Then Payment Released (`erp_vendor_bank_change_then_payment`) | 2. Vendor and payment manipulation (ERP) | T1657 Financial Theft | erp/vendor_master + erp/payments | high |
-| Vendor Master Bank Details Changed (`erp_vendor_bank_details_changed`) | 2. Vendor and payment manipulation (ERP) | T1657 Financial Theft | erp/vendor_master | medium |
-| Vendor Payment Released (`erp_vendor_payment_released`) | 2. Vendor and payment manipulation (ERP) | none (fraud or support rule) | erp/payments | informational |
+| Rule | Theme | ATT&CK technique | Log source | Level | Notes |
+|---|---|---|---|---|---|
+| Finance Mailbox Inbox Rule Forwards Mail to External Address (`m365_inbox_rule_external_forward_finance`) | 1. BEC and payment fraud | T1114.003 Email Forwarding Rule | m365/audit | high |  |
+| Vendor Bank Details Changed (Correlation Input) (`erp_vendor_bank_change_event`) | 2. Vendor and payment manipulation (ERP) | none (fraud or support rule) | erp/vendor_master | informational | Support rule, not deployed alone |
+| Vendor Bank Details Changed Then Payment Released (`erp_vendor_bank_change_then_payment`) | 2. Vendor and payment manipulation (ERP) | T1657 Financial Theft | erp/vendor_master + erp/payments | high | Sigma + SQLite tested, no SPL (Splunk backend lacks temporal_ordered) |
+| Vendor Master Bank Details Changed (`erp_vendor_bank_details_changed`) | 2. Vendor and payment manipulation (ERP) | T1657 Financial Theft | erp/vendor_master | medium |  |
+| Vendor Payment Released (`erp_vendor_payment_released`) | 2. Vendor and payment manipulation (ERP) | none (fraud or support rule) | erp/payments | informational | Support rule, not deployed alone |
 <!-- RULES:END -->
 
 Per-rule SigmaHQ overlap decisions are in [docs/rule-catalog.md](docs/rule-catalog.md). The ATT&CK table is in
@@ -40,9 +41,9 @@ python3 -m venv .venv && . .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-Versions are pinned. sigma-cli 3.1.0 requires pySigma below 2.0, so the set is pySigma 1.5.1 with the SQLite backend
-2.0.0 and the Splunk backend 2.1.0. Newer backend releases need pySigma 2.x and cannot be installed alongside
-sigma-cli 3.1.0 yet.
+Versions are pinned to pySigma 1.5.1, pysigma-backend-sqlite 2.0.0 and pysigma-backend-splunk 2.1.0 because sigma-cli
+3.1.0 caps pySigma below 2.0. Newer backend releases need pySigma 2.x and cannot be installed alongside sigma-cli
+3.1.0 yet.
 
 ## Run locally
 
@@ -65,7 +66,7 @@ same backend, which supports `event_count`, `value_count`, `temporal` and `tempo
 is used. Details that keep a negative from passing by accident: a SQL error or an unparseable timestamp fails the
 test instead of counting as no match, and `tests/test_harness.py` and `tests/test_gates.py` prove the harness and
 the CI gates can fail: the em dash gate, the metadata gate (missing references, technique tag, tactic tag, negative
-sample, duplicate id), `sigma check` on an unknown technique and tactic, strict SPL conversion (unlisted failure and
+sample, duplicate id, diverging mirrored support rule), `sigma check` on an unknown technique and tactic, strict SPL conversion (unlisted failure and
 stale entry) and the generated docs check. Not self-tested: the pytest and `sigma check` steps are exercised only by
 running them, and the upload step is not exercised at all.
 
@@ -85,18 +86,22 @@ tables, but it has not been run against any ERP product, and SigmaFin makes no v
 
 - **Synthetic samples.** Every sample event is made up. Passing tests show the rule logic does what the author
   intended on those events, not that it fits real logs.
-- **Tested on SQLite, shipped as SPL.** Tests run the SQLite conversion. The Splunk SPL is converted in CI but never
-  executed. SQL and SPL differ (case handling, wildcards, boolean precedence), so SPL behaviour is unproven.
+- **SPL is converted but never executed against Splunk.** Tests run the SQLite conversion. The Splunk SPL is only
+  generated in CI and published as an artifact. SQL and SPL differ (case handling, wildcards, boolean precedence),
+  so SPL behaviour is unproven.
 - **Generic ERP schema.** You must map your ERP audit data into it, and enrichment fields such as
   `outside_business_hours` must come from your pipeline.
 - **Placeholder scoping.** Finance account and domain lists are placeholders that you maintain. Rules that cannot
   know what is new or unusual (for example a "new country" sign-in) use allowlists, not baselines.
-- **Flattened M365 parameters.** Exchange `Parameters` must be flattened at ingestion. See docs/m365-fields.md.
+- **Flattened M365 parameters.** Exchange `Parameters` must be flattened at ingestion, with one recipient per field or
+  per event. If one field holds a list whose last recipient is internal, `m365_inbox_rule_external_forward_finance`
+  misses an earlier external recipient. This gap is asserted in `tests/known_gaps/`. See docs/m365-fields.md.
 - **Correlation support is uneven.** The SQLite backend converts all four correlation types. The Splunk backend 2.1.0
-  does not convert `temporal_ordered`, so these rules have no SPL output and are listed in `scripts/policy.yml`:
-  `erp_vendor_bank_change_then_payment`.
-- **Standalone base rules.** pySigma suppresses a base rule that a correlation references unless `generate: true`.
-  To deploy `erp_vendor_bank_details_changed` as its own alert, convert its file on its own. `build_spl.py` does so.
+  does not convert `temporal_ordered`, so those rules are marked "Sigma + SQLite tested, no SPL" in the table, have no
+  SPL output, and are listed in `scripts/policy.yml`. Currently: `erp_vendor_bank_change_then_payment`.
+- **Correlation inputs are mirrored.** pySigma does not output a rule that a correlation references, so each
+  correlation gets its own support copy of the conditions it needs. A CI gate fails if a support copy drifts from the
+  standalone rule it mirrors, and a test proves the standalone rules still convert when `rules/` is converted whole.
 - **Validation is not coverage.** ATT&CK tags show intent. They do not prove a rule detects every procedure of the
   technique.
 
