@@ -15,7 +15,10 @@ description: |
     pipelines/finance_scope.yml and must be edited before use. The audit log itself does not contain department or
     group membership.
     Assumes Parameters are flattened to one field per parameter name (see docs/m365-fields.md).
-    When one field holds a list of recipients, only the last recipient is judged against the internal domains.
+    Known limitation: the recipient check looks only at the end of the field value. Ingest one recipient per field
+    or per event. If one field holds a list whose last recipient is internal (for example
+    "external@mail.example.net;colleague@corp.example.com"), the rule misses it; this is asserted in
+    tests/known_gaps/.
 references:
     - https://attack.mitre.org/techniques/T1114/003/
     - https://www.ic3.gov/CSA/2020/201204.pdf
