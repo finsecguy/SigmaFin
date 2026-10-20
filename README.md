@@ -42,6 +42,7 @@ exists, and the rule's description says so.
 <!-- RULES:START -->
 | Rule | Theme | ATT&CK technique | Log source | Level | Notes |
 |---|---|---|---|---|---|
+| Finance Account Signs In From Anonymous IP Address (`entra_finance_signin_anonymous_ip`) | 1. BEC and payment fraud | T1078.004 Cloud Accounts, T1090.003 Multi-hop Proxy | azure/signinlogs | medium |  |
 | Finance Account Sign-in From Country Outside Allowed List (`entra_finance_signin_unlisted_country`) | 1. BEC and payment fraud | T1078.004 Cloud Accounts | azure/signinlogs | medium |  |
 | Finance Mailbox Inbox Rule Forwards Mail to External Address (`m365_inbox_rule_external_forward_finance`) | 1. BEC and payment fraud | T1114.003 Email Forwarding Rule | m365/audit | high |  |
 | Finance Mailbox Inbox Rule Hides or Deletes Finance Keyword Mail (`m365_inbox_rule_hides_finance_mail`) | 1. BEC and payment fraud | T1564.008 Email Hiding Rules | m365/audit | medium |  |
@@ -213,6 +214,8 @@ whether the URL resolves or supports the rule. That was done by hand when each r
   selects mail by sender only is missed. The gap is asserted in `tests/known_gaps/`.
 - **Country rule is a list, not a baseline.** `entra_finance_signin_unlisted_country` alerts on "outside the list", not
   on "new for this user".
+- **Anonymous IP rule relies on Microsoft's classification.** `entra_finance_signin_anonymous_ip` sees only addresses
+  Microsoft flags as anonymous.
 - **ATT&CK tags show intent, not coverage.** A tag does not mean the rule detects every procedure of the technique.
 - **CI has to pass on GitHub to count.** The badge at the top shows the state of the latest run.
 

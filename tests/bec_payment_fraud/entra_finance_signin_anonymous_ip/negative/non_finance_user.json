@@ -1,0 +1,8 @@
+{
+  "timestamp": "2026-03-02T09:15:00Z",
+  "UserPrincipalName": "bob.builder@corp.example.com",
+  "ResultType": "0",
+  "Location": "US",
+  "IPAddress": "203.0.113.77",
+  "RiskEventTypes_V2": "[\"anonymizedIPAddress\"]"
+}

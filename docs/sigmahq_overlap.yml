@@ -68,3 +68,11 @@ rules:
         note: Wraps the Defender for Cloud Apps infrequent country alert. Same difference.
     decision: keep-scoped
     scoping_added: Finance account scope (finance_users placeholder) and a fixed country allowlist (allowed_countries placeholder) that needs no baseline or premium license.
+  entra_finance_signin_anonymous_ip:
+    search_terms: [anonymous, anonymizedIPAddress, RiskEventTypes, signinlogs, tor]
+    overlap:
+      - id: 53acd925-2003-440d-a1f3-71a5253fe237
+        path: rules/cloud/azure/identity_protection/azure_identity_protection_anonymous_ip_address.yml
+        note: Matches the riskdetection log for riskEventType anonymizedIPAddress. No account scoping and no check that the sign-in succeeded. Level high.
+    decision: keep-scoped
+    scoping_added: Finance account scope (finance_users placeholder) and a successful sign-in requirement, read from the sign-in log RiskEventTypes_V2 column instead of the risk detection log.

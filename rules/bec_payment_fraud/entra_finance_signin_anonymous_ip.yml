@@ -1,0 +1,46 @@
+title: Finance Account Signs In From Anonymous IP Address
+id: 9b1d4e68-0a35-4c72-a8f9-2e6c7d3b5014
+name: entra_finance_signin_anonymous_ip
+status: experimental
+description: |
+    Detects a successful Microsoft Entra sign-in by a finance user that Entra ID Protection flagged with the
+    anonymizedIPAddress risk event type, for example a Tor exit node or an anonymous VPN. Microsoft describes these
+    addresses as typically used by actors who want to hide their sign-in information. Attackers who take over a
+    finance account use proxies and VPNs to avoid location based alerts. ATT&CK maps hiding the origin of traffic
+    behind such networks to Multi-hop Proxy (T1090.003) and the sign-in itself to Valid Accounts: Cloud Accounts.
+    A SigmaHQ rule (53acd925-2003-440d-a1f3-71a5253fe237) matches the same risk event type in the risk detection log
+    for all users and also for failed sign-ins. This rule reads the RiskEventTypes_V2 column of the sign-in log,
+    requires the sign-in to have succeeded, and is scoped to a list of finance accounts (finance_users). The list is a
+    placeholder defined in pipelines/finance_scope.yml and must be edited before use. The sign-in log itself does not
+    contain department or group membership.
+    The detection is Microsoft's, not this rule's. It covers only addresses Microsoft classifies as anonymous, so a
+    residential proxy or a VPN that Microsoft does not classify is not seen. The rule also keeps alerting on the
+    sign-in of a finance user who legitimately uses a privacy VPN.
+    It also serves as the base for entra_anonymous_signin_then_inbox_rule, which uses its own mirrored copy
+    (entra_finance_anonymous_signin_event), so this rule always alerts on its own.
+references:
+    - https://attack.mitre.org/techniques/T1090/003/
+    - https://attack.mitre.org/techniques/T1078/004/
+    - https://learn.microsoft.com/en-us/entra/id-protection/concept-identity-protection-risks
+    - https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables/signinlogs
+author: SigmaFin Contributors
+date: 2026-10-20
+tags:
+    - attack.initial-access
+    - attack.command-and-control
+    - attack.t1078.004
+    - attack.t1090.003
+logsource:
+    product: azure
+    service: signinlogs
+detection:
+    selection:
+        UserPrincipalName|expand: '%finance_users%'
+        ResultType: 0
+        RiskEventTypes_V2|contains: anonymizedIPAddress
+    condition: selection
+falsepositives:
+    - Finance staff who use a commercial privacy VPN on personal or travel networks
+    - Corporate VPN or secure web gateway egress addresses that Microsoft classifies as anonymous
+    - Security testing or red team exercises against finance accounts
+level: medium

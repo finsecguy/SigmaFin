@@ -6,7 +6,8 @@ Coverage here means a rule is tagged with the technique. It does not claim the r
 
 | Technique | Name | Rules |
 |---|---|---|
-| T1078.004 | Cloud Accounts | `entra_finance_signin_unlisted_country` |
+| T1078.004 | Cloud Accounts | `entra_finance_signin_anonymous_ip`, `entra_finance_signin_unlisted_country` |
+| T1090.003 | Multi-hop Proxy | `entra_finance_signin_anonymous_ip` |
 | T1114.003 | Email Forwarding Rule | `m365_inbox_rule_external_forward_finance`, `m365_mailbox_forwarding_external_finance` |
 | T1564.008 | Email Hiding Rules | `m365_inbox_rule_hides_finance_mail` |
 | T1657 | Financial Theft | `erp_vendor_bank_change_then_payment`, `erp_vendor_bank_details_changed` |
