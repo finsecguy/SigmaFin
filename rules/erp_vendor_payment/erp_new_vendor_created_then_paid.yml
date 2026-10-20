@@ -1,0 +1,89 @@
+title: Vendor Created (Correlation Input)
+id: 52dd0c17-11e1-44e3-bd27-0711d4f0fec7
+name: erp_new_vendor_created_event
+status: experimental
+description: |
+    Support rule for erp_new_vendor_paid_quickly. Matches
+    every successful vendor creation in the vendor-neutral ERP schema (logsource product erp, service vendor_master).
+    It is not an alert on its own: every legitimate vendor onboarding matches it. Do not deploy it standalone.
+    No ATT&CK technique applies to a vendor creation by itself, so no technique tag is set.
+    The correlation erp_vendor_created_and_payment_approved_by_same_user has its own copy of this condition
+    (erp_sod_vendor_created_event), because a support rule that two correlations share makes pySigma fail when the
+    whole rules directory is converted. scripts/check_metadata.py fails the build if the copies diverge.
+references:
+    - https://www.criadv.com/insight/unearthing-occupational-fraud-in-your-business
+author: SigmaFin Contributors
+date: 2026-10-20
+logsource:
+    product: erp
+    service: vendor_master
+detection:
+    selection:
+        action: vendor_created
+        status: success
+    condition: selection
+falsepositives:
+    - Every legitimate vendor onboarding matches, which is why this is only used as a correlation input
+level: informational
+---
+title: Vendor Payment Released (New Vendor Correlation Input)
+id: 294df00d-9ea2-4092-adef-547fe7ebb78a
+name: erp_new_vendor_payment_released_event
+status: experimental
+description: |
+    Support rule for erp_new_vendor_paid_quickly. Its detection must stay identical to erp_vendor_payment_released, the
+    support rule of the bank change correlation; scripts/check_metadata.py fails the build if the two diverge.
+    It is a separate copy because a support rule that two correlations share makes pySigma fail when the whole
+    rules directory is converted. Do not deploy this rule standalone.
+    No ATT&CK technique applies to a payment release by itself, so no technique tag is set.
+references:
+    - https://www.criadv.com/insight/unearthing-occupational-fraud-in-your-business
+author: SigmaFin Contributors
+date: 2026-10-20
+logsource:
+    product: erp
+    service: payments
+detection:
+    selection:
+        action: payment_released
+        status: success
+    condition: selection
+falsepositives:
+    - Every legitimate payment run matches this rule, which is why it is only used as a correlation input
+level: informational
+---
+title: New Vendor Created Then Paid Within Three Days
+id: 77b79c4a-42a8-4dd5-b6ab-98e2aa76b450
+name: erp_new_vendor_paid_quickly
+status: experimental
+description: |
+    Detects a payment released to a vendor within 3 days after that vendor was created, grouped by vendor_id. The
+    creation must come first (temporal_ordered).
+    A fictitious vendor, often called a shell company, is a classic billing scheme: someone in a position to add
+    vendors creates one that exists only on paper, then gets invoices for work never done paid to it. A very short
+    time between creation and the first payment is one of the few signals the ERP log offers. A vendor that is created
+    and paid within days is also what an urgent legitimate onboarding looks like, so the rule is a prompt for review.
+    No ATT&CK technique applies. This is business process fraud, tagged with no ATT&CK technique.
+    The 3 day window is a starting point. Tune it to your onboarding process, which may be much longer, and consider
+    suppressing vendors created through an approved onboarding workflow.
+    Needs a backend with temporal_ordered correlation support. The pySigma Splunk backend 2.1.0 does not convert it,
+    so this rule is tested on the SQLite backend only and has no SPL output.
+references:
+    - https://www.criadv.com/insight/unearthing-occupational-fraud-in-your-business
+    - https://csf.tools/reference/nist-sp-800-53/r5/ac/ac-5/
+author: SigmaFin Contributors
+date: 2026-10-20
+correlation:
+    type: temporal_ordered
+    rules:
+        - erp_new_vendor_created_event
+        - erp_new_vendor_payment_released_event
+    group-by:
+        - vendor_id
+    timespan: 3d
+    generate: false
+falsepositives:
+    - Urgent but legitimate onboarding, such as a one-off supplier for an emergency repair, paid on a rush invoice
+    - Employee reimbursement or expense vendors created and paid in the same run
+    - Vendors migrated or re-created in a system change, then paid in the next scheduled run
+level: medium

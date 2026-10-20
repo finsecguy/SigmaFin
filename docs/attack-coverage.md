@@ -19,6 +19,9 @@ Coverage here means a rule is tagged with the technique. It does not claim the r
 Allowed only when listed in `scripts/policy.yml` with a reason.
 
 - `entra_finance_anonymous_signin_event`
+- `erp_new_vendor_created_event`
+- `erp_new_vendor_paid_quickly`
+- `erp_new_vendor_payment_released_event`
 - `erp_payment_run_modified_outside_hours`
 - `erp_vendor_bank_change_event`
 - `erp_vendor_payment_released`

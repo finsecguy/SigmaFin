@@ -112,3 +112,18 @@ rules:
         note: Entra user added to a privileged role. Different product and log source.
     decision: keep
     scoping_added: SigmaHQ has no ERP rules. The related rules cover Entra roles, not ERP roles.
+  erp_new_vendor_created_event:
+    search_terms: [vendor, new vendor, vendor_master]
+    overlap: []
+    decision: keep
+    scoping_added: Support rule for erp_new_vendor_paid_quickly. SigmaHQ has no ERP or accounts payable rules.
+  erp_new_vendor_payment_released_event:
+    search_terms: [vendor, payment_run, accounts payable]
+    overlap: []
+    decision: keep
+    scoping_added: Support rule that mirrors erp_vendor_payment_released for use inside its own correlation. SigmaHQ has no ERP or accounts payable rules.
+  erp_new_vendor_paid_quickly:
+    search_terms: [vendor, new vendor, payment_run, accounts payable]
+    overlap: []
+    decision: keep
+    scoping_added: SigmaHQ has no ERP or accounts payable rules.

@@ -16,8 +16,10 @@
 6. **Samples.** Add at least one JSON file under `tests/<theme>/<name>/positive/` and `negative/`. A sample is one
    flat event object or a list of them, each with an ISO 8601 `timestamp`. Make negatives near misses (right action,
    wrong field; right events, wrong order or window).
-7. **Correlation.** Put support rules and the correlation in the same file as separate YAML documents. Give the
-   support rules `status`, tests and a `support_rules` entry in `policy.yml`. The SQLite backend converts
+7. **Correlation.** Put support rules and the correlation in the same file as separate YAML documents. Give each
+   correlation its own support rules: a support rule shared by two correlations makes pySigma fail when the whole
+   `rules/` directory is converted ("Conversion state not available"), so copy it and list the copy under `mirrors`.
+   Give the support rules `status`, tests and a `support_rules` entry in `policy.yml`. The SQLite backend converts
    `event_count`, `value_count`, `temporal` and `temporal_ordered`; the Splunk backend 2.1.0 does not convert
    `temporal_ordered`.
 8. **Run everything.** `sigma check -i rules`, `pytest`, `python scripts/gen_docs.py`, `python scripts/build_spl.py`.

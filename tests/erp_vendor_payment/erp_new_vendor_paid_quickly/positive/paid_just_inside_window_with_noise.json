@@ -1,0 +1,41 @@
+[
+  {
+    "timestamp": "2026-03-02T12:00:00Z",
+    "event_id": "pay-0099",
+    "source_system": "erp-test-01",
+    "user": "treasury.batch",
+    "action": "payment_released",
+    "status": "success",
+    "channel": "batch",
+    "payment_id": "P9000",
+    "vendor_id": "V100234",
+    "amount": "500.00",
+    "currency": "EUR"
+  },
+  {
+    "timestamp": "2026-03-02T09:00:00Z",
+    "event_id": "vm-0100",
+    "source_system": "erp-test-01",
+    "user": "ap.clerk1",
+    "action": "vendor_created",
+    "status": "success",
+    "channel": "ui",
+    "vendor_id": "V200500",
+    "vendor_name": "Example Supplies Ltd",
+    "approval_status": "pending"
+  },
+  {
+    "timestamp": "2026-03-05T08:59:00Z",
+    "event_id": "pay-0200",
+    "source_system": "erp-test-01",
+    "user": "treasury.batch",
+    "action": "payment_released",
+    "status": "success",
+    "channel": "batch",
+    "payment_id": "P9001",
+    "vendor_id": "V200500",
+    "amount": "7400.00",
+    "currency": "EUR",
+    "payment_run_id": "RUN-2026-0303"
+  }
+]

@@ -15,6 +15,12 @@ no_technique:
     reason: Support rule for a correlation. An inbox rule change by itself is not a technique.
   - name: erp_payment_run_modified_outside_hours
     reason: Business process fraud. A payment run change is a normal business action, so no ATT&CK technique maps cleanly.
+  - name: erp_new_vendor_created_event
+    reason: Support rule for a correlation. A vendor creation alone is not a technique.
+  - name: erp_new_vendor_payment_released_event
+    reason: Support rule for a correlation. A payment release alone is not a technique.
+  - name: erp_new_vendor_paid_quickly
+    reason: Business process fraud (fictitious vendor scheme). No ATT&CK technique maps cleanly.
 
 # Rules that exist only as correlation inputs. They are converted as part of
 # their correlation but never written out as standalone queries.
@@ -22,6 +28,8 @@ support_rules:
   - erp_vendor_payment_released
   - erp_vendor_bank_change_event
   - entra_finance_anonymous_signin_event
+  - erp_new_vendor_created_event
+  - erp_new_vendor_payment_released_event
   - m365_inbox_rule_change_event
 
 # Support rules that must keep the same logsource and detection as a standalone
@@ -31,6 +39,8 @@ mirrors:
     of: erp_vendor_bank_details_changed
   - support: entra_finance_anonymous_signin_event
     of: entra_finance_signin_anonymous_ip
+  - support: erp_new_vendor_payment_released_event
+    of: erp_vendor_payment_released
 
 # Rules the pySigma Splunk backend cannot convert. CI fails if a rule fails to
 # convert and is not listed here, and also if a listed rule starts converting.
@@ -38,4 +48,6 @@ splunk_unsupported:
   - name: erp_vendor_bank_change_then_payment
     reason: Splunk backend 2.1.0 lacks temporal_ordered correlation support. Sigma + SQLite tested, no SPL.
   - name: entra_anonymous_signin_then_inbox_rule
+    reason: Splunk backend 2.1.0 lacks temporal_ordered correlation support. Sigma + SQLite tested, no SPL.
+  - name: erp_new_vendor_paid_quickly
     reason: Splunk backend 2.1.0 lacks temporal_ordered correlation support. Sigma + SQLite tested, no SPL.
