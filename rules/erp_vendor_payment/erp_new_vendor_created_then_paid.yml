@@ -61,7 +61,10 @@ description: |
     creation must come first (temporal_ordered).
     A fictitious vendor, often called a shell company, is a classic billing scheme: someone in a position to add
     vendors creates one that exists only on paper, then gets invoices for work never done paid to it. A very short
-    time between creation and the first payment is one of the few signals the ERP log offers. A vendor that is created
+    time between creation and the first payment is one of the few signals the ERP log offers. A Tennessee Valley
+    Authority Inspector General audit of a vendor master file, which draws on ACFE guidance, names fraudulent
+    disbursements for invoices on fictitious goods or services as part of the most common type of fraud against
+    organizations, and says a vendor with no physical address could indicate a shell company scheme. A vendor that is created
     and paid within days is also what an urgent legitimate onboarding looks like, so the rule is a prompt for review.
     No ATT&CK technique applies. This is business process fraud, tagged with no ATT&CK technique.
     The 3 day window is a starting point. Tune it to your onboarding process, which may be much longer, and consider
@@ -69,6 +72,7 @@ description: |
     Needs a backend with temporal_ordered correlation support. The pySigma Splunk backend 2.1.0 does not convert it,
     so this rule is tested on the SQLite backend only and has no SPL output.
 references:
+    - https://www.oversight.gov/sites/default/files/documents/reports/2020-04/2019-15666.pdf
     - https://www.criadv.com/insight/unearthing-occupational-fraud-in-your-business
     - https://csf.tools/reference/nist-sp-800-53/r5/ac/ac-5/
 author: SigmaFin Contributors
