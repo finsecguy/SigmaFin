@@ -1,0 +1,60 @@
+title: Finance Mailbox Inbox Rule Forwards Mail to External Address
+id: 4b0f8f5e-2c6a-4d1e-9a47-3e5d7b1c9f20
+name: m365_inbox_rule_external_forward_finance
+status: experimental
+description: |
+    Detects creation or modification of an Exchange Online inbox rule on a finance mailbox that forwards,
+    redirects or forwards as attachment to a recipient outside the internal domains.
+    Attackers who take over a finance mailbox use such rules to read payment and vendor conversations and to prepare
+    invoice or bank detail fraud. The FBI has reported attackers using web mail forwarding rules to conceal
+    business email compromise activity.
+    Generic inbox rule forwarding detections exist in SigmaHQ (for example the threat hunting rule
+    c726e007-2cd0-4a55-abfb-79730fbedee5), which matches any forwarding parameter without a recipient domain check.
+    This rule adds scoping to a list of finance accounts and shared mailboxes (finance_mailboxes) and requires the
+    recipient to be outside the internal domains (internal_domains). Both lists are placeholders defined in
+    pipelines/finance_scope.yml and must be edited before use. The audit log itself does not contain department or
+    group membership.
+    Assumes Parameters are flattened to one field per parameter name (see docs/m365-fields.md).
+    When one field holds a list of recipients, only the last recipient is judged against the internal domains.
+references:
+    - https://attack.mitre.org/techniques/T1114/003/
+    - https://www.ic3.gov/CSA/2020/201204.pdf
+    - https://www.ic3.gov/PSA/2020/PSA200406
+author: SigmaFin Contributors
+date: 2026-10-20
+tags:
+    - attack.collection
+    - attack.t1114.003
+logsource:
+    product: m365
+    service: audit
+detection:
+    selection_rule_change:
+        Operation:
+            - New-InboxRule
+            - Set-InboxRule
+        UserId|expand: '%finance_mailboxes%'
+    selection_forward_to:
+        Parameters.ForwardTo|contains: '@'
+    selection_redirect_to:
+        Parameters.RedirectTo|contains: '@'
+    selection_forward_as_attachment:
+        Parameters.ForwardAsAttachmentTo|contains: '@'
+    filter_internal_forward_to:
+        Parameters.ForwardTo|endswith|expand: '%internal_domains%'
+    filter_internal_redirect_to:
+        Parameters.RedirectTo|endswith|expand: '%internal_domains%'
+    filter_internal_forward_as_attachment:
+        Parameters.ForwardAsAttachmentTo|endswith|expand: '%internal_domains%'
+    condition: >
+        selection_rule_change and (
+            (selection_forward_to and not filter_internal_forward_to) or
+            (selection_redirect_to and not filter_internal_redirect_to) or
+            (selection_forward_as_attachment and not filter_internal_forward_as_attachment)
+        )
+falsepositives:
+    - Approved forwarding to an outsourced accounting, audit or payroll provider during month-end close or an audit
+    - Out-of-office style forwarding set by a finance user to a personal address while on leave
+    - Mailbox migrations or shared mailbox restructuring by the messaging team
+    - Rules created by an administrator on behalf of a finance user, where the actor field differs from the mailbox owner
+level: high

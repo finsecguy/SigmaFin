@@ -1,0 +1,8 @@
+{
+  "timestamp": "2026-03-02T09:15:00Z",
+  "Operation": "New-InboxRule",
+  "UserId": "ap@finance.example.com",
+  "ClientIP": "198.51.100.23",
+  "Parameters.Name": "sync",
+  "Parameters.ForwardTo": "x@corp.example.com"
+}

@@ -1,0 +1,46 @@
+title: Vendor Master Bank Details Changed
+id: 9c3a1e7d-5f42-4b8a-8d16-0a7e2b4c6d51
+name: erp_vendor_bank_details_changed
+status: experimental
+description: |
+    Detects a successful change to a bank related field on a vendor master record in the vendor-neutral ERP schema
+    described in docs/erp-log-schema.md (logsource product erp, service vendor_master).
+    Changing the beneficiary account of an existing vendor is the central step of vendor payment redirection fraud,
+    a common outcome of business email compromise. The FBI recommends verifying vendor payment location changes with
+    a known contact through a separate channel and adding a secondary sign-off.
+    ATT&CK maps this to Financial Theft (T1657) at the impact stage. The change itself is a normal business event, so
+    the level is medium; escalation to high happens in the correlation rule
+    erp_vendor_bank_change_then_payment.
+    The bank field names in field_changed are the schema vocabulary, not the column names of any specific ERP.
+    SigmaHQ has no ERP vendor master rules: a search of its rules, threat hunting and emerging threats directories
+    for the terms listed in docs/sigmahq_overlap.yml found no equivalent.
+references:
+    - https://attack.mitre.org/techniques/T1657/
+    - https://www.ic3.gov/PSA/2017/PSA170504
+    - https://www.ic3.gov/PSA/2020/PSA200406
+author: SigmaFin Contributors
+date: 2026-10-20
+tags:
+    - attack.impact
+    - attack.t1657
+logsource:
+    product: erp
+    service: vendor_master
+detection:
+    selection:
+        action: vendor_updated
+        status: success
+        field_changed:
+            - bank_account_number
+            - iban
+            - bank_routing_number
+            - swift_bic
+            - bank_name
+            - bank_country
+    condition: selection
+falsepositives:
+    - Legitimate bank change requested by the vendor and verified by call-back to a known contact
+    - Vendor master clean-up or data migration projects run through the import channel
+    - Vendor onboarding where bank details are corrected shortly after creation
+    - Bank mergers or account closures that force many vendors to change accounts at once
+level: medium

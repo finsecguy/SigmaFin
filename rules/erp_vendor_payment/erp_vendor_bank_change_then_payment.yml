@@ -1,0 +1,64 @@
+title: Vendor Payment Released
+id: d2e6b9a4-1c73-4f58-b0a9-6e8f3c5d7a12
+name: erp_vendor_payment_released
+status: experimental
+description: |
+    Support rule for erp_vendor_bank_change_then_payment. Matches every successful payment release in the
+    vendor-neutral ERP schema (logsource product erp, service payments).
+    It is not an alert on its own: every legitimate payment matches it. Do not deploy it standalone.
+    No ATT&CK technique applies to a payment release by itself, so no technique tag is set.
+references:
+    - https://www.ic3.gov/PSA/2020/PSA200406
+author: SigmaFin Contributors
+date: 2026-10-20
+logsource:
+    product: erp
+    service: payments
+detection:
+    selection:
+        action: payment_released
+        status: success
+    condition: selection
+falsepositives:
+    - Every legitimate payment run matches this rule, which is why it is only used as a correlation input
+level: informational
+---
+title: Vendor Bank Details Changed Then Payment Released
+id: 6a1f4c8e-0b25-4e93-a7d3-9c2b5e8f1a64
+name: erp_vendor_bank_change_then_payment
+status: experimental
+description: |
+    Detects a payment released to a vendor within 3 days after that vendor's bank details were changed, grouped by
+    vendor_id. The change must come first (temporal_ordered).
+    This is the payment redirection pattern described by the FBI: a request to change the beneficiary account is
+    followed by payments to the new account. ATT&CK maps this to Financial Theft (T1657).
+    The 3 day window is a starting point. Tune it to your payment run schedule: weekly runs can need 7 days, daily
+    runs can use less.
+    The base rule erp_vendor_bank_details_changed also stays useful alone as a medium level alert; this correlation
+    raises the severity when money moves. Because pySigma suppresses base rules referenced by a correlation unless
+    generate is true, and generate: true would also emit the noisy payment rule, deploy the bank change rule from its
+    own file when you want the standalone alert (see README).
+    Needs a backend with temporal_ordered correlation support. The pySigma Splunk backend 2.1.0 does not convert it.
+references:
+    - https://attack.mitre.org/techniques/T1657/
+    - https://www.ic3.gov/PSA/2017/PSA170504
+    - https://www.ic3.gov/PSA/2020/PSA200406
+author: SigmaFin Contributors
+date: 2026-10-20
+tags:
+    - attack.impact
+    - attack.t1657
+correlation:
+    type: temporal_ordered
+    rules:
+        - erp_vendor_bank_details_changed
+        - erp_vendor_payment_released
+    group-by:
+        - vendor_id
+    timespan: 3d
+    generate: false
+falsepositives:
+    - Legitimate bank change by the vendor followed by the next scheduled payment, verified by call-back
+    - Bank account closures or mergers that move many vendors to new accounts before a payment run
+    - Vendor onboarding where details are corrected and the first invoice is paid immediately
+level: high

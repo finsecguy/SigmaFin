@@ -1,0 +1,34 @@
+# Record of the SigmaHQ overlap check done before each rule was written.
+# Source: https://github.com/SigmaHQ/sigma, shallow clone at commit f083329 (2026-10-19).
+# Searched directories: rules, rules-threat-hunting, rules-emerging-threats.
+# decision is one of: keep (no equivalent), keep-scoped (equivalent exists, our rule adds finance scoping), drop.
+rules:
+  m365_inbox_rule_external_forward_finance:
+    search_terms: [inboxrule, "inbox rule", ForwardingSmtp, forwarding]
+    overlap:
+      - id: c726e007-2cd0-4a55-abfb-79730fbedee5
+        path: rules-threat-hunting/cloud/m365/audit/microsoft365_susp_email_forwarding_activity.yml
+        note: Matches any forwarding parameter on New-InboxRule, Set-InboxRule and Set-Mailbox, with no recipient domain check and no account scoping. Level medium, threat hunting.
+      - id: d3577be1-42c9-44a7-b56e-2e8de97349d3
+        path: rules-threat-hunting/cloud/m365/audit/microsoft365_susp_inbox_rule_creation_or_update_activity.yml
+        note: Any hiding or moving inbox rule. Related to the planned finance hide-rule detection, not to this rule.
+      - id: 27e4f1d6-ae72-4ea0-8a67-77a73a289c3d
+        path: rules/cloud/azure/identity_protection/azure_identity_protection_inbox_forwarding_rule.yml
+        note: Wraps an Entra ID Protection risk detection. Different log source.
+    decision: keep-scoped
+    scoping_added: Finance account scope (finance_mailboxes placeholder) and an external recipient check (internal_domains placeholder).
+  erp_vendor_bank_details_changed:
+    search_terms: [vendor, "bank account", "bank detail", vendor_master, payment_run, "accounts payable"]
+    overlap: []
+    decision: keep
+    scoping_added: SigmaHQ has no ERP or accounts payable rules.
+  erp_vendor_payment_released:
+    search_terms: [vendor, payment_run, "accounts payable"]
+    overlap: []
+    decision: keep
+    scoping_added: Support rule for a correlation. SigmaHQ has no ERP or accounts payable rules.
+  erp_vendor_bank_change_then_payment:
+    search_terms: [vendor, "bank account", payment_run, "accounts payable"]
+    overlap: []
+    decision: keep
+    scoping_added: SigmaHQ has no ERP or accounts payable rules.

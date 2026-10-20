@@ -1,0 +1,30 @@
+[
+  {
+    "timestamp": "2026-03-02T09:00:00Z",
+    "event_id": "vm-0001",
+    "source_system": "erp-test-01",
+    "user": "ap.clerk1",
+    "action": "vendor_updated",
+    "status": "success",
+    "channel": "ui",
+    "vendor_id": "V100234",
+    "field_changed": "bank_account_number",
+    "old_value_masked": "****4321",
+    "new_value_masked": "****9876",
+    "approval_status": "pending"
+  },
+  {
+    "timestamp": "2026-03-03T10:00:00Z",
+    "event_id": "pay-0001",
+    "source_system": "erp-test-01",
+    "user": "treasury.batch",
+    "action": "payment_released",
+    "status": "success",
+    "channel": "batch",
+    "payment_id": "P7788",
+    "vendor_id": "V100234",
+    "amount": "18250.00",
+    "currency": "EUR",
+    "payment_run_id": "RUN-2026-0302"
+  }
+]
