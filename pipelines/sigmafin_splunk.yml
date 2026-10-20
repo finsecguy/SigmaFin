@@ -27,6 +27,14 @@ transformations:
       - type: logsource
         product: erp
         service: payments
+  - id: erp_user_admin_sourcetype
+    type: add_condition
+    conditions:
+      sourcetype: sigmafin:erp:user_admin
+    rule_conditions:
+      - type: logsource
+        product: erp
+        service: user_admin
   - id: m365_audit_sourcetype
     type: add_condition
     conditions:

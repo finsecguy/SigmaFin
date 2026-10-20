@@ -1,0 +1,36 @@
+title: ERP Emergency Access Started
+id: c1519217-4338-4984-a3d5-c91250c6d556
+name: erp_emergency_access_started
+status: experimental
+description: |
+    Detects a successful start of emergency (sometimes called firefighter or break glass) access in the
+    vendor-neutral ERP schema (logsource product erp, service user_admin). Emergency access gives a user temporary
+    elevated rights, for example to post a payment or change a vendor outside the normal roles. It bypasses the
+    segregation of duties the ERP otherwise enforces, so every use needs a reviewer to confirm a real incident behind
+    it. ATT&CK maps abuse of such accounts to Valid Accounts (T1078). NIST SP 800-53 AC-2(2) expects temporary and
+    emergency accounts to be removed or disabled automatically after a set time.
+    The rule alerts on every successful start by design: a reviewer closes it against the ticket in
+    ticket_reference. Tune by suppressing starts that carry an approved ticket if your process allows it.
+    The event vocabulary (emergency_access_started, access_id, ticket_reference) is the SigmaFin schema, not the
+    names of any specific ERP. Map your ERP's emergency access log into it (docs/erp-log-schema.md).
+references:
+    - https://attack.mitre.org/techniques/T1078/
+    - https://csf.tools/reference/nist-sp-800-53/r5/ac/ac-2/ac-2-2/
+author: SigmaFin Contributors
+date: 2026-10-20
+tags:
+    - attack.privilege-escalation
+    - attack.t1078
+logsource:
+    product: erp
+    service: user_admin
+detection:
+    selection:
+        action: emergency_access_started
+        status: success
+    condition: selection
+falsepositives:
+    - Real incidents handled with an approved ticket, such as a failed payment run at period end
+    - Planned emergency access during a system cutover or a close, approved in advance
+    - Test or training sessions on non-production systems that share the log
+level: medium

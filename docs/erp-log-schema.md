@@ -5,7 +5,7 @@ SigmaFin rules for ERP activity use a custom, vendor-neutral logsource:
 ```yaml
 logsource:
     product: erp
-    service: vendor_master   # or payments, and later user_admin, system_audit, reporting
+    service: vendor_master   # or payments, user_admin, and later system_audit, reporting
 ```
 
 This schema is something you map your ERP audit data into. It is not the native format of any ERP product, and no
@@ -65,14 +65,30 @@ Payment proposals, runs and releases.
 | `amount`, `currency` | Amount as a decimal string and ISO 4217 currency code. |
 | `initiator`, `approver` | Accounts that created and approved the payment. Optional. |
 
+## Service `user_admin`
+
+Account and access administration inside the ERP.
+
+`action` values used by current rules: `emergency_access_started`, `role_assigned`. Other values (for example
+`user_created`, `role_removed`) are reserved for later rules.
+
+| Field | Description |
+|---|---|
+| `target_user` | Account that receives the role or the emergency access. Optional for emergency access. |
+| `role_name` | Role assigned, for `role_assigned`. |
+| `approval_status` | State of the access request behind the change: `approved`, `pending` or `not_required`. Assumed to be recorded by the ERP or joined in by ingestion. |
+| `access_id` | Emergency access identifier (the elevated ID that was checked out), for `emergency_access_started`. |
+| `ticket_reference` | Incident or change ticket quoted for the emergency access. Optional. |
+
 ## Planned services
 
-`user_admin`, `system_audit` and `reporting` are reserved. Their fields will be documented here in the same commit as
+`system_audit` and `reporting` are reserved. Their fields will be documented here in the same commit as
 the first rule that uses them, so reserved services never list fields that no rule or test exercises.
 
-Some fields and values in the services above are defined ahead of use by later rules (`initiator`, `approver`,
-`payment_run_modified`, `outside_business_hours`). Today's rules use only `action`, `status`, `vendor_id` and
-`field_changed`.
+Some fields and values in the services above are defined ahead of use by later rules (`initiator`, `approver`).
+Current rules use `action`, `status`, `vendor_id`, `field_changed`, `outside_business_hours`, `role_name` and
+`approval_status`. `access_id`, `ticket_reference` and `target_user` are documented for analysts and appear in
+samples, but no rule reads them.
 
 ## How this relates to real ERP audit data
 

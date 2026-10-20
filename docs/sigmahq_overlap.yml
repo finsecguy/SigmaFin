@@ -96,3 +96,8 @@ rules:
     overlap: []
     decision: keep
     scoping_added: SigmaHQ has no ERP or accounts payable rules and no time-of-day rules for payment runs.
+  erp_emergency_access_started:
+    search_terms: [firefighter, break glass, breakglass, emergency access]
+    overlap: []
+    decision: keep
+    scoping_added: SigmaHQ has no ERP rules. The only break glass match is a GCP container deployment rule (different product and purpose).
