@@ -1,0 +1,20 @@
+# Explicit exceptions to the CI gates. Every entry needs a reason.
+# Anything not listed here is held to the full rule: ATT&CK technique tag,
+# Splunk conversion succeeds.
+
+# Rules allowed to carry no attack.tNNNN tag. The description of each must
+# contain the text "No ATT&CK" or "no ATT&CK" so the reader is told why.
+no_technique:
+  - name: erp_vendor_payment_released
+    reason: Support rule for a correlation. A payment release alone is not a technique.
+
+# Rules that exist only as correlation inputs. They are converted as part of
+# their correlation but never written out as standalone queries.
+support_rules:
+  - erp_vendor_payment_released
+
+# Rules the pySigma Splunk backend cannot convert. CI fails if a rule fails to
+# convert and is not listed here, and also if a listed rule starts converting.
+splunk_unsupported:
+  - name: erp_vendor_bank_change_then_payment
+    reason: pySigma Splunk backend 2.1.0 does not support temporal_ordered correlation.
