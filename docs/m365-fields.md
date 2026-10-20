@@ -24,6 +24,13 @@ this normalization. SigmaHQ M365 rules solve the same problem differently, by ma
 Known limitation: when one parameter holds several recipients, the rules judge only the end of the value against the
 internal domains. Normalizing to one event per recipient removes the limitation.
 
+## `Parameters.Identity`
+
+`m365_mailbox_forwarding_external_finance` scopes on the mailbox that was changed as well as on the account that ran
+the command, so it reads `Parameters.Identity`. It assumes that field holds the user principal name. Exchange can log
+an alias or a distinguished name there instead. Normalize it at ingestion, or the target mailbox will not match the
+finance list (the actor check on `UserId` still works).
+
 ## Finance scoping
 
 Audit and sign-in logs do not contain department or group membership. Finance rules scope with a placeholder list,

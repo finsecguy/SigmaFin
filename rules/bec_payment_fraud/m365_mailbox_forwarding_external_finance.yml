@@ -1,0 +1,54 @@
+title: Finance Mailbox Forwarding Set to External Address
+id: 2d9a6b40-7c13-4e85-b1f6-0a4e8c3d5927
+name: m365_mailbox_forwarding_external_finance
+status: experimental
+description: |
+    Detects Set-Mailbox setting ForwardingSmtpAddress to an address outside the internal domains, on a finance
+    mailbox. Mailbox-level forwarding copies or moves every message to the external address, so an attacker who sets
+    it can read payment and vendor conversations without keeping a session open. Microsoft lists recently added
+    external forwarding as a symptom of a compromised mailbox.
+    A generic SigmaHQ threat hunting rule (c726e007-2cd0-4a55-abfb-79730fbedee5) matches any forwarding parameter
+    including this one, without a recipient domain check or account scoping. This rule adds scoping to a list of
+    finance accounts and shared mailboxes (finance_mailboxes), matched either on the account that ran the command
+    (UserId) or on the mailbox changed (Parameters.Identity), and requires the recipient to be outside the internal
+    domains (internal_domains). Both lists are placeholders defined in pipelines/finance_scope.yml and must be edited
+    before use. The audit log itself does not contain department or group membership.
+    Assumes Parameters are flattened to one field per parameter name and that Parameters.Identity holds the user
+    principal name of the mailbox (see docs/m365-fields.md). If your logs hold an alias or a distinguished name,
+    normalize it at ingestion.
+    Only ForwardingSmtpAddress is checked. ForwardingAddress points at an existing recipient object in the directory
+    and Microsoft documents it as an internal recipient, so it is not covered. A mail contact that points outside is
+    not seen by this rule. Inbox rule forwarding is covered by m365_inbox_rule_external_forward_finance.
+references:
+    - https://attack.mitre.org/techniques/T1114/003/
+    - https://learn.microsoft.com/en-us/defender-office-365/responding-to-a-compromised-email-account
+    - https://learn.microsoft.com/en-us/exchange/recipients-in-exchange-online/manage-user-mailboxes/configure-email-forwarding
+    - https://www.ic3.gov/PSA/2020/PSA200406
+author: SigmaFin Contributors
+date: 2026-10-20
+tags:
+    - attack.collection
+    - attack.t1114.003
+logsource:
+    product: m365
+    service: audit
+detection:
+    selection_operation:
+        Operation: Set-Mailbox
+    selection_actor_is_finance:
+        UserId|expand: '%finance_mailboxes%'
+    selection_target_is_finance:
+        Parameters.Identity|expand: '%finance_mailboxes%'
+    selection_forward_to:
+        Parameters.ForwardingSmtpAddress|contains: '@'
+    filter_internal:
+        Parameters.ForwardingSmtpAddress|endswith|expand: '%internal_domains%'
+    condition: >
+        selection_operation and
+        (selection_actor_is_finance or selection_target_is_finance) and
+        selection_forward_to and not filter_internal
+falsepositives:
+    - Approved forwarding to an outsourced accounting, audit or payroll provider during month-end close or an audit
+    - Forwarding to a personal address for a finance user on extended leave, approved by the messaging team
+    - Mailbox migrations or offboarding that forward a leaver's finance mailbox to an external archive
+level: high

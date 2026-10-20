@@ -1,0 +1,9 @@
+{
+  "timestamp": "2026-03-02T09:15:00Z",
+  "Operation": "Set-CASMailbox",
+  "UserId": "admin@corp.example.com",
+  "ClientIP": "198.51.100.23",
+  "Parameters.Identity": "ap@finance.example.com",
+  "Parameters.ForwardingSmtpAddress": "smtp:audit-desk@mail.example.net",
+  "Parameters.DeliverToMailboxAndForward": "True"
+}

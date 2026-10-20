@@ -49,3 +49,11 @@ rules:
         note: Wraps an Entra ID Protection risk detection about forwarding. Different log source and purpose.
     decision: keep-scoped
     scoping_added: Finance account scope (finance_mailboxes placeholder), a finance keyword requirement and a check that the rule deletes mail or moves it to a rarely read folder.
+  m365_mailbox_forwarding_external_finance:
+    search_terms: [Set-Mailbox, ForwardingSmtpAddress, ForwardingAddress, DeliverToMailboxAndForward, forwarding]
+    overlap:
+      - id: c726e007-2cd0-4a55-abfb-79730fbedee5
+        path: rules-threat-hunting/cloud/m365/audit/microsoft365_susp_email_forwarding_activity.yml
+        note: Its Set-Mailbox branch matches ForwardingSmtpAddress or ForwardingAddress on any mailbox, with no recipient domain check and no account scoping. Level medium, threat hunting.
+    decision: keep-scoped
+    scoping_added: Finance mailbox scope (finance_mailboxes placeholder, on the actor or the target mailbox) and an external recipient check (internal_domains placeholder).

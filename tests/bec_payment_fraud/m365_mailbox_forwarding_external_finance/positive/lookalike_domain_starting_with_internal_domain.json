@@ -1,0 +1,9 @@
+{
+  "timestamp": "2026-03-02T09:15:00Z",
+  "Operation": "Set-Mailbox",
+  "UserId": "admin@corp.example.com",
+  "ClientIP": "198.51.100.23",
+  "Parameters.Identity": "ap@finance.example.com",
+  "Parameters.ForwardingSmtpAddress": "smtp:x@corp.example.com.mail.example.net",
+  "Parameters.DeliverToMailboxAndForward": "True"
+}
