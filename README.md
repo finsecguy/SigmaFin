@@ -209,6 +209,9 @@ whether the URL resolves or supports the rule. That was done by hand when each r
 - **SPL is converted but never executed against Splunk.** Tests run the SQLite conversion. The SPL is only generated
   and published as a CI artifact. SQL and SPL differ in case handling, wildcards and boolean precedence, so SPL
   behaviour is unproven.
+- **Some SPL is expected to behave differently from SQLite.** The Splunk conversion of an unordered `temporal`
+  correlation bins time in fixed windows, so one sample is predicted to match on SQLite and miss on Splunk. The
+  prediction and its sample are in [docs/splunk-expectations.md](docs/splunk-expectations.md). It is not a test result.
 - **`temporal_ordered` rules have no SPL output.** The pySigma Splunk backend 2.1.0 cannot convert that correlation
   type. These rules keep strict event ordering, are tested on SQLite only and are marked in the table. They are listed
   in `scripts/policy.yml`, and CI fails if the list goes stale.

@@ -1,0 +1,27 @@
+[
+  {
+    "timestamp": "2026-03-07T12:00:00Z",
+    "event_id": "vm-0101",
+    "source_system": "erp-test-01",
+    "user": "ap.clerk1",
+    "action": "vendor_created",
+    "status": "success",
+    "channel": "ui",
+    "vendor_id": "V200500",
+    "vendor_name": "Example Supplies Ltd",
+    "approval_status": "pending"
+  },
+  {
+    "timestamp": "2026-03-08T12:00:00Z",
+    "event_id": "pay-0202",
+    "source_system": "erp-test-01",
+    "user": "ap.clerk1",
+    "action": "payment_approved",
+    "status": "success",
+    "channel": "ui",
+    "payment_id": "P9001",
+    "vendor_id": "V200500",
+    "amount": "7400.00",
+    "currency": "EUR"
+  }
+]
