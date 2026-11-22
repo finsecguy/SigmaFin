@@ -64,21 +64,26 @@ def technique_cell(doc: lib.RuleDoc, support: set[str]) -> str:
     return ", ".join(f"{t} {mitre_attack_techniques.get(t, '?')}" for t in ts)
 
 
-def note(doc: lib.RuleDoc, unsupported: set[str], support: set[str]) -> str:
+def note(doc: lib.RuleDoc, splunk_unsupported: set[str], kusto_unsupported: set[str], support: set[str]) -> str:
     if doc.name in support:
         return "Support rule, not deployed alone"
-    if doc.name in unsupported:
+    gaps = []
+    if doc.name in splunk_unsupported:
         ctype = doc.data["correlation"]["type"]
-        return f"Sigma + SQLite tested, no SPL (Splunk backend lacks {ctype})"
-    return ""
+        gaps.append(f"no SPL (Splunk backend lacks {ctype})")
+    if doc.name in kusto_unsupported:
+        gaps.append("no KQL (Kusto backend has no correlation support)")
+    if not gaps:
+        return ""
+    return "Sigma + SQLite tested, " + "; ".join(gaps)
 
 
-def build_readme_table(docs, index, support, unsupported) -> str:
+def build_readme_table(docs, index, support, splunk_unsupported, kusto_unsupported) -> str:
     lines = ["| Rule | Theme | ATT&CK technique | Log source | Level | Notes |", "|---|---|---|---|---|---|"]
     for doc in sorted(docs, key=lambda d: (list(THEMES).index(d.theme) if d.theme in THEMES else 99, d.name)):
         lines.append(
             f"| {doc.data['title']} (`{doc.name}`) | {THEMES.get(doc.theme, doc.theme)} | {technique_cell(doc, support)} "
-            f"| {logsource(doc, index)} | {doc.data['level']} | {note(doc, unsupported, support)} |"
+            f"| {logsource(doc, index)} | {doc.data['level']} | {note(doc, splunk_unsupported, kusto_unsupported, support)} |"
         )
     return "\n".join(lines)
 
@@ -136,7 +141,8 @@ def main(argv=None) -> int:
     index = lib.index_docs(docs)
     policy = lib.load_policy()
     support = set(policy.get("support_rules", []))
-    unsupported = {e["name"] for e in policy.get("splunk_unsupported", [])}
+    splunk_unsupported = {e["name"] for e in policy.get("splunk_unsupported", [])}
+    kusto_unsupported = {e["name"] for e in policy.get("kusto_unsupported", [])}
     overlap = yaml.safe_load(OVERLAP.read_text(encoding="utf-8"))
 
     readme = README.read_text(encoding="utf-8")
@@ -144,7 +150,10 @@ def main(argv=None) -> int:
     if not pattern.search(readme):
         print(f"README.md is missing the {START} / {END} markers")
         return 1
-    new_readme = pattern.sub(lambda _: f"{START}\n{build_readme_table(docs, index, support, unsupported)}\n{END}", readme)
+    new_readme = pattern.sub(
+        lambda _: f"{START}\n{build_readme_table(docs, index, support, splunk_unsupported, kusto_unsupported)}\n{END}",
+        readme,
+    )
 
     outputs = {
         DOCS / "rule-catalog.md": build_catalog(docs, index, support, overlap),

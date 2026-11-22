@@ -20,11 +20,11 @@ description: |
     "external@mail.example.net;colleague@corp.example.com"), the rule misses it; this is asserted in
     tests/known_gaps/.
 references:
-    - https://attack.mitre.org/techniques/T1114/003/
     - https://www.ic3.gov/CSA/2020/201204.pdf
     - https://www.ic3.gov/PSA/2020/PSA200406
 author: SigmaFin Contributors
 date: 2026-10-20
+modified: 2026-11-22
 tags:
     - attack.collection
     - attack.t1114.003

@@ -73,7 +73,8 @@ description: |
     the severity when an inbox rule change follows. The correlation uses its own copies of both conditions
     (entra_finance_anonymous_signin_event and m365_inbox_rule_change_event) so everything can be deployed together.
     Needs a backend with temporal_ordered correlation support. The pySigma Splunk backend 2.1.0 does not convert it,
-    so this rule is tested on the SQLite backend only and has no SPL output.
+    and the pySigma Kusto backend 1.0.1 does not convert correlation rules, so this rule is tested on the SQLite
+    backend only and has no SPL or KQL output.
 references:
     - https://www.microsoft.com/en-us/security/blog/2022/07/12/from-cookie-theft-to-bec-attackers-use-aitm-phishing-sites-as-entry-point-to-further-financial-fraud/
     - https://learn.microsoft.com/en-us/defender-office-365/responding-to-a-compromised-email-account

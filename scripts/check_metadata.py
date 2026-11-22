@@ -94,7 +94,12 @@ def check(rules_dir: Path, tests_dir: Path, policy_file: Path) -> list[str]:
             if support.data.get(key) != original.data.get(key):
                 errors.append(f"{support.name}: {key} differs from {original.name} (mirrored rules must match)")
 
-    for entry in policy.get("no_technique", []) + policy.get("support_rules", []) + policy.get("splunk_unsupported", []):
+    for entry in (
+        policy.get("no_technique", [])
+        + policy.get("support_rules", [])
+        + policy.get("splunk_unsupported", [])
+        + policy.get("kusto_unsupported", [])
+    ):
         name = entry["name"] if isinstance(entry, dict) else entry
         if name not in index:
             errors.append(f"policy.yml lists unknown rule {name!r}")

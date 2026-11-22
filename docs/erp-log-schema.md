@@ -98,6 +98,7 @@ can be thin. That is a design intent, not tested support: SigmaFin has not been 
 
 ## Using the schema with a backend
 
-`pipelines/sigmafin_splunk.yml` maps each service to a Splunk sourcetype (made-up names that you should change). To
+`pipelines/sigmafin_splunk.yml` maps each service to a Splunk sourcetype (made-up names that you should change).
+`pipelines/sigmafin_kusto.yml` maps each service to a KQL table name (`sigmafin_erp_*`, also a placeholder). To
 rename fields to your ERP's column names, add `field_name_mapping` transformations conditioned on the logsource. The
-file contains a commented, untested example of the shape.
+Splunk file contains a commented, untested example of the shape. The Kusto file has the same example.

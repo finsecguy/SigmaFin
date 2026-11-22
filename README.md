@@ -42,7 +42,7 @@ exists, and the rule's description says so.
 <!-- RULES:START -->
 | Rule | Theme | ATT&CK technique | Log source | Level | Notes |
 |---|---|---|---|---|---|
-| Finance Anonymous Sign-in Followed by Inbox Rule Change (`entra_anonymous_signin_then_inbox_rule`) | 1. BEC and payment fraud | T1078.004 Cloud Accounts, T1564.008 Email Hiding Rules | azure/signinlogs + m365/audit | high | Sigma + SQLite tested, no SPL (Splunk backend lacks temporal_ordered) |
+| Finance Anonymous Sign-in Followed by Inbox Rule Change (`entra_anonymous_signin_then_inbox_rule`) | 1. BEC and payment fraud | T1078.004 Cloud Accounts, T1564.008 Email Hiding Rules | azure/signinlogs + m365/audit | high | Sigma + SQLite tested, no SPL (Splunk backend lacks temporal_ordered); no KQL (Kusto backend has no correlation support) |
 | Finance Anonymous Sign-in Correlation Input (`entra_finance_anonymous_signin_event`) | 1. BEC and payment fraud | none (support rule) | azure/signinlogs | informational | Support rule, not deployed alone |
 | Finance Account Signs In From Anonymous IP Address (`entra_finance_signin_anonymous_ip`) | 1. BEC and payment fraud | T1078.004 Cloud Accounts, T1090.003 Multi-hop Proxy | azure/signinlogs | medium |  |
 | Finance Account Sign-in From Country Outside Allowed List (`entra_finance_signin_unlisted_country`) | 1. BEC and payment fraud | T1078.004 Cloud Accounts | azure/signinlogs | medium |  |
@@ -51,15 +51,15 @@ exists, and the rule's description says so.
 | Finance Mailbox Inbox Rule Hides or Deletes Finance Keyword Mail (`m365_inbox_rule_hides_finance_mail`) | 1. BEC and payment fraud | T1564.008 Email Hiding Rules | m365/audit | medium |  |
 | Finance Mailbox Forwarding Set to External Address (`m365_mailbox_forwarding_external_finance`) | 1. BEC and payment fraud | T1114.003 Email Forwarding Rule | m365/audit | high |  |
 | Vendor Created (Correlation Input) (`erp_new_vendor_created_event`) | 2. Vendor and payment manipulation (ERP) | none (support rule) | erp/vendor_master | informational | Support rule, not deployed alone |
-| New Vendor Created Then Paid Within Three Days (`erp_new_vendor_paid_quickly`) | 2. Vendor and payment manipulation (ERP) | fraud, no technique | erp/vendor_master + erp/payments | medium | Sigma + SQLite tested, no SPL (Splunk backend lacks temporal_ordered) |
+| New Vendor Created Then Paid Within Three Days (`erp_new_vendor_paid_quickly`) | 2. Vendor and payment manipulation (ERP) | fraud, no technique | erp/vendor_master + erp/payments | medium | Sigma + SQLite tested, no SPL (Splunk backend lacks temporal_ordered); no KQL (Kusto backend has no correlation support) |
 | Vendor Payment Released (New Vendor Correlation Input) (`erp_new_vendor_payment_released_event`) | 2. Vendor and payment manipulation (ERP) | none (support rule) | erp/payments | informational | Support rule, not deployed alone |
 | Payment Run Modified Outside Business Hours (`erp_payment_run_modified_outside_hours`) | 2. Vendor and payment manipulation (ERP) | fraud, no technique | erp/payments | medium |  |
 | Vendor Payment Approved (Correlation Input) (`erp_sod_payment_approved_event`) | 2. Vendor and payment manipulation (ERP) | none (support rule) | erp/payments | informational | Support rule, not deployed alone |
 | Vendor Created (Segregation of Duties Correlation Input) (`erp_sod_vendor_created_event`) | 2. Vendor and payment manipulation (ERP) | none (support rule) | erp/vendor_master | informational | Support rule, not deployed alone |
 | Vendor Bank Details Changed (Correlation Input) (`erp_vendor_bank_change_event`) | 2. Vendor and payment manipulation (ERP) | none (support rule) | erp/vendor_master | informational | Support rule, not deployed alone |
-| Vendor Bank Details Changed Then Payment Released (`erp_vendor_bank_change_then_payment`) | 2. Vendor and payment manipulation (ERP) | T1657 Financial Theft | erp/vendor_master + erp/payments | high | Sigma + SQLite tested, no SPL (Splunk backend lacks temporal_ordered) |
+| Vendor Bank Details Changed Then Payment Released (`erp_vendor_bank_change_then_payment`) | 2. Vendor and payment manipulation (ERP) | T1657 Financial Theft | erp/vendor_master + erp/payments | high | Sigma + SQLite tested, no SPL (Splunk backend lacks temporal_ordered); no KQL (Kusto backend has no correlation support) |
 | Vendor Master Bank Details Changed (`erp_vendor_bank_details_changed`) | 2. Vendor and payment manipulation (ERP) | T1657 Financial Theft | erp/vendor_master | medium |  |
-| Same User Created a Vendor and Approved a Payment to It (`erp_vendor_created_and_payment_approved_by_same_user`) | 2. Vendor and payment manipulation (ERP) | fraud, no technique | erp/vendor_master + erp/payments | high |  |
+| Same User Created a Vendor and Approved a Payment to It (`erp_vendor_created_and_payment_approved_by_same_user`) | 2. Vendor and payment manipulation (ERP) | fraud, no technique | erp/vendor_master + erp/payments | high | Sigma + SQLite tested, no KQL (Kusto backend has no correlation support) |
 | Vendor Payment Released (`erp_vendor_payment_released`) | 2. Vendor and payment manipulation (ERP) | none (support rule) | erp/payments | informational | Support rule, not deployed alone |
 | ERP Emergency Access Started (`erp_emergency_access_started`) | 3. Privileged ERP and finance app abuse | T1078 Valid Accounts | erp/user_admin | medium |  |
 | ERP Privileged Role Assigned Without Approval (`erp_privileged_role_assigned_without_approval`) | 3. Privileged ERP and finance app abuse | T1098 Account Manipulation | erp/user_admin | high |  |
@@ -91,6 +91,7 @@ sigma check --fail-on-issues --fail-on-error rules   # Sigma validation
 python scripts/check_metadata.py                     # references, tags, ids, samples, mirrors
 python -m pytest -q tests                            # sample tests, harness and gate self-tests
 python scripts/build_spl.py                          # Splunk SPL into build/spl/
+python scripts/build_kql.py                          # KQL into build/kql/
 ```
 
 Other commands:
@@ -105,11 +106,51 @@ To convert one rule yourself, pass the pipelines it needs. This prints SPL:
 
 ```bash
 sigma convert -t splunk -p pipelines/finance_scope.yml -p pipelines/sigmafin_splunk.yml \
-  rules/bec_payment_fraud/m365_inbox_rule_external_forward_finance.yml
+  rules/bec_payment_fraud/microsoft365_inbox_rule_external_forward_finance.yml
 ```
 
 A rule that uses a finance scope placeholder fails loudly if `finance_scope.yml` is missing ("unhandled placeholder")
-instead of silently producing an unscoped query.
+instead of silently producing an unscoped query. KQL usage is in the next section.
+
+## KQL usage
+
+`scripts/build_kql.py` converts every rule to Kusto Query Language with pySigma and `pysigma-backend-kusto`, and
+writes `build/kql/<theme>/<rule_name>.kql` plus `build/kql/SUMMARY.md`. The layout matches `scripts/build_spl.py`.
+Support rules are not written as their own files. A conversion failure fails the build unless the rule is listed
+under `kusto_unsupported` in `scripts/policy.yml`, and a listed rule that starts converting also fails the build.
+`build/` is gitignored, so the generated KQL is not committed, the same as the generated SPL. CI publishes `build/kql`
+as the `kusto-kql` artifact.
+
+The conversion passes `pipelines/finance_scope.yml` and `pipelines/sigmafin_kusto.yml`. The first expands the finance
+lists. The second sets the Kusto table:
+
+| Log source | Shipped table | What it is |
+|---|---|---|
+| `product: m365`, `service: audit` | `OfficeActivity` | Microsoft Sentinel unified audit log |
+| `product: azure`, `service: signinlogs` | `SigninLogs` | Microsoft Sentinel Entra sign-in log |
+| `product: erp`, `service: vendor_master` | `sigmafin_erp_vendor_master` | Placeholder for the ERP schema |
+| `product: erp`, `service: payments` | `sigmafin_erp_payments` | Placeholder for the ERP schema |
+| `product: erp`, `service: user_admin` | `sigmafin_erp_user_admin` | Placeholder for the ERP schema |
+
+Microsoft Defender XDR advanced hunting speaks KQL and uses different tables and columns (`CloudAppEvents`,
+`AADSignInEventsBeta`, and custom tables). Copy `pipelines/sigmafin_kusto.yml`, change `query_table`, and add
+`field_name_mapping` entries before you run a generated query as a Defender hunt. The shipped queries use the
+Sentinel column names the rules already use.
+
+To convert one rule with the raw backend:
+
+```bash
+sigma convert -t kusto -p pipelines/finance_scope.yml -p pipelines/sigmafin_kusto.yml \
+  rules/bec_payment_fraud/microsoft365_inbox_rule_external_forward_finance.yml
+```
+
+That command prints the backend text, which single-quotes dotted field names. `build_kql.py` is what CI runs. It
+rewrites those identifiers to KQL bracket quotes (`['Parameters.ForwardTo']`), because a single-quoted token in KQL
+is a string, not a column. The stock `OfficeActivity` table still stores `Parameters` as a property bag, so the
+bracket name matches only after you flatten parameters the way [docs/m365-fields.md](docs/m365-fields.md) describes.
+
+Correlation rules have no KQL file. Backend 1.0.1 does not implement Sigma correlations. Those rules stay listed in
+`scripts/policy.yml`.
 
 ## Log sources and schemas
 
@@ -126,7 +167,8 @@ workstations, and the reserved ERP services `user_admin`, `system_audit` and `re
 [docs/erp-log-schema.md](docs/erp-log-schema.md). It is shaped like field-level change records (object, field, old
 value, new value) plus payment records. You map your ERP audit data into it. No ERP product has been tested, and
 SigmaFin makes no vendor-specific support claim. `pipelines/sigmafin_splunk.yml` maps the logsources to Splunk
-sourcetypes. The sourcetype names are placeholders you should change.
+sourcetypes. `pipelines/sigmafin_kusto.yml` maps them to KQL tables. The ERP names in both files are placeholders
+you should change.
 
 **Business hours field.** Sigma has no time-of-day condition. Rules that need one read a precomputed
 `outside_business_hours` field (`true` or `false`) that your ingestion or enrichment step must populate from the
@@ -184,12 +226,14 @@ Tests convert the real rule files, not a copy of their logic.
 - **Known gaps.** `tests/known_gaps/` holds events a rule should flag but currently misses.
   `tests/test_known_gaps.py` asserts the miss, so a gap stays visible and the test fails when the rule is fixed.
 
-What the tests do not do: they apply only `finance_scope.yml`, so the logsource mapping in `sigmafin_splunk.yml` is not
-exercised, and nothing checks sample field names against the schema documents.
+What the tests do not do: they apply only `finance_scope.yml`, so the logsource mapping in `sigmafin_splunk.yml` and
+the table mapping in `sigmafin_kusto.yml` are not exercised, and nothing checks sample field names against the schema
+documents.
 
 ## CI gates
 
-CI (`.github/workflows/ci.yml`) runs on every push and pull request, on Python 3.12 and 3.14. The steps:
+CI (`.github/workflows/ci.yml`) runs on every push and pull request, on Python 3.12 and 3.14. The workflow
+permission is `contents: read`. Actions are pinned to commit SHAs. The steps:
 
 | Gate | Fails on | Self-tested |
 |---|---|---|
@@ -199,7 +243,8 @@ CI (`.github/workflows/ci.yml`) runs on every push and pull request, on Python 3
 | `pytest` | Failing positive or negative samples, harness checks, known gap checks, whole-directory checks | The harness is self-tested. The sample tests themselves are not |
 | `gen_docs.py --check` | README table or generated docs out of date | Yes |
 | `build_spl.py` | A rule fails to convert and is not listed as unsupported, or a listed rule now converts | Yes, both directions |
-| Artifact upload | Not a gate. Publishes `build/spl` as the `splunk-spl` artifact from the 3.12 job | No |
+| `build_kql.py` | A rule fails to convert and is not listed as unsupported, or a listed rule now converts | Yes, both directions |
+| Artifact upload | Not a gate. Publishes `build/spl` as `splunk-spl` and `build/kql` as `kusto-kql` from the 3.12 job | No |
 
 Rule metadata is also covered only as far as these checks go. References are checked for presence and HTTPS, not for
 whether the URL resolves or supports the rule. That was done by hand when each rule was written.
@@ -209,12 +254,21 @@ whether the URL resolves or supports the rule. That was done by hand when each r
 - **SPL is converted but never executed against Splunk.** Tests run the SQLite conversion. The SPL is only generated
   and published as a CI artifact. SQL and SPL differ in case handling, wildcards and boolean precedence, so SPL
   behaviour is unproven.
+- **KQL is converted but never executed.** The same limit applies to Sentinel and Defender. `build_kql.py` checks
+  that each query starts with a table name. It does not run the query. A boolean comparison is emitted with the
+  backend's `=~` operator (`outside_business_hours =~ true` on the payment run rule).
 - **Some SPL is expected to behave differently from SQLite.** The Splunk conversion of an unordered `temporal`
   correlation bins time in fixed windows, so one sample is predicted to match on SQLite and miss on Splunk. The
   prediction and its sample are in [docs/splunk-expectations.md](docs/splunk-expectations.md). It is not a test result.
 - **`temporal_ordered` rules have no SPL output.** The pySigma Splunk backend 2.1.0 cannot convert that correlation
   type. These rules keep strict event ordering, are tested on SQLite only and are marked in the table. They are listed
   in `scripts/policy.yml`, and CI fails if the list goes stale.
+- **Correlation rules have no KQL output.** The pySigma Kusto backend 1.0.1 does not implement Sigma correlation
+  rules, so both `temporal` and `temporal_ordered` rules are omitted. The `temporal` rule still converts to SPL.
+  The gaps are listed under `kusto_unsupported` in `scripts/policy.yml`, and CI fails if the list goes stale.
+- **Shipped KQL uses Sentinel table names.** `OfficeActivity` and `SigninLogs` follow the field names in the rules.
+  Defender XDR advanced hunting uses other tables and columns. ERP tables are placeholders (`sigmafin_erp_*`).
+  Change `pipelines/sigmafin_kusto.yml` before you deploy a query.
 - **Samples are synthetic.** Every event is made up. Passing tests show the rule logic does what the author intended
   on those events, not that it fits real telemetry or finds real attacks.
 - **The ERP schema is generic.** You must map your ERP audit data into it, and no vendor-specific mapping or support
@@ -252,6 +306,10 @@ commit `f083329`, 2026-10-19) was searched for an equivalent. The terms, matches
 
 Only rules that exist have been checked. Each new rule gets the same check first.
 
+[docs/sigmahq-submission.md](docs/sigmahq-submission.md) records which `microsoft365_*` finance rules meet SigmaHQ
+conventions and which edits were applied in this repo. That note is preparation only. No pull request has been
+opened against SigmaHQ.
+
 ## Version pins
 
 `requirements.txt` pins exact versions:
@@ -261,11 +319,13 @@ Only rules that exist have been checked. Each new rule gets the same check first
 | pySigma | 1.5.1 |
 | pysigma-backend-sqlite | 2.0.0 |
 | pysigma-backend-splunk | 2.1.0 |
+| pysigma-backend-kusto | 1.0.1 |
 | sigma-cli | 3.1.0 |
 
 sigma-cli 3.1.0 requires pySigma below 2.0, and the newer SQLite backend (2.1.x) requires pySigma 2.0.1 or newer, so
-the two cannot be installed together. The set above was verified to install and pass every gate. Revisit the pins when
-a sigma-cli release supports pySigma 2.x.
+the two cannot be installed together. pysigma-backend-kusto 1.0.1 is the newest Kusto release that still accepts
+pySigma 1.x. The set above was verified to install and pass every gate. Revisit the pins when a sigma-cli release
+supports pySigma 2.x.
 
 ## Roadmap
 

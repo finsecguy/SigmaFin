@@ -1,0 +1,72 @@
+# Maps SigmaFin logsources to Kusto table names.
+#
+# The table values are assumptions: change them to match how your data is
+# onboarded. OfficeActivity and SigninLogs are the Microsoft Sentinel tables
+# whose column names match the fields these rules already use (see
+# docs/m365-fields.md and docs/entra-fields.md). Defender XDR advanced hunting
+# uses different tables and columns (CloudAppEvents, AADSignInEventsBeta, and
+# so on). Point the same logsource at your Defender table and add a
+# field_name_mapping if you hunt there. "sigmafin_erp_*" is a made-up name for
+# the vendor-neutral ERP schema in docs/erp-log-schema.md. To map the generic
+# ERP field names to the columns of a specific audit table, add a
+# field_name_mapping transformation conditioned on the same logsource (see the
+# commented example).
+name: SigmaFin Kusto table mapping
+priority: 20
+allowed_backends:
+  - kusto
+transformations:
+  - id: m365_audit_table
+    type: set_state
+    key: query_table
+    val: OfficeActivity
+    rule_conditions:
+      - type: logsource
+        product: m365
+        service: audit
+  - id: entra_signinlogs_table
+    type: set_state
+    key: query_table
+    val: SigninLogs
+    rule_conditions:
+      - type: logsource
+        product: azure
+        service: signinlogs
+  - id: erp_vendor_master_table
+    type: set_state
+    key: query_table
+    val: sigmafin_erp_vendor_master
+    rule_conditions:
+      - type: logsource
+        product: erp
+        service: vendor_master
+  - id: erp_payments_table
+    type: set_state
+    key: query_table
+    val: sigmafin_erp_payments
+    rule_conditions:
+      - type: logsource
+        product: erp
+        service: payments
+  - id: erp_user_admin_table
+    type: set_state
+    key: query_table
+    val: sigmafin_erp_user_admin
+    rule_conditions:
+      - type: logsource
+        product: erp
+        service: user_admin
+  # Illustrative only, not tested against any real ERP:
+  # - id: erp_vendor_master_field_names
+  #   type: field_name_mapping
+  #   mapping:
+  #     vendor_id: SUPPLIER_NO
+  #   rule_conditions:
+  #     - type: logsource
+  #       product: erp
+  #       service: vendor_master
+postprocessing:
+  - type: template
+    template: |
+      {{ pipeline.state['query_table'] }}
+      | where {{ query }}

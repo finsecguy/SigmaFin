@@ -61,7 +61,8 @@ description: |
     expects access authorizations that support separation of duties, and describes it as reducing the risk of abuse
     without collusion.
     The correlation is unordered (temporal): approving a payment to a vendor that does not exist yet cannot happen,
-    so the order adds nothing, and unordered correlations convert to Splunk.
+    so the order adds nothing, and unordered correlations convert to Splunk. The pySigma Kusto backend 1.0.1 does
+    not convert correlation rules, so this rule has no KQL output.
     No ATT&CK technique applies. This is business process fraud, tagged with no ATT&CK technique.
     It only sees the approval event. If your ERP puts the approving account in a different field than user, map it
     into user at ingestion (docs/erp-log-schema.md). Small teams where one person legitimately does both need an

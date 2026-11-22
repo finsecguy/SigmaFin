@@ -19,7 +19,9 @@ parameter as its own field named `Parameters.<Name>`:
 
 Flatten at ingestion (for example with a Splunk field extraction or an ingestion pipeline). SigmaFin does not ship
 this normalization. SigmaHQ M365 rules solve the same problem differently, by matching the serialized list with
-`Parameters|contains`, which cannot express an external domain check.
+`Parameters|contains`, which cannot express an external domain check. Generated KQL keeps these dotted names and
+writes them as KQL bracket identifiers, for example `['Parameters.ForwardTo']`. The stock Sentinel `OfficeActivity`
+table still stores `Parameters` as a property bag until you promote the flattened columns.
 
 Known limitation: when one parameter holds several recipients, the rules judge only the end of the value against the
 internal domains. Normalizing to one event per recipient removes the limitation.
