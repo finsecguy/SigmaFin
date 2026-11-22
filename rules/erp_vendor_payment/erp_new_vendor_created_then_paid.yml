@@ -70,7 +70,8 @@ description: |
     The 3 day window is a starting point. Tune it to your onboarding process, which may be much longer, and consider
     suppressing vendors created through an approved onboarding workflow.
     Needs a backend with temporal_ordered correlation support. The pySigma Splunk backend 2.1.0 does not convert it,
-    so this rule is tested on the SQLite backend only and has no SPL output.
+    and the pySigma Kusto backend 1.0.1 does not convert correlation rules, so this rule is tested on the SQLite
+    backend only and has no SPL or KQL output.
 references:
     - https://www.oversight.gov/sites/default/files/documents/reports/2020-04/2019-15666.pdf
     - https://www.criadv.com/insight/unearthing-occupational-fraud-in-your-business

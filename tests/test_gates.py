@@ -17,6 +17,7 @@ import pytest
 SCRIPTS = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPTS))
 
+import build_kql  # noqa: E402
 import build_spl  # noqa: E402
 import check_metadata  # noqa: E402
 import check_no_em_dash  # noqa: E402
@@ -95,7 +96,7 @@ def test_metadata_gate_fails_on_missing_negative_sample(tree):
 
 
 def test_metadata_gate_fails_on_duplicate_id(tree):
-    other = tree / "rules" / "bec_payment_fraud" / "m365_inbox_rule_external_forward_finance.yml"
+    other = tree / "rules" / "bec_payment_fraud" / "microsoft365_inbox_rule_external_forward_finance.yml"
     _edit(other, "4b0f8f5e-2c6a-4d1e-9a47-3e5d7b1c9f20", "9c3a1e7d-5f42-4b8a-8d16-0a7e2b4c6d51")
     assert _meta(tree) != 0
 
@@ -115,6 +116,38 @@ def test_spl_build_fails_when_listed_rule_actually_converts(tmp_path):
         "  - {name: erp_vendor_bank_details_changed, reason: stale entry}\n"
     )
     assert build_spl.main(["--out", str(tmp_path / "out"), "--policy", str(policy)]) != 0
+
+
+def test_kql_build_fails_when_unsupported_rule_is_not_listed(tmp_path):
+    empty = tmp_path / "policy.yml"
+    empty.write_text("no_technique: []\nsupport_rules: [erp_vendor_payment_released]\nkusto_unsupported: []\n")
+    assert build_kql.main(["--out", str(tmp_path / "out"), "--policy", str(empty)]) != 0
+
+
+def test_kql_build_fails_when_listed_rule_actually_converts(tmp_path):
+    policy = tmp_path / "policy.yml"
+    policy.write_text(
+        "no_technique: []\nsupport_rules: [erp_vendor_payment_released]\n"
+        "kusto_unsupported:\n"
+        "  - {name: entra_anonymous_signin_then_inbox_rule, reason: x}\n"
+        "  - {name: erp_vendor_bank_details_changed, reason: stale entry}\n"
+    )
+    assert build_kql.main(["--out", str(tmp_path / "out"), "--policy", str(policy)]) != 0
+
+
+def test_kql_build_writes_queries_and_skips_unsupported(tmp_path):
+    out = tmp_path / "kql"
+    assert build_kql.main(["--out", str(out)]) == 0
+    text = (out / "bec_payment_fraud" / "m365_inbox_rule_external_forward_finance.kql").read_text(encoding="utf-8")
+    assert text.startswith("OfficeActivity\n| where ")
+    assert "['Parameters.ForwardTo']" in text
+    bare = text.replace("['Parameters.ForwardTo']", "")
+    assert "'Parameters.ForwardTo'" not in bare
+    assert not (out / "bec_payment_fraud" / "entra_anonymous_signin_then_inbox_rule.kql").exists()
+    summary = (out / "SUMMARY.md").read_text(encoding="utf-8")
+    assert "| entra_anonymous_signin_then_inbox_rule | unsupported |" in summary
+    assert "| erp_vendor_created_and_payment_approved_by_same_user | unsupported |" in summary
+    assert "| erp_vendor_bank_details_changed | converted |" in summary
 
 
 def test_em_dash_gate_fails_on_em_dash(tmp_path):

@@ -72,7 +72,8 @@ description: |
     raises the severity when money moves. The correlation uses its own copy of the bank change condition
     (erp_vendor_bank_change_event) so both can be deployed together.
     Needs a backend with temporal_ordered correlation support. The pySigma Splunk backend 2.1.0 does not convert it,
-    so this rule is tested on the SQLite backend only and has no SPL output.
+    and the pySigma Kusto backend 1.0.1 does not convert correlation rules, so this rule is tested on the SQLite
+    backend only and has no SPL or KQL output.
 references:
     - https://attack.mitre.org/techniques/T1657/
     - https://www.ic3.gov/PSA/2017/PSA170504

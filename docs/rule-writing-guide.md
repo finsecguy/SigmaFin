@@ -20,7 +20,8 @@
    correlation its own support rules: a support rule shared by two correlations makes pySigma fail when the whole
    `rules/` directory is converted ("Conversion state not available"), so copy it and list the copy under `mirrors`.
    Give the support rules `status`, tests and a `support_rules` entry in `policy.yml`. The SQLite backend converts
-   `event_count`, `value_count`, `temporal` and `temporal_ordered`; the Splunk backend 2.1.0 does not convert
-   `temporal_ordered`.
-8. **Run everything.** `sigma check -i rules`, `pytest`, `python scripts/gen_docs.py`, `python scripts/build_spl.py`.
+   `event_count`, `value_count`, `temporal` and `temporal_ordered`. The Splunk backend 2.1.0 does not convert
+   `temporal_ordered`. The Kusto backend 1.0.1 does not convert any correlation type.
+8. **Run everything.** `sigma check -i rules`, `pytest`, `python scripts/gen_docs.py`, `python scripts/build_spl.py`,
+   `python scripts/build_kql.py`.
 9. **No em dashes** in docs, comments or commit messages. CI enforces this.

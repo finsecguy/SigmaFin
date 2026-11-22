@@ -20,12 +20,12 @@ description: |
     and Microsoft documents it as an internal recipient, so it is not covered. A mail contact that points outside is
     not seen by this rule. Inbox rule forwarding is covered by m365_inbox_rule_external_forward_finance.
 references:
-    - https://attack.mitre.org/techniques/T1114/003/
     - https://learn.microsoft.com/en-us/defender-office-365/responding-to-a-compromised-email-account
     - https://learn.microsoft.com/en-us/exchange/recipients-in-exchange-online/manage-user-mailboxes/configure-email-forwarding
     - https://www.ic3.gov/PSA/2020/PSA200406
 author: SigmaFin Contributors
 date: 2026-10-20
+modified: 2026-11-22
 tags:
     - attack.collection
     - attack.t1114.003

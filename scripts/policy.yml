@@ -1,6 +1,6 @@
 # Explicit exceptions to the CI gates. Every entry needs a reason.
 # Anything not listed here is held to the full rule: ATT&CK technique tag,
-# Splunk conversion succeeds.
+# Splunk conversion succeeds, and Kusto conversion succeeds.
 
 # Rules allowed to carry no attack.tNNNN tag. The description of each must
 # contain the text "No ATT&CK" or "no ATT&CK" so the reader is told why.
@@ -61,3 +61,16 @@ splunk_unsupported:
     reason: Splunk backend 2.1.0 lacks temporal_ordered correlation support. Sigma + SQLite tested, no SPL.
   - name: erp_new_vendor_paid_quickly
     reason: Splunk backend 2.1.0 lacks temporal_ordered correlation support. Sigma + SQLite tested, no SPL.
+
+# Rules the pySigma Kusto backend cannot convert. CI fails if a rule fails to
+# convert and is not listed here, and also if a listed rule starts converting.
+# Backend 1.0.1 has no Sigma correlation support at all.
+kusto_unsupported:
+  - name: erp_vendor_bank_change_then_payment
+    reason: Kusto backend 1.0.1 does not convert correlation rules. Sigma + SQLite tested, no KQL.
+  - name: entra_anonymous_signin_then_inbox_rule
+    reason: Kusto backend 1.0.1 does not convert correlation rules. Sigma + SQLite tested, no KQL.
+  - name: erp_new_vendor_paid_quickly
+    reason: Kusto backend 1.0.1 does not convert correlation rules. Sigma + SQLite tested, no KQL.
+  - name: erp_vendor_created_and_payment_approved_by_same_user
+    reason: Kusto backend 1.0.1 does not convert correlation rules. Splunk still converts this temporal rule. Sigma + SQLite tested, no KQL.
