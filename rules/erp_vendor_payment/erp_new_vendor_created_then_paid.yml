@@ -12,7 +12,7 @@ description: |
     whole rules directory is converted. scripts/check_metadata.py fails the build if the copies diverge.
 references:
     - https://www.criadv.com/insight/unearthing-occupational-fraud-in-your-business
-author: SigmaFin Contributors
+author: Herman K. (finsecguy)
 date: 2026-10-20
 logsource:
     product: erp
@@ -38,7 +38,7 @@ description: |
     No ATT&CK technique applies to a payment release by itself, so no technique tag is set.
 references:
     - https://www.criadv.com/insight/unearthing-occupational-fraud-in-your-business
-author: SigmaFin Contributors
+author: Herman K. (finsecguy)
 date: 2026-10-20
 logsource:
     product: erp
@@ -76,7 +76,7 @@ references:
     - https://www.oversight.gov/sites/default/files/documents/reports/2020-04/2019-15666.pdf
     - https://www.criadv.com/insight/unearthing-occupational-fraud-in-your-business
     - https://csf.tools/reference/nist-sp-800-53/r5/ac/ac-5/
-author: SigmaFin Contributors
+author: Herman K. (finsecguy)
 date: 2026-10-20
 correlation:
     type: temporal_ordered

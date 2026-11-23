@@ -1,0 +1,2236 @@
+{
+  "@graph": [
+    {
+      "@type": "owl:Ontology",
+      "owl:versionIRI": {
+        "@id": "http://d3fend.mitre.org/ontologies/d3fend/1.6.0/d3fend.owl"
+      }
+    },
+    {
+      "@id": "d3f:ARMA_Model",
+      "@type": [
+        "d3f:TimeSeriesAnalysis"
+      ],
+      "rdfs:label": "ARMA Model",
+      "d3f:d3fend-id": "D3-ARMA"
+    },
+    {
+      "@id": "d3f:AccessMediation",
+      "@type": [
+        "d3f:AccessMediation"
+      ],
+      "rdfs:label": "Access Mediation",
+      "d3f:d3fend-id": "D3-AMED"
+    },
+    {
+      "@id": "d3f:AccessModeling",
+      "@type": [
+        "d3f:AccessModeling"
+      ],
+      "rdfs:label": "Access Modeling",
+      "d3f:d3fend-id": "D3-AM"
+    },
+    {
+      "@id": "d3f:AccessPolicyAdministration",
+      "@type": [
+        "d3f:AccessPolicyAdministration"
+      ],
+      "rdfs:label": "Access Policy Administration",
+      "d3f:d3fend-id": "D3-APA"
+    },
+    {
+      "@id": "d3f:AccountLocking",
+      "@type": [
+        "d3f:AccountLocking"
+      ],
+      "rdfs:label": "Account Locking",
+      "d3f:d3fend-id": "D3-AL"
+    },
+    {
+      "@id": "d3f:ActiveCertificateAnalysis",
+      "@type": [
+        "d3f:ActiveCertificateAnalysis"
+      ],
+      "rdfs:label": "Active Certificate Analysis",
+      "d3f:d3fend-id": "D3-ACA"
+    },
+    {
+      "@id": "d3f:ActiveLogicalLinkMapping",
+      "@type": [
+        "d3f:ActiveLogicalLinkMapping"
+      ],
+      "rdfs:label": "Active Logical Link Mapping",
+      "d3f:d3fend-id": "D3-ALLM"
+    },
+    {
+      "@id": "d3f:ActivePhysicalLinkMapping",
+      "@type": [
+        "d3f:ActivePhysicalLinkMapping"
+      ],
+      "rdfs:label": "Active Physical Link Mapping",
+      "d3f:d3fend-id": "D3-APLM"
+    },
+    {
+      "@id": "d3f:AdministrativeNetworkActivityAnalysis",
+      "@type": [
+        "d3f:AdministrativeNetworkActivityAnalysis"
+      ],
+      "rdfs:label": "Administrative Network Activity Analysis",
+      "d3f:d3fend-id": "D3-ANAA"
+    },
+    {
+      "@id": "d3f:AgentAuthentication",
+      "@type": [
+        "d3f:AgentAuthentication"
+      ],
+      "rdfs:label": "Agent Authentication",
+      "d3f:d3fend-id": "D3-AA"
+    },
+    {
+      "@id": "d3f:Application-basedProcessIsolation",
+      "@type": [
+        "d3f:Application-basedProcessIsolation"
+      ],
+      "rdfs:label": "Application-based Process Isolation",
+      "d3f:d3fend-id": "D3-ABPI"
+    },
+    {
+      "@id": "d3f:ApplicationConfigurationHardening",
+      "@type": [
+        "d3f:ApplicationConfigurationHardening"
+      ],
+      "rdfs:label": "Application Configuration Hardening",
+      "d3f:d3fend-id": "D3-ACH"
+    },
+    {
+      "@id": "d3f:ApplicationExceptionMonitoring",
+      "@type": [
+        "d3f:ApplicationExceptionMonitoring"
+      ],
+      "rdfs:label": "Application Exception Monitoring",
+      "d3f:d3fend-id": "D3-AEM"
+    },
+    {
+      "@id": "d3f:ApplicationHardening",
+      "@type": [
+        "d3f:ApplicationHardening"
+      ],
+      "rdfs:label": "Application Hardening",
+      "d3f:d3fend-id": "D3-AH"
+    },
+    {
+      "@id": "d3f:ApplicationPerformanceMonitoring",
+      "@type": [
+        "d3f:ApplicationPerformanceMonitoring"
+      ],
+      "rdfs:label": "Application Performance Monitoring",
+      "d3f:d3fend-id": "D3-APM"
+    },
+    {
+      "@id": "d3f:ApplicationProtocolCommandAnalysis",
+      "@type": [
+        "d3f:ApplicationProtocolCommandAnalysis"
+      ],
+      "rdfs:label": "Application Protocol Command Analysis",
+      "d3f:d3fend-id": "D3-APCA"
+    },
+    {
+      "@id": "d3f:AssetInventory",
+      "@type": [
+        "d3f:AssetInventory"
+      ],
+      "rdfs:label": "Asset Inventory",
+      "d3f:d3fend-id": "D3-AI"
+    },
+    {
+      "@id": "d3f:AssetVulnerabilityEnumeration",
+      "@type": [
+        "d3f:AssetVulnerabilityEnumeration"
+      ],
+      "rdfs:label": "Asset Vulnerability Enumeration",
+      "d3f:d3fend-id": "D3-AVE"
+    },
+    {
+      "@id": "d3f:AuthenticationCacheInvalidation",
+      "@type": [
+        "d3f:AuthenticationCacheInvalidation"
+      ],
+      "rdfs:label": "Authentication Cache Invalidation",
+      "d3f:d3fend-id": "D3-ANCI"
+    },
+    {
+      "@id": "d3f:AuthenticationEventThresholding",
+      "@type": [
+        "d3f:AuthenticationEventThresholding"
+      ],
+      "rdfs:label": "Authentication Event Thresholding",
+      "d3f:d3fend-id": "D3-ANET"
+    },
+    {
+      "@id": "d3f:AuthorizationEventThresholding",
+      "@type": [
+        "d3f:AuthorizationEventThresholding"
+      ],
+      "rdfs:label": "Authorization Event Thresholding",
+      "d3f:d3fend-id": "D3-AZET"
+    },
+    {
+      "@id": "d3f:BiometricAuthentication",
+      "@type": [
+        "d3f:BiometricAuthentication"
+      ],
+      "rdfs:label": "Biometric Authentication",
+      "d3f:d3fend-id": "D3-BAN"
+    },
+    {
+      "@id": "d3f:BootloaderAuthentication",
+      "@type": [
+        "d3f:BootloaderAuthentication"
+      ],
+      "rdfs:label": "Bootloader Authentication",
+      "d3f:d3fend-id": "D3-BA"
+    },
+    {
+      "@id": "d3f:BroadcastDomainIsolation",
+      "@type": [
+        "d3f:BroadcastDomainIsolation"
+      ],
+      "rdfs:label": "Broadcast Domain Isolation",
+      "d3f:d3fend-id": "D3-BDI"
+    },
+    {
+      "@id": "d3f:BusMessageAuthentication",
+      "@type": [
+        "d3f:BusMessageAuthentication"
+      ],
+      "rdfs:label": "Bus Message Authentication",
+      "d3f:d3fend-id": "D3-BMA"
+    },
+    {
+      "@id": "d3f:ByteSequenceEmulation",
+      "@type": [
+        "d3f:ByteSequenceEmulation"
+      ],
+      "rdfs:label": "Byte Sequence Emulation",
+      "d3f:d3fend-id": "D3-BSE"
+    },
+    {
+      "@id": "d3f:Certificate-basedAuthentication",
+      "@type": [
+        "d3f:Certificate-basedAuthentication"
+      ],
+      "rdfs:label": "Certificate-based Authentication",
+      "d3f:d3fend-id": "D3-CBAN"
+    },
+    {
+      "@id": "d3f:CertificateAnalysis",
+      "@type": [
+        "d3f:CertificateAnalysis"
+      ],
+      "rdfs:label": "Certificate Analysis",
+      "d3f:d3fend-id": "D3-CA"
+    },
+    {
+      "@id": "d3f:CertificatePinning",
+      "@type": [
+        "d3f:CertificatePinning"
+      ],
+      "rdfs:label": "Certificate Pinning",
+      "d3f:d3fend-id": "D3-CP"
+    },
+    {
+      "@id": "d3f:CertificateRotation",
+      "@type": [
+        "d3f:CertificateRotation"
+      ],
+      "rdfs:label": "Certificate Rotation",
+      "d3f:d3fend-id": "D3-CERO"
+    },
+    {
+      "@id": "d3f:ChangeDefaultPassword",
+      "@type": [
+        "d3f:ChangeDefaultPassword"
+      ],
+      "rdfs:label": "Change Default Password",
+      "d3f:d3fend-id": "D3-CDP"
+    },
+    {
+      "@id": "d3f:Client-serverPayloadProfiling",
+      "@type": [
+        "d3f:Client-serverPayloadProfiling"
+      ],
+      "rdfs:label": "Client-server Payload Profiling",
+      "d3f:d3fend-id": "D3-CSPP"
+    },
+    {
+      "@id": "d3f:ConfigurationInventory",
+      "@type": [
+        "d3f:ConfigurationInventory"
+      ],
+      "rdfs:label": "Configuration Inventory",
+      "d3f:d3fend-id": "D3-CI"
+    },
+    {
+      "@id": "d3f:ConnectedHoneynet",
+      "@type": [
+        "d3f:ConnectedHoneynet"
+      ],
+      "rdfs:label": "Connected Honeynet",
+      "d3f:d3fend-id": "D3-CHN"
+    },
+    {
+      "@id": "d3f:ConnectionAttemptAnalysis",
+      "@type": [
+        "d3f:ConnectionAttemptAnalysis"
+      ],
+      "rdfs:label": "Connection Attempt Analysis",
+      "d3f:d3fend-id": "D3-CAA"
+    },
+    {
+      "@id": "d3f:ContainerImageAnalysis",
+      "@type": [
+        "d3f:ContainerImageAnalysis"
+      ],
+      "rdfs:label": "Container Image Analysis",
+      "d3f:d3fend-id": "D3-CIA"
+    },
+    {
+      "@id": "d3f:ContentExcision",
+      "@type": [
+        "d3f:ContentExcision"
+      ],
+      "rdfs:label": "Content Excision",
+      "d3f:d3fend-id": "D3-CNE"
+    },
+    {
+      "@id": "d3f:ContentFiltering",
+      "@type": [
+        "d3f:ContentFiltering"
+      ],
+      "rdfs:label": "Content Filtering",
+      "d3f:d3fend-id": "D3-CF"
+    },
+    {
+      "@id": "d3f:ContentFormatConversion",
+      "@type": [
+        "d3f:ContentFormatConversion"
+      ],
+      "rdfs:label": "Content Format Conversion",
+      "d3f:d3fend-id": "D3-CFC"
+    },
+    {
+      "@id": "d3f:ContentModification",
+      "@type": [
+        "d3f:ContentModification"
+      ],
+      "rdfs:label": "Content Modification",
+      "d3f:d3fend-id": "D3-CM"
+    },
+    {
+      "@id": "d3f:ContentQuarantine",
+      "@type": [
+        "d3f:ContentQuarantine"
+      ],
+      "rdfs:label": "Content Quarantine",
+      "d3f:d3fend-id": "D3-CQ"
+    },
+    {
+      "@id": "d3f:ContentRebuild",
+      "@type": [
+        "d3f:ContentRebuild"
+      ],
+      "rdfs:label": "Content Rebuild",
+      "d3f:d3fend-id": "D3-CNR"
+    },
+    {
+      "@id": "d3f:ContentSubstitution",
+      "@type": [
+        "d3f:ContentSubstitution"
+      ],
+      "rdfs:label": "Content Substitution",
+      "d3f:d3fend-id": "D3-CNS"
+    },
+    {
+      "@id": "d3f:ContentValidation",
+      "@type": [
+        "d3f:ContentValidation"
+      ],
+      "rdfs:label": "Content Validation",
+      "d3f:d3fend-id": "D3-CV"
+    },
+    {
+      "@id": "d3f:ControlFlowIntegrity",
+      "@type": [
+        "d3f:ControlFlowIntegrity"
+      ],
+      "rdfs:label": "Control Flow Integrity",
+      "d3f:d3fend-id": "D3-CFI"
+    },
+    {
+      "@id": "d3f:CredentialCompromiseScopeAnalysis",
+      "@type": [
+        "d3f:CredentialCompromiseScopeAnalysis"
+      ],
+      "rdfs:label": "Credential Compromise Scope Analysis",
+      "d3f:d3fend-id": "D3-CCSA"
+    },
+    {
+      "@id": "d3f:CredentialEviction",
+      "@type": [
+        "d3f:CredentialEviction"
+      ],
+      "rdfs:label": "Credential Eviction",
+      "d3f:d3fend-id": "D3-CE"
+    },
+    {
+      "@id": "d3f:CredentialHardening",
+      "@type": [
+        "d3f:CredentialHardening"
+      ],
+      "rdfs:label": "Credential Hardening",
+      "d3f:d3fend-id": "D3-CH"
+    },
+    {
+      "@id": "d3f:CredentialRevocation",
+      "@type": [
+        "d3f:CredentialRevocation"
+      ],
+      "rdfs:label": "Credential Revocation",
+      "d3f:d3fend-id": "D3-CR"
+    },
+    {
+      "@id": "d3f:CredentialRotation",
+      "@type": [
+        "d3f:CredentialRotation"
+      ],
+      "rdfs:label": "Credential Rotation",
+      "d3f:d3fend-id": "D3-CRO"
+    },
+    {
+      "@id": "d3f:CredentialScrubbing",
+      "@type": [
+        "d3f:CredentialScrubbing"
+      ],
+      "rdfs:label": "Credential Scrubbing",
+      "d3f:d3fend-id": "D3-CS"
+    },
+    {
+      "@id": "d3f:CredentialTransmissionScoping",
+      "@type": [
+        "d3f:CredentialTransmissionScoping"
+      ],
+      "rdfs:label": "Credential Transmission Scoping",
+      "d3f:d3fend-id": "D3-CTS"
+    },
+    {
+      "@id": "d3f:DNSAllowlisting",
+      "@type": [
+        "d3f:DNSAllowlisting"
+      ],
+      "rdfs:label": "DNS Allowlisting",
+      "d3f:d3fend-id": "D3-DNSAL"
+    },
+    {
+      "@id": "d3f:DNSCacheEviction",
+      "@type": [
+        "d3f:DNSCacheEviction"
+      ],
+      "rdfs:label": "DNS Cache Eviction",
+      "d3f:d3fend-id": "D3-DNSCE"
+    },
+    {
+      "@id": "d3f:DNSDenylisting",
+      "@type": [
+        "d3f:DNSDenylisting"
+      ],
+      "rdfs:label": "DNS Denylisting",
+      "d3f:d3fend-id": "D3-DNSDL"
+    },
+    {
+      "@id": "d3f:DNSTrafficAnalysis",
+      "@type": [
+        "d3f:DNSTrafficAnalysis"
+      ],
+      "rdfs:label": "DNS Traffic Analysis",
+      "d3f:d3fend-id": "D3-DNSTA"
+    },
+    {
+      "@id": "d3f:DataExchangeMapping",
+      "@type": [
+        "d3f:DataExchangeMapping"
+      ],
+      "rdfs:label": "Data Exchange Mapping",
+      "d3f:d3fend-id": "D3-DEM"
+    },
+    {
+      "@id": "d3f:DataInventory",
+      "@type": [
+        "d3f:DataInventory"
+      ],
+      "rdfs:label": "Data Inventory",
+      "d3f:d3fend-id": "D3-DI"
+    },
+    {
+      "@id": "d3f:DatabaseQueryStringAnalysis",
+      "@type": [
+        "d3f:DatabaseQueryStringAnalysis"
+      ],
+      "rdfs:label": "Database Query String Analysis",
+      "d3f:d3fend-id": "D3-DQSA"
+    },
+    {
+      "@id": "d3f:DeadCodeElimination",
+      "@type": [
+        "d3f:DeadCodeElimination"
+      ],
+      "rdfs:label": "Dead Code Elimination",
+      "d3f:d3fend-id": "D3-DCE"
+    },
+    {
+      "@id": "d3f:Deceive",
+      "@type": [
+        "d3f:DefensiveTactic"
+      ],
+      "rdfs:label": "Deceive"
+    },
+    {
+      "@id": "d3f:DecoyEnvironment",
+      "@type": [
+        "d3f:DecoyEnvironment"
+      ],
+      "rdfs:label": "Decoy Environment",
+      "d3f:d3fend-id": "D3-DE"
+    },
+    {
+      "@id": "d3f:DecoyFile",
+      "@type": [
+        "d3f:DecoyFile"
+      ],
+      "rdfs:label": "Decoy File",
+      "d3f:d3fend-id": "D3-DF"
+    },
+    {
+      "@id": "d3f:DecoyNetworkResource",
+      "@type": [
+        "d3f:DecoyNetworkResource"
+      ],
+      "rdfs:label": "Decoy Network Resource",
+      "d3f:d3fend-id": "D3-DNR"
+    },
+    {
+      "@id": "d3f:DecoyObject",
+      "@type": [
+        "d3f:DecoyObject"
+      ],
+      "rdfs:label": "Decoy Object",
+      "d3f:d3fend-id": "D3-DO"
+    },
+    {
+      "@id": "d3f:DecoyPersona",
+      "@type": [
+        "d3f:DecoyPersona"
+      ],
+      "rdfs:label": "Decoy Persona",
+      "d3f:d3fend-id": "D3-DP"
+    },
+    {
+      "@id": "d3f:DecoyPublicRelease",
+      "@type": [
+        "d3f:DecoyPublicRelease"
+      ],
+      "rdfs:label": "Decoy Public Release",
+      "d3f:d3fend-id": "D3-DPR"
+    },
+    {
+      "@id": "d3f:DecoySessionToken",
+      "@type": [
+        "d3f:DecoySessionToken"
+      ],
+      "rdfs:label": "Decoy Session Token",
+      "d3f:d3fend-id": "D3-DST"
+    },
+    {
+      "@id": "d3f:DecoyUserCredential",
+      "@type": [
+        "d3f:DecoyUserCredential"
+      ],
+      "rdfs:label": "Decoy User Credential",
+      "d3f:d3fend-id": "D3-DUC"
+    },
+    {
+      "@id": "d3f:Detect",
+      "@type": [
+        "d3f:DefensiveTactic"
+      ],
+      "rdfs:label": "Detect"
+    },
+    {
+      "@id": "d3f:DirectPhysicalLinkMapping",
+      "@type": [
+        "d3f:DirectPhysicalLinkMapping"
+      ],
+      "rdfs:label": "Direct Physical Link Mapping",
+      "d3f:d3fend-id": "D3-DPLM"
+    },
+    {
+      "@id": "d3f:DirectionalNetworkLink",
+      "@type": [
+        "d3f:DirectionalNetworkLink"
+      ],
+      "rdfs:label": "Directional Network Link",
+      "d3f:d3fend-id": "D3-DNL"
+    },
+    {
+      "@id": "d3f:DisableRemoteAccess",
+      "@type": [
+        "d3f:DisableRemoteAccess"
+      ],
+      "rdfs:label": "Disable Remote Access",
+      "d3f:d3fend-id": "D3-DRA"
+    },
+    {
+      "@id": "d3f:DiskEncryption",
+      "@type": [
+        "d3f:DiskEncryption"
+      ],
+      "rdfs:label": "Disk Encryption",
+      "d3f:d3fend-id": "D3-DENCR"
+    },
+    {
+      "@id": "d3f:DiskErasure",
+      "@type": [
+        "d3f:DiskErasure"
+      ],
+      "rdfs:label": "Disk Erasure",
+      "d3f:d3fend-id": "D3-DKE"
+    },
+    {
+      "@id": "d3f:DiskFormatting",
+      "@type": [
+        "d3f:DiskFormatting"
+      ],
+      "rdfs:label": "Disk Formatting",
+      "d3f:d3fend-id": "D3-DKF"
+    },
+    {
+      "@id": "d3f:DiskPartitioning",
+      "@type": [
+        "d3f:DiskPartitioning"
+      ],
+      "rdfs:label": "Disk Partitioning",
+      "d3f:d3fend-id": "D3-DKP"
+    },
+    {
+      "@id": "d3f:DomainAccountMonitoring",
+      "@type": [
+        "d3f:DomainAccountMonitoring"
+      ],
+      "rdfs:label": "Domain Account Monitoring",
+      "d3f:d3fend-id": "D3-DAM"
+    },
+    {
+      "@id": "d3f:DomainLogicValidation",
+      "@type": [
+        "d3f:DomainLogicValidation"
+      ],
+      "rdfs:label": "Domain Logic Validation",
+      "d3f:d3fend-id": "D3-DLV"
+    },
+    {
+      "@id": "d3f:DomainNameReputationAnalysis",
+      "@type": [
+        "d3f:DomainNameReputationAnalysis"
+      ],
+      "rdfs:label": "Domain Name Reputation Analysis",
+      "d3f:d3fend-id": "D3-DNRA"
+    },
+    {
+      "@id": "d3f:DomainRegistrationTakedown",
+      "@type": [
+        "d3f:DomainRegistrationTakedown"
+      ],
+      "rdfs:label": "Domain Registration Takedown",
+      "d3f:d3fend-id": "D3-DRT"
+    },
+    {
+      "@id": "d3f:DomainTrustPolicy",
+      "@type": [
+        "d3f:DomainTrustPolicy"
+      ],
+      "rdfs:label": "Domain Trust Policy",
+      "d3f:d3fend-id": "D3-DTP"
+    },
+    {
+      "@id": "d3f:DriverLoadIntegrityChecking",
+      "@type": [
+        "d3f:DriverLoadIntegrityChecking"
+      ],
+      "rdfs:label": "Driver Load Integrity Checking",
+      "d3f:d3fend-id": "D3-DLIC"
+    },
+    {
+      "@id": "d3f:DynamicAnalysis",
+      "@type": [
+        "d3f:DynamicAnalysis"
+      ],
+      "rdfs:label": "Dynamic Analysis",
+      "d3f:d3fend-id": "D3-DA"
+    },
+    {
+      "@id": "d3f:ElectromagneticRadiationHardening",
+      "@type": [
+        "d3f:ElectromagneticRadiationHardening"
+      ],
+      "rdfs:label": "Electromagnetic Radiation Hardening",
+      "d3f:d3fend-id": "D3-EMH"
+    },
+    {
+      "@id": "d3f:ElectronicLockMonitoring",
+      "@type": [
+        "d3f:ElectronicLockMonitoring"
+      ],
+      "rdfs:label": "Electronic Lock Monitoring",
+      "d3f:d3fend-id": "D3-ELM"
+    },
+    {
+      "@id": "d3f:EmailFiltering",
+      "@type": [
+        "d3f:EmailFiltering"
+      ],
+      "rdfs:label": "Email Filtering",
+      "d3f:d3fend-id": "D3-EF"
+    },
+    {
+      "@id": "d3f:EmailRemoval",
+      "@type": [
+        "d3f:EmailRemoval"
+      ],
+      "rdfs:label": "Email Removal",
+      "d3f:d3fend-id": "D3-ER"
+    },
+    {
+      "@id": "d3f:EmulatedFileAnalysis",
+      "@type": [
+        "d3f:EmulatedFileAnalysis"
+      ],
+      "rdfs:label": "Emulated File Analysis",
+      "d3f:d3fend-id": "D3-EFA"
+    },
+    {
+      "@id": "d3f:EncryptedTunnels",
+      "@type": [
+        "d3f:EncryptedTunnels"
+      ],
+      "rdfs:label": "Encrypted Tunnels",
+      "d3f:d3fend-id": "D3-ET"
+    },
+    {
+      "@id": "d3f:Endpoint-basedWebServerAccessMediation",
+      "@type": [
+        "d3f:Endpoint-basedWebServerAccessMediation"
+      ],
+      "rdfs:label": "Endpoint-based Web Server Access Mediation",
+      "d3f:d3fend-id": "D3-EBWSAM"
+    },
+    {
+      "@id": "d3f:EndpointHealthBeacon",
+      "@type": [
+        "d3f:EndpointHealthBeacon"
+      ],
+      "rdfs:label": "Endpoint Health Beacon",
+      "d3f:d3fend-id": "D3-EHB"
+    },
+    {
+      "@id": "d3f:Evict",
+      "@type": [
+        "d3f:DefensiveTactic"
+      ],
+      "rdfs:label": "Evict"
+    },
+    {
+      "@id": "d3f:ExceptionHandlerPointerValidation",
+      "@type": [
+        "d3f:ExceptionHandlerPointerValidation"
+      ],
+      "rdfs:label": "Exception Handler Pointer Validation",
+      "d3f:d3fend-id": "D3-EHPV"
+    },
+    {
+      "@id": "d3f:ExecutableAllowlisting",
+      "@type": [
+        "d3f:ExecutableAllowlisting"
+      ],
+      "rdfs:label": "Executable Allowlisting",
+      "d3f:d3fend-id": "D3-EAL"
+    },
+    {
+      "@id": "d3f:ExecutableDenylisting",
+      "@type": [
+        "d3f:ExecutableDenylisting"
+      ],
+      "rdfs:label": "Executable Denylisting",
+      "d3f:d3fend-id": "D3-EDL"
+    },
+    {
+      "@id": "d3f:ExecutionIsolation",
+      "@type": [
+        "d3f:ExecutionIsolation"
+      ],
+      "rdfs:label": "Execution Isolation",
+      "d3f:d3fend-id": "D3-EI"
+    },
+    {
+      "@id": "d3f:FileAccessPatternAnalysis",
+      "@type": [
+        "d3f:FileAccessPatternAnalysis"
+      ],
+      "rdfs:label": "File Access Pattern Analysis",
+      "d3f:d3fend-id": "D3-FAPA"
+    },
+    {
+      "@id": "d3f:FileAnalysis",
+      "@type": [
+        "d3f:FileAnalysis"
+      ],
+      "rdfs:label": "File Analysis",
+      "d3f:d3fend-id": "D3-FA"
+    },
+    {
+      "@id": "d3f:FileCarving",
+      "@type": [
+        "d3f:FileCarving"
+      ],
+      "rdfs:label": "File Carving",
+      "d3f:d3fend-id": "D3-FC"
+    },
+    {
+      "@id": "d3f:FileContentAnalysis",
+      "@type": [
+        "d3f:FileContentAnalysis"
+      ],
+      "rdfs:label": "File Content Analysis",
+      "d3f:d3fend-id": "D3-FCOA"
+    },
+    {
+      "@id": "d3f:FileContentDecompressionChecking",
+      "@type": [
+        "d3f:FileContentDecompressionChecking"
+      ],
+      "rdfs:label": "File Content Decompression Checking",
+      "d3f:d3fend-id": "D3-FCDC"
+    },
+    {
+      "@id": "d3f:FileContentRules",
+      "@type": [
+        "d3f:FileContentRules"
+      ],
+      "rdfs:label": "File Content Rules",
+      "d3f:d3fend-id": "D3-FCR"
+    },
+    {
+      "@id": "d3f:FileCreationAnalysis",
+      "@type": [
+        "d3f:FileCreationAnalysis"
+      ],
+      "rdfs:label": "File Creation Analysis",
+      "d3f:d3fend-id": "D3-FCA"
+    },
+    {
+      "@id": "d3f:FileEncryption",
+      "@type": [
+        "d3f:FileEncryption"
+      ],
+      "rdfs:label": "File Encryption",
+      "d3f:d3fend-id": "D3-FE"
+    },
+    {
+      "@id": "d3f:FileEviction",
+      "@type": [
+        "d3f:FileEviction"
+      ],
+      "rdfs:label": "File Eviction",
+      "d3f:d3fend-id": "D3-FEV"
+    },
+    {
+      "@id": "d3f:FileFormatVerification",
+      "@type": [
+        "d3f:FileFormatVerification"
+      ],
+      "rdfs:label": "File Format Verification",
+      "d3f:d3fend-id": "D3-FFV"
+    },
+    {
+      "@id": "d3f:FileHashReputationAnalysis",
+      "@type": [
+        "d3f:FileHashReputationAnalysis"
+      ],
+      "rdfs:label": "File Hash Reputation Analysis",
+      "d3f:d3fend-id": "D3-FHRA"
+    },
+    {
+      "@id": "d3f:FileHashing",
+      "@type": [
+        "d3f:FileHashing"
+      ],
+      "rdfs:label": "File Hashing",
+      "d3f:d3fend-id": "D3-FH"
+    },
+    {
+      "@id": "d3f:FileIntegrityMonitoring",
+      "@type": [
+        "d3f:FileIntegrityMonitoring"
+      ],
+      "rdfs:label": "File Integrity Monitoring",
+      "d3f:d3fend-id": "D3-FIM"
+    },
+    {
+      "@id": "d3f:FileInternalStructureVerification",
+      "@type": [
+        "d3f:FileInternalStructureVerification"
+      ],
+      "rdfs:label": "File Internal Structure Verification",
+      "d3f:d3fend-id": "D3-FISV"
+    },
+    {
+      "@id": "d3f:FileMagicByteVerification",
+      "@type": [
+        "d3f:FileMagicByteVerification"
+      ],
+      "rdfs:label": "File Magic Byte Verification",
+      "d3f:d3fend-id": "D3-FMBV"
+    },
+    {
+      "@id": "d3f:FileMetadataConsistencyValidation",
+      "@type": [
+        "d3f:FileMetadataConsistencyValidation"
+      ],
+      "rdfs:label": "File Metadata Consistency Validation",
+      "d3f:d3fend-id": "D3-FMCV"
+    },
+    {
+      "@id": "d3f:FileMetadataValueVerification",
+      "@type": [
+        "d3f:FileMetadataValueVerification"
+      ],
+      "rdfs:label": "File Metadata Value Verification",
+      "d3f:d3fend-id": "D3-FMVV"
+    },
+    {
+      "@id": "d3f:FirmwareBehaviorAnalysis",
+      "@type": [
+        "d3f:FirmwareBehaviorAnalysis"
+      ],
+      "rdfs:label": "Firmware Behavior Analysis",
+      "d3f:d3fend-id": "D3-FBA"
+    },
+    {
+      "@id": "d3f:FirmwareEmbeddedMonitoringCode",
+      "@type": [
+        "d3f:FirmwareEmbeddedMonitoringCode"
+      ],
+      "rdfs:label": "Firmware Embedded Monitoring Code",
+      "d3f:d3fend-id": "D3-FEMC"
+    },
+    {
+      "@id": "d3f:FirmwareVerification",
+      "@type": [
+        "d3f:FirmwareVerification"
+      ],
+      "rdfs:label": "Firmware Verification",
+      "d3f:d3fend-id": "D3-FV"
+    },
+    {
+      "@id": "d3f:ForwardResolutionDomainDenylisting",
+      "@type": [
+        "d3f:ForwardResolutionDomainDenylisting"
+      ],
+      "rdfs:label": "Forward Resolution Domain Denylisting",
+      "d3f:d3fend-id": "D3-FRDDL"
+    },
+    {
+      "@id": "d3f:ForwardResolutionIPDenylisting",
+      "@type": [
+        "d3f:ForwardResolutionIPDenylisting"
+      ],
+      "rdfs:label": "Forward Resolution IP Denylisting",
+      "d3f:d3fend-id": "D3-FRIDL"
+    },
+    {
+      "@id": "d3f:Harden",
+      "@type": [
+        "d3f:DefensiveTactic"
+      ],
+      "rdfs:label": "Harden"
+    },
+    {
+      "@id": "d3f:Hardware-basedProcessIsolation",
+      "@type": [
+        "d3f:Hardware-basedProcessIsolation"
+      ],
+      "rdfs:label": "Hardware-based Process Isolation",
+      "d3f:d3fend-id": "D3-HBPI"
+    },
+    {
+      "@id": "d3f:Hardware-basedWriteProtection",
+      "@type": [
+        "d3f:Hardware-basedWriteProtection"
+      ],
+      "rdfs:label": "Hardware-based Write Protection",
+      "d3f:d3fend-id": "D3-HBWP"
+    },
+    {
+      "@id": "d3f:HardwareComponentInventory",
+      "@type": [
+        "d3f:HardwareComponentInventory"
+      ],
+      "rdfs:label": "Hardware Component Inventory",
+      "d3f:d3fend-id": "D3-HCI"
+    },
+    {
+      "@id": "d3f:HierarchicalDomainDenylisting",
+      "@type": [
+        "d3f:HierarchicalDomainDenylisting"
+      ],
+      "rdfs:label": "Hierarchical Domain Denylisting",
+      "d3f:d3fend-id": "D3-HDDL"
+    },
+    {
+      "@id": "d3f:HomoglyphDenylisting",
+      "@type": [
+        "d3f:HomoglyphDenylisting"
+      ],
+      "rdfs:label": "Homoglyph Denylisting",
+      "d3f:d3fend-id": "D3-HDL"
+    },
+    {
+      "@id": "d3f:HomoglyphDetection",
+      "@type": [
+        "d3f:HomoglyphDetection"
+      ],
+      "rdfs:label": "Homoglyph Detection",
+      "d3f:d3fend-id": "D3-HD"
+    },
+    {
+      "@id": "d3f:HostReboot",
+      "@type": [
+        "d3f:HostReboot"
+      ],
+      "rdfs:label": "Host Reboot",
+      "d3f:d3fend-id": "D3-HR"
+    },
+    {
+      "@id": "d3f:HostShutdown",
+      "@type": [
+        "d3f:HostShutdown"
+      ],
+      "rdfs:label": "Host Shutdown",
+      "d3f:d3fend-id": "D3-HS"
+    },
+    {
+      "@id": "d3f:IOPortRestriction",
+      "@type": [
+        "d3f:IOPortRestriction"
+      ],
+      "rdfs:label": "IO Port Restriction",
+      "d3f:d3fend-id": "D3-IOPR"
+    },
+    {
+      "@id": "d3f:IPCTrafficAnalysis",
+      "@type": [
+        "d3f:IPCTrafficAnalysis"
+      ],
+      "rdfs:label": "IPC Traffic Analysis",
+      "d3f:d3fend-id": "D3-IPCTA"
+    },
+    {
+      "@id": "d3f:IPReputationAnalysis",
+      "@type": [
+        "d3f:IPReputationAnalysis"
+      ],
+      "rdfs:label": "IP Reputation Analysis",
+      "d3f:d3fend-id": "D3-IPRA"
+    },
+    {
+      "@id": "d3f:IdentifierActivityAnalysis",
+      "@type": [
+        "d3f:IdentifierActivityAnalysis"
+      ],
+      "rdfs:label": "Identifier Activity Analysis",
+      "d3f:d3fend-id": "D3-IAA"
+    },
+    {
+      "@id": "d3f:IdentifierAnalysis",
+      "@type": [
+        "d3f:IdentifierAnalysis"
+      ],
+      "rdfs:label": "Identifier Analysis",
+      "d3f:d3fend-id": "D3-ID"
+    },
+    {
+      "@id": "d3f:IdentifierReputationAnalysis",
+      "@type": [
+        "d3f:IdentifierReputationAnalysis"
+      ],
+      "rdfs:label": "Identifier Reputation Analysis",
+      "d3f:d3fend-id": "D3-IRA"
+    },
+    {
+      "@id": "d3f:InboundSessionVolumeAnalysis",
+      "@type": [
+        "d3f:InboundSessionVolumeAnalysis"
+      ],
+      "rdfs:label": "Inbound Session Volume Analysis",
+      "d3f:d3fend-id": "D3-ISVA"
+    },
+    {
+      "@id": "d3f:InboundTrafficFiltering",
+      "@type": [
+        "d3f:InboundTrafficFiltering"
+      ],
+      "rdfs:label": "Inbound Traffic Filtering",
+      "d3f:d3fend-id": "D3-ITF"
+    },
+    {
+      "@id": "d3f:IndirectBranchCallAnalysis",
+      "@type": [
+        "d3f:IndirectBranchCallAnalysis"
+      ],
+      "rdfs:label": "Indirect Branch Call Analysis",
+      "d3f:d3fend-id": "D3-IBCA"
+    },
+    {
+      "@id": "d3f:InputDeviceAnalysis",
+      "@type": [
+        "d3f:InputDeviceAnalysis"
+      ],
+      "rdfs:label": "Input Device Analysis",
+      "d3f:d3fend-id": "D3-IDA"
+    },
+    {
+      "@id": "d3f:IntegerRangeValidation",
+      "@type": [
+        "owl:Class"
+      ],
+      "rdfs:label": "Integer Range Validation",
+      "d3f:d3fend-id": "D3-IRV"
+    },
+    {
+      "@id": "d3f:IntegratedHoneynet",
+      "@type": [
+        "d3f:IntegratedHoneynet"
+      ],
+      "rdfs:label": "Integrated Honeynet",
+      "d3f:d3fend-id": "D3-IHN"
+    },
+    {
+      "@id": "d3f:Isolate",
+      "@type": [
+        "d3f:DefensiveTactic"
+      ],
+      "rdfs:label": "Isolate"
+    },
+    {
+      "@id": "d3f:JobFunctionAccessPatternAnalysis",
+      "@type": [
+        "d3f:JobFunctionAccessPatternAnalysis"
+      ],
+      "rdfs:label": "Job Function Access Pattern Analysis",
+      "d3f:d3fend-id": "D3-JFAPA"
+    },
+    {
+      "@id": "d3f:Kernel-basedProcessIsolation",
+      "@type": [
+        "d3f:Kernel-basedProcessIsolation"
+      ],
+      "rdfs:label": "Kernel-based Process Isolation",
+      "d3f:d3fend-id": "D3-KBPI"
+    },
+    {
+      "@id": "d3f:LANAccessMediation",
+      "@type": [
+        "d3f:LANAccessMediation"
+      ],
+      "rdfs:label": "LAN Access Mediation",
+      "d3f:d3fend-id": "D3-LAMED"
+    },
+    {
+      "@id": "d3f:LocalAccountMonitoring",
+      "@type": [
+        "d3f:LocalAccountMonitoring"
+      ],
+      "rdfs:label": "Local Account Monitoring",
+      "d3f:d3fend-id": "D3-LAM"
+    },
+    {
+      "@id": "d3f:LocalFileAccessMediation",
+      "@type": [
+        "d3f:LocalFileAccessMediation"
+      ],
+      "rdfs:label": "Local File Access Mediation",
+      "d3f:d3fend-id": "D3-LFAM"
+    },
+    {
+      "@id": "d3f:LocalFilePermissions",
+      "@type": [
+        "d3f:LocalFilePermissions"
+      ],
+      "rdfs:label": "Local File Permissions",
+      "d3f:d3fend-id": "D3-LFP"
+    },
+    {
+      "@id": "d3f:LogicalLinkMapping",
+      "@type": [
+        "d3f:LogicalLinkMapping"
+      ],
+      "rdfs:label": "Logical Link Mapping",
+      "d3f:d3fend-id": "D3-LLM"
+    },
+    {
+      "@id": "d3f:MemoryBlockStartValidation",
+      "@type": [
+        "owl:Class"
+      ],
+      "rdfs:label": "Memory Block Start Validation",
+      "d3f:d3fend-id": "D3-MBSV"
+    },
+    {
+      "@id": "d3f:MemoryBoundaryTracking",
+      "@type": [
+        "d3f:MemoryBoundaryTracking"
+      ],
+      "rdfs:label": "Memory Boundary Tracking",
+      "d3f:d3fend-id": "D3-MBT"
+    },
+    {
+      "@id": "d3f:MessageAnalysis",
+      "@type": [
+        "d3f:MessageAnalysis"
+      ],
+      "rdfs:label": "Message Analysis",
+      "d3f:d3fend-id": "D3-MA"
+    },
+    {
+      "@id": "d3f:MessageAuthentication",
+      "@type": [
+        "d3f:MessageAuthentication"
+      ],
+      "rdfs:label": "Message Authentication",
+      "d3f:d3fend-id": "D3-MAN"
+    },
+    {
+      "@id": "d3f:MessageEncryption",
+      "@type": [
+        "d3f:MessageEncryption"
+      ],
+      "rdfs:label": "Message Encryption",
+      "d3f:d3fend-id": "D3-MENCR"
+    },
+    {
+      "@id": "d3f:MessageHardening",
+      "@type": [
+        "d3f:MessageHardening"
+      ],
+      "rdfs:label": "Message Hardening",
+      "d3f:d3fend-id": "D3-MH"
+    },
+    {
+      "@id": "d3f:Model",
+      "@type": [
+        "d3f:DefensiveTactic"
+      ],
+      "rdfs:label": "Model"
+    },
+    {
+      "@id": "d3f:MotionSensorMonitoring",
+      "@type": [
+        "d3f:MotionSensorMonitoring"
+      ],
+      "rdfs:label": "Motion Sensor Monitoring",
+      "d3f:d3fend-id": "D3-MSM"
+    },
+    {
+      "@id": "d3f:Multi-factorAuthentication",
+      "@type": [
+        "d3f:Multi-factorAuthentication"
+      ],
+      "rdfs:label": "Multi-factor Authentication",
+      "d3f:d3fend-id": "D3-MFA"
+    },
+    {
+      "@id": "d3f:NetworkAccessMediation",
+      "@type": [
+        "d3f:NetworkAccessMediation"
+      ],
+      "rdfs:label": "Network Access Mediation",
+      "d3f:d3fend-id": "D3-NAM"
+    },
+    {
+      "@id": "d3f:NetworkIsolation",
+      "@type": [
+        "d3f:NetworkIsolation"
+      ],
+      "rdfs:label": "Network Isolation",
+      "d3f:d3fend-id": "D3-NI"
+    },
+    {
+      "@id": "d3f:NetworkMapping",
+      "@type": [
+        "d3f:NetworkMapping"
+      ],
+      "rdfs:label": "Network Mapping",
+      "d3f:d3fend-id": "D3-NM"
+    },
+    {
+      "@id": "d3f:NetworkNodeInventory",
+      "@type": [
+        "d3f:NetworkNodeInventory"
+      ],
+      "rdfs:label": "Network Node Inventory",
+      "d3f:d3fend-id": "D3-NNI"
+    },
+    {
+      "@id": "d3f:NetworkResourceAccessMediation",
+      "@type": [
+        "d3f:NetworkResourceAccessMediation"
+      ],
+      "rdfs:label": "Network Resource Access Mediation",
+      "d3f:d3fend-id": "D3-NRAM"
+    },
+    {
+      "@id": "d3f:NetworkTrafficAnalysis",
+      "@type": [
+        "d3f:NetworkTrafficAnalysis"
+      ],
+      "rdfs:label": "Network Traffic Analysis",
+      "d3f:d3fend-id": "D3-NTA"
+    },
+    {
+      "@id": "d3f:NetworkTrafficCommunityDeviation",
+      "@type": [
+        "d3f:NetworkTrafficCommunityDeviation"
+      ],
+      "rdfs:label": "Network Traffic Community Deviation",
+      "d3f:d3fend-id": "D3-NTCD"
+    },
+    {
+      "@id": "d3f:NetworkTrafficFiltering",
+      "@type": [
+        "d3f:NetworkTrafficFiltering"
+      ],
+      "rdfs:label": "Network Traffic Filtering",
+      "d3f:d3fend-id": "D3-NTF"
+    },
+    {
+      "@id": "d3f:NetworkTrafficPolicyMapping",
+      "@type": [
+        "d3f:NetworkTrafficPolicyMapping"
+      ],
+      "rdfs:label": "Network Traffic Policy Mapping",
+      "d3f:d3fend-id": "D3-NTPM"
+    },
+    {
+      "@id": "d3f:NetworkTrafficSignatureAnalysis",
+      "@type": [
+        "d3f:NetworkTrafficSignatureAnalysis"
+      ],
+      "rdfs:label": "Network Traffic Signature Analysis",
+      "d3f:d3fend-id": "D3-NTSA"
+    },
+    {
+      "@id": "d3f:NetworkVulnerabilityAssessment",
+      "@type": [
+        "d3f:NetworkVulnerabilityAssessment"
+      ],
+      "rdfs:label": "Network Vulnerability Assessment",
+      "d3f:d3fend-id": "D3-NVA"
+    },
+    {
+      "@id": "d3f:NullPointerChecking",
+      "@type": [
+        "owl:Class"
+      ],
+      "rdfs:label": "Null Pointer Checking",
+      "d3f:d3fend-id": "D3-NPC"
+    },
+    {
+      "@id": "d3f:OTVariableAccessRestriction",
+      "@type": [
+        "owl:Class"
+      ],
+      "rdfs:label": "OT Variable Access Restriction",
+      "d3f:d3fend-id": "D3-OVAR"
+    },
+    {
+      "@id": "d3f:ObjectEviction",
+      "@type": [
+        "d3f:ObjectEviction"
+      ],
+      "rdfs:label": "Object Eviction",
+      "d3f:d3fend-id": "D3-OE"
+    },
+    {
+      "@id": "d3f:One-timePassword",
+      "@type": [
+        "d3f:One-timePassword"
+      ],
+      "rdfs:label": "One-time Password",
+      "d3f:d3fend-id": "D3-OTP"
+    },
+    {
+      "@id": "d3f:OperatingModeMonitoring",
+      "@type": [
+        "d3f:OperatingModeMonitoring"
+      ],
+      "rdfs:label": "Operating Mode Monitoring",
+      "d3f:d3fend-id": "D3-OMM"
+    },
+    {
+      "@id": "d3f:OperatingModeRestriction",
+      "@type": [
+        "d3f:OperatingModeRestriction"
+      ],
+      "rdfs:label": "Operating Mode Restriction",
+      "d3f:d3fend-id": "D3-OPR"
+    },
+    {
+      "@id": "d3f:OperatingSystemMonitoring",
+      "@type": [
+        "d3f:OperatingSystemMonitoring"
+      ],
+      "rdfs:label": "Operating System Monitoring",
+      "d3f:d3fend-id": "D3-OSM"
+    },
+    {
+      "@id": "d3f:OperationalActivityMapping",
+      "@type": [
+        "d3f:OperationalActivityMapping"
+      ],
+      "rdfs:label": "Operational Activity Mapping",
+      "d3f:d3fend-id": "D3-OAM"
+    },
+    {
+      "@id": "d3f:OperationalDependencyMapping",
+      "@type": [
+        "d3f:OperationalDependencyMapping"
+      ],
+      "rdfs:label": "Operational Dependency Mapping",
+      "d3f:d3fend-id": "D3-ODM"
+    },
+    {
+      "@id": "d3f:OperationalLogicValidation",
+      "@type": [
+        "d3f:OperationalLogicValidation"
+      ],
+      "rdfs:label": "Operational Logic Validation",
+      "d3f:d3fend-id": "D3-OLV"
+    },
+    {
+      "@id": "d3f:OperationalProcessMonitoring",
+      "@type": [
+        "d3f:OperationalProcessMonitoring"
+      ],
+      "rdfs:label": "Operational Process Monitoring",
+      "d3f:d3fend-id": "D3-OPM"
+    },
+    {
+      "@id": "d3f:OperationalRiskAssessment",
+      "@type": [
+        "d3f:OperationalRiskAssessment"
+      ],
+      "rdfs:label": "Operational Risk Assessment",
+      "d3f:d3fend-id": "D3-ORA"
+    },
+    {
+      "@id": "d3f:OrganizationMapping",
+      "@type": [
+        "d3f:OrganizationMapping"
+      ],
+      "rdfs:label": "Organization Mapping",
+      "d3f:d3fend-id": "D3-OM"
+    },
+    {
+      "@id": "d3f:OutboundTrafficFiltering",
+      "@type": [
+        "d3f:OutboundTrafficFiltering"
+      ],
+      "rdfs:label": "Outbound Traffic Filtering",
+      "d3f:d3fend-id": "D3-OTF"
+    },
+    {
+      "@id": "d3f:PassiveCertificateAnalysis",
+      "@type": [
+        "d3f:PassiveCertificateAnalysis"
+      ],
+      "rdfs:label": "Passive Certificate Analysis",
+      "d3f:d3fend-id": "D3-PCA"
+    },
+    {
+      "@id": "d3f:PassiveLogicalLinkMapping",
+      "@type": [
+        "d3f:PassiveLogicalLinkMapping"
+      ],
+      "rdfs:label": "Passive Logical Link Mapping",
+      "d3f:d3fend-id": "D3-PLLM"
+    },
+    {
+      "@id": "d3f:PasswordAuthentication",
+      "@type": [
+        "d3f:PasswordAuthentication"
+      ],
+      "rdfs:label": "Password Authentication",
+      "d3f:d3fend-id": "D3-PWA"
+    },
+    {
+      "@id": "d3f:PasswordRotation",
+      "@type": [
+        "d3f:PasswordRotation"
+      ],
+      "rdfs:label": "Password Rotation",
+      "d3f:d3fend-id": "D3-PR"
+    },
+    {
+      "@id": "d3f:PerHostDownload-UploadRatioAnalysis",
+      "@type": [
+        "d3f:PerHostDownload-UploadRatioAnalysis"
+      ],
+      "rdfs:label": "Per Host Download-Upload Ratio Analysis",
+      "d3f:d3fend-id": "D3-PHDURA"
+    },
+    {
+      "@id": "d3f:PeripheralFirmwareVerification",
+      "@type": [
+        "d3f:PeripheralFirmwareVerification"
+      ],
+      "rdfs:label": "Peripheral Firmware Verification",
+      "d3f:d3fend-id": "D3-PFV"
+    },
+    {
+      "@id": "d3f:PhysicalAccessMediation",
+      "@type": [
+        "d3f:PhysicalAccessMediation"
+      ],
+      "rdfs:label": "Physical Access Mediation",
+      "d3f:d3fend-id": "D3-PAM"
+    },
+    {
+      "@id": "d3f:PhysicalAccessMonitoring",
+      "@type": [
+        "d3f:PhysicalAccessMonitoring"
+      ],
+      "rdfs:label": "Physical Access Monitoring",
+      "d3f:d3fend-id": "D3-PHAM"
+    },
+    {
+      "@id": "d3f:PhysicalEnclosureHardening",
+      "@type": [
+        "d3f:PhysicalEnclosureHardening"
+      ],
+      "rdfs:label": "Physical Enclosure Hardening",
+      "d3f:d3fend-id": "D3-PEH"
+    },
+    {
+      "@id": "d3f:PhysicalLinkMapping",
+      "@type": [
+        "d3f:PhysicalLinkMapping"
+      ],
+      "rdfs:label": "Physical Link Mapping",
+      "d3f:d3fend-id": "D3-PLM"
+    },
+    {
+      "@id": "d3f:PhysicalLocking",
+      "@type": [
+        "d3f:PhysicalLocking"
+      ],
+      "rdfs:label": "Physical Locking",
+      "d3f:d3fend-id": "D3-EPL"
+    },
+    {
+      "@id": "d3f:PlatformHardening",
+      "@type": [
+        "d3f:PlatformHardening"
+      ],
+      "rdfs:label": "Platform Hardening",
+      "d3f:d3fend-id": "D3-PH"
+    },
+    {
+      "@id": "d3f:PlatformMonitoring",
+      "@type": [
+        "d3f:PlatformMonitoring"
+      ],
+      "rdfs:label": "Platform Monitoring",
+      "d3f:d3fend-id": "D3-PM"
+    },
+    {
+      "@id": "d3f:PlatformUptimeMonitoring",
+      "@type": [
+        "d3f:PlatformUptimeMonitoring"
+      ],
+      "rdfs:label": "Platform Uptime Monitoring",
+      "d3f:d3fend-id": "D3-PUM"
+    },
+    {
+      "@id": "d3f:PointerAuthentication",
+      "@type": [
+        "d3f:PointerAuthentication"
+      ],
+      "rdfs:label": "Pointer Authentication",
+      "d3f:d3fend-id": "D3-PAN"
+    },
+    {
+      "@id": "d3f:PointerValidation",
+      "@type": [
+        "owl:Class"
+      ],
+      "rdfs:label": "Pointer Validation",
+      "d3f:d3fend-id": "D3-PV"
+    },
+    {
+      "@id": "d3f:ProcessAnalysis",
+      "@type": [
+        "d3f:ProcessAnalysis"
+      ],
+      "rdfs:label": "Process Analysis",
+      "d3f:d3fend-id": "D3-PA"
+    },
+    {
+      "@id": "d3f:ProcessCodeSegmentVerification",
+      "@type": [
+        "d3f:ProcessCodeSegmentVerification"
+      ],
+      "rdfs:label": "Process Code Segment Verification",
+      "d3f:d3fend-id": "D3-PCSV"
+    },
+    {
+      "@id": "d3f:ProcessEviction",
+      "@type": [
+        "d3f:ProcessEviction"
+      ],
+      "rdfs:label": "Process Eviction",
+      "d3f:d3fend-id": "D3-PE"
+    },
+    {
+      "@id": "d3f:ProcessLineageAnalysis",
+      "@type": [
+        "d3f:ProcessLineageAnalysis"
+      ],
+      "rdfs:label": "Process Lineage Analysis",
+      "d3f:d3fend-id": "D3-PLA"
+    },
+    {
+      "@id": "d3f:ProcessSegmentExecutionPrevention",
+      "@type": [
+        "d3f:ProcessSegmentExecutionPrevention"
+      ],
+      "rdfs:label": "Process Segment Execution Prevention",
+      "d3f:d3fend-id": "D3-PSEP"
+    },
+    {
+      "@id": "d3f:ProcessSelf-ModificationDetection",
+      "@type": [
+        "d3f:ProcessSelf-ModificationDetection"
+      ],
+      "rdfs:label": "Process Self-Modification Detection",
+      "d3f:d3fend-id": "D3-PSMD"
+    },
+    {
+      "@id": "d3f:ProcessSpawnAnalysis",
+      "@type": [
+        "d3f:ProcessSpawnAnalysis"
+      ],
+      "rdfs:label": "Process Spawn Analysis",
+      "d3f:d3fend-id": "D3-PSA"
+    },
+    {
+      "@id": "d3f:ProcessSuspension",
+      "@type": [
+        "d3f:ProcessSuspension"
+      ],
+      "rdfs:label": "Process Suspension",
+      "d3f:d3fend-id": "D3-PS"
+    },
+    {
+      "@id": "d3f:ProcessTermination",
+      "@type": [
+        "d3f:ProcessTermination"
+      ],
+      "rdfs:label": "Process Termination",
+      "d3f:d3fend-id": "D3-PT"
+    },
+    {
+      "@id": "d3f:ProtocolMetadataAnomalyDetection",
+      "@type": [
+        "d3f:ProtocolMetadataAnomalyDetection"
+      ],
+      "rdfs:label": "Protocol Metadata Anomaly Detection",
+      "d3f:d3fend-id": "D3-PMAD"
+    },
+    {
+      "@id": "d3f:ProximitySensorMonitoring",
+      "@type": [
+        "d3f:ProximitySensorMonitoring"
+      ],
+      "rdfs:label": "Proximity Sensor Monitoring",
+      "d3f:d3fend-id": "D3-PSM"
+    },
+    {
+      "@id": "d3f:Proxy-basedWebServerAccessMediation",
+      "@type": [
+        "d3f:Proxy-basedWebServerAccessMediation"
+      ],
+      "rdfs:label": "Proxy-based Web Server Access Mediation",
+      "d3f:d3fend-id": "D3-PBWSAM"
+    },
+    {
+      "@id": "d3f:RFShielding",
+      "@type": [
+        "d3f:RFShielding"
+      ],
+      "rdfs:label": "RF Shielding",
+      "d3f:d3fend-id": "D3-RFS"
+    },
+    {
+      "@id": "d3f:RPCTrafficAnalysis",
+      "@type": [
+        "d3f:RPCTrafficAnalysis"
+      ],
+      "rdfs:label": "RPC Traffic Analysis",
+      "d3f:d3fend-id": "D3-RTA"
+    },
+    {
+      "@id": "d3f:RadiationHardening",
+      "@type": [
+        "d3f:RadiationHardening"
+      ],
+      "rdfs:label": "Radiation Hardening",
+      "d3f:d3fend-id": "D3-RH"
+    },
+    {
+      "@id": "d3f:ReferenceNullification",
+      "@type": [
+        "owl:Class"
+      ],
+      "rdfs:label": "Reference Nullification",
+      "d3f:d3fend-id": "D3-RN"
+    },
+    {
+      "@id": "d3f:RegistryKeyDeletion",
+      "@type": [
+        "d3f:RegistryKeyDeletion"
+      ],
+      "rdfs:label": "Registry Key Deletion",
+      "d3f:d3fend-id": "D3-RKD"
+    },
+    {
+      "@id": "d3f:ReissueCredential",
+      "@type": [
+        "d3f:ReissueCredential"
+      ],
+      "rdfs:label": "Reissue Credential",
+      "d3f:d3fend-id": "D3-RIC"
+    },
+    {
+      "@id": "d3f:RelayPatternAnalysis",
+      "@type": [
+        "d3f:RelayPatternAnalysis"
+      ],
+      "rdfs:label": "Relay Pattern Analysis",
+      "d3f:d3fend-id": "D3-RPA"
+    },
+    {
+      "@id": "d3f:RemoteFileAccessMediation",
+      "@type": [
+        "d3f:RemoteFileAccessMediation"
+      ],
+      "rdfs:label": "Remote File Access Mediation",
+      "d3f:d3fend-id": "D3-RFAM"
+    },
+    {
+      "@id": "d3f:RemoteFirmwareUpdateMonitoring",
+      "@type": [
+        "d3f:RemoteFirmwareUpdateMonitoring"
+      ],
+      "rdfs:label": "Remote Firmware Update Monitoring",
+      "d3f:d3fend-id": "D3-RFUM"
+    },
+    {
+      "@id": "d3f:RemoteTerminalSessionDetection",
+      "@type": [
+        "d3f:RemoteTerminalSessionDetection"
+      ],
+      "rdfs:label": "Remote Terminal Session Detection",
+      "d3f:d3fend-id": "D3-RTSD"
+    },
+    {
+      "@id": "d3f:ResourceAccessPatternAnalysis",
+      "@type": [
+        "d3f:ResourceAccessPatternAnalysis"
+      ],
+      "rdfs:label": "Resource Access Pattern Analysis",
+      "d3f:d3fend-id": "D3-RAPA"
+    },
+    {
+      "@id": "d3f:Restore",
+      "@type": [
+        "d3f:DefensiveTactic"
+      ],
+      "rdfs:label": "Restore"
+    },
+    {
+      "@id": "d3f:RestoreAccess",
+      "@type": [
+        "d3f:RestoreAccess"
+      ],
+      "rdfs:label": "Restore Access",
+      "d3f:d3fend-id": "D3-RA"
+    },
+    {
+      "@id": "d3f:RestoreConfiguration",
+      "@type": [
+        "d3f:RestoreConfiguration"
+      ],
+      "rdfs:label": "Restore Configuration",
+      "d3f:d3fend-id": "D3-RC"
+    },
+    {
+      "@id": "d3f:RestoreDatabase",
+      "@type": [
+        "d3f:RestoreDatabase"
+      ],
+      "rdfs:label": "Restore Database",
+      "d3f:d3fend-id": "D3-RD"
+    },
+    {
+      "@id": "d3f:RestoreDiskImage",
+      "@type": [
+        "d3f:RestoreDiskImage"
+      ],
+      "rdfs:label": "Restore Disk Image",
+      "d3f:d3fend-id": "D3-RDI"
+    },
+    {
+      "@id": "d3f:RestoreEmail",
+      "@type": [
+        "d3f:RestoreEmail"
+      ],
+      "rdfs:label": "Restore Email",
+      "d3f:d3fend-id": "D3-RE"
+    },
+    {
+      "@id": "d3f:RestoreFile",
+      "@type": [
+        "d3f:RestoreFile"
+      ],
+      "rdfs:label": "Restore File",
+      "d3f:d3fend-id": "D3-RF"
+    },
+    {
+      "@id": "d3f:RestoreNetworkAccess",
+      "@type": [
+        "d3f:RestoreNetworkAccess"
+      ],
+      "rdfs:label": "Restore Network Access",
+      "d3f:d3fend-id": "D3-RNA"
+    },
+    {
+      "@id": "d3f:RestoreObject",
+      "@type": [
+        "d3f:RestoreObject"
+      ],
+      "rdfs:label": "Restore Object",
+      "d3f:d3fend-id": "D3-RO"
+    },
+    {
+      "@id": "d3f:RestoreSoftware",
+      "@type": [
+        "d3f:RestoreSoftware"
+      ],
+      "rdfs:label": "Restore Software",
+      "d3f:d3fend-id": "D3-RS"
+    },
+    {
+      "@id": "d3f:RestoreUserAccountAccess",
+      "@type": [
+        "d3f:RestoreUserAccountAccess"
+      ],
+      "rdfs:label": "Restore User Account Access",
+      "d3f:d3fend-id": "D3-RUAA"
+    },
+    {
+      "@id": "d3f:ReverseResolutionIPDenylisting",
+      "@type": [
+        "d3f:ReverseResolutionIPDenylisting"
+      ],
+      "rdfs:label": "Reverse Resolution IP Denylisting",
+      "d3f:d3fend-id": "D3-RRID"
+    },
+    {
+      "@id": "d3f:RoutingAccessMediation",
+      "@type": [
+        "d3f:RoutingAccessMediation"
+      ],
+      "rdfs:label": "Routing Access Mediation",
+      "d3f:d3fend-id": "D3-RAM"
+    },
+    {
+      "@id": "d3f:ScheduledJobAnalysis",
+      "@type": [
+        "d3f:ScheduledJobAnalysis"
+      ],
+      "rdfs:label": "Scheduled Job Analysis",
+      "d3f:d3fend-id": "D3-SJA"
+    },
+    {
+      "@id": "d3f:ScriptExecutionAnalysis",
+      "@type": [
+        "d3f:ScriptExecutionAnalysis"
+      ],
+      "rdfs:label": "Script Execution Analysis",
+      "d3f:d3fend-id": "D3-SEA"
+    },
+    {
+      "@id": "d3f:SegmentAddressOffsetRandomization",
+      "@type": [
+        "d3f:SegmentAddressOffsetRandomization"
+      ],
+      "rdfs:label": "Segment Address Offset Randomization",
+      "d3f:d3fend-id": "D3-SAOR"
+    },
+    {
+      "@id": "d3f:SenderMTAReputationAnalysis",
+      "@type": [
+        "d3f:SenderMTAReputationAnalysis"
+      ],
+      "rdfs:label": "Sender MTA Reputation Analysis",
+      "d3f:d3fend-id": "D3-SMRA"
+    },
+    {
+      "@id": "d3f:SenderReputationAnalysis",
+      "@type": [
+        "d3f:SenderReputationAnalysis"
+      ],
+      "rdfs:label": "Sender Reputation Analysis",
+      "d3f:d3fend-id": "D3-SRA"
+    },
+    {
+      "@id": "d3f:ServiceBinaryVerification",
+      "@type": [
+        "d3f:ServiceBinaryVerification"
+      ],
+      "rdfs:label": "Service Binary Verification",
+      "d3f:d3fend-id": "D3-SBV"
+    },
+    {
+      "@id": "d3f:ServiceDependencyMapping",
+      "@type": [
+        "d3f:ServiceDependencyMapping"
+      ],
+      "rdfs:label": "Service Dependency Mapping",
+      "d3f:d3fend-id": "D3-SVCDM"
+    },
+    {
+      "@id": "d3f:SessionDurationAnalysis",
+      "@type": [
+        "d3f:SessionDurationAnalysis"
+      ],
+      "rdfs:label": "Session Duration Analysis",
+      "d3f:d3fend-id": "D3-SDA"
+    },
+    {
+      "@id": "d3f:SessionTermination",
+      "@type": [
+        "d3f:SessionTermination"
+      ],
+      "rdfs:label": "Session Termination",
+      "d3f:d3fend-id": "D3-ST"
+    },
+    {
+      "@id": "d3f:ShadowStackComparisons",
+      "@type": [
+        "d3f:ShadowStackComparisons"
+      ],
+      "rdfs:label": "Shadow Stack Comparisons",
+      "d3f:d3fend-id": "D3-SSC"
+    },
+    {
+      "@id": "d3f:SoftwareInventory",
+      "@type": [
+        "d3f:SoftwareInventory"
+      ],
+      "rdfs:label": "Software Inventory",
+      "d3f:d3fend-id": "D3-SWI"
+    },
+    {
+      "@id": "d3f:SoftwareUpdate",
+      "@type": [
+        "d3f:SoftwareUpdate"
+      ],
+      "rdfs:label": "Software Update",
+      "d3f:d3fend-id": "D3-SU"
+    },
+    {
+      "@id": "d3f:SourceCodeHardening",
+      "@type": [
+        "owl:Class"
+      ],
+      "rdfs:label": "Source Code Hardening",
+      "d3f:d3fend-id": "D3-SCH"
+    },
+    {
+      "@id": "d3f:StackFrameCanaryValidation",
+      "@type": [
+        "d3f:StackFrameCanaryValidation"
+      ],
+      "rdfs:label": "Stack Frame Canary Validation",
+      "d3f:d3fend-id": "D3-SFCV"
+    },
+    {
+      "@id": "d3f:StandaloneHoneynet",
+      "@type": [
+        "d3f:StandaloneHoneynet"
+      ],
+      "rdfs:label": "Standalone Honeynet",
+      "d3f:d3fend-id": "D3-SHN"
+    },
+    {
+      "@id": "d3f:StrongPasswordPolicy",
+      "@type": [
+        "d3f:StrongPasswordPolicy"
+      ],
+      "rdfs:label": "Strong Password Policy",
+      "d3f:d3fend-id": "D3-SPP"
+    },
+    {
+      "@id": "d3f:SystemCallAnalysis",
+      "@type": [
+        "d3f:SystemCallAnalysis"
+      ],
+      "rdfs:label": "System Call Analysis",
+      "d3f:d3fend-id": "D3-SCA"
+    },
+    {
+      "@id": "d3f:SystemCallFiltering",
+      "@type": [
+        "d3f:SystemCallFiltering"
+      ],
+      "rdfs:label": "System Call Filtering",
+      "d3f:d3fend-id": "D3-SCF"
+    },
+    {
+      "@id": "d3f:SystemConfigurationPermissions",
+      "@type": [
+        "d3f:SystemConfigurationPermissions"
+      ],
+      "rdfs:label": "System Configuration Permissions",
+      "d3f:d3fend-id": "D3-SCP"
+    },
+    {
+      "@id": "d3f:SystemDaemonMonitoring",
+      "@type": [
+        "d3f:SystemDaemonMonitoring"
+      ],
+      "rdfs:label": "System Daemon Monitoring",
+      "d3f:d3fend-id": "D3-SDM"
+    },
+    {
+      "@id": "d3f:SystemDependencyMapping",
+      "@type": [
+        "d3f:SystemDependencyMapping"
+      ],
+      "rdfs:label": "System Dependency Mapping",
+      "d3f:d3fend-id": "D3-SYSDM"
+    },
+    {
+      "@id": "d3f:SystemFileAnalysis",
+      "@type": [
+        "d3f:SystemFileAnalysis"
+      ],
+      "rdfs:label": "System File Analysis",
+      "d3f:d3fend-id": "D3-SFA"
+    },
+    {
+      "@id": "d3f:SystemFirmwareVerification",
+      "@type": [
+        "d3f:SystemFirmwareVerification"
+      ],
+      "rdfs:label": "System Firmware Verification",
+      "d3f:d3fend-id": "D3-SFV"
+    },
+    {
+      "@id": "d3f:SystemInitConfigAnalysis",
+      "@type": [
+        "d3f:SystemInitConfigAnalysis"
+      ],
+      "rdfs:label": "System Init Config Analysis",
+      "d3f:d3fend-id": "D3-SICA"
+    },
+    {
+      "@id": "d3f:SystemMapping",
+      "@type": [
+        "d3f:SystemMapping"
+      ],
+      "rdfs:label": "System Mapping",
+      "d3f:d3fend-id": "D3-SYSM"
+    },
+    {
+      "@id": "d3f:SystemVulnerabilityAssessment",
+      "@type": [
+        "d3f:SystemVulnerabilityAssessment"
+      ],
+      "rdfs:label": "System Vulnerability Assessment",
+      "d3f:d3fend-id": "D3-SYSVA"
+    },
+    {
+      "@id": "d3f:TPMBootIntegrity",
+      "@type": [
+        "d3f:TPMBootIntegrity"
+      ],
+      "rdfs:label": "TPM Boot Integrity",
+      "d3f:d3fend-id": "D3-TBI"
+    },
+    {
+      "@id": "d3f:Token-basedAuthentication",
+      "@type": [
+        "d3f:Token-basedAuthentication"
+      ],
+      "rdfs:label": "Token-based Authentication",
+      "d3f:d3fend-id": "D3-TBA"
+    },
+    {
+      "@id": "d3f:TokenBinding",
+      "@type": [
+        "d3f:TokenBinding"
+      ],
+      "rdfs:label": "Token Binding",
+      "d3f:d3fend-id": "D3-TB"
+    },
+    {
+      "@id": "d3f:TransferAgentAuthentication",
+      "@type": [
+        "d3f:TransferAgentAuthentication"
+      ],
+      "rdfs:label": "Transfer Agent Authentication",
+      "d3f:d3fend-id": "D3-TAAN"
+    },
+    {
+      "@id": "d3f:TrustedLibrary",
+      "@type": [
+        "owl:Class"
+      ],
+      "rdfs:label": "Trusted Library",
+      "d3f:d3fend-id": "D3-TL"
+    },
+    {
+      "@id": "d3f:URLAnalysis",
+      "@type": [
+        "d3f:URLAnalysis"
+      ],
+      "rdfs:label": "URL Analysis",
+      "d3f:d3fend-id": "D3-UA"
+    },
+    {
+      "@id": "d3f:URLReputationAnalysis",
+      "@type": [
+        "d3f:URLReputationAnalysis"
+      ],
+      "rdfs:label": "URL Reputation Analysis",
+      "d3f:d3fend-id": "D3-URA"
+    },
+    {
+      "@id": "d3f:UnlockAccount",
+      "@type": [
+        "d3f:UnlockAccount"
+      ],
+      "rdfs:label": "Unlock Account",
+      "d3f:d3fend-id": "D3-ULA"
+    },
+    {
+      "@id": "d3f:UserAccountPermissions",
+      "@type": [
+        "d3f:UserAccountPermissions"
+      ],
+      "rdfs:label": "User Account Permissions",
+      "d3f:d3fend-id": "D3-UAP"
+    },
+    {
+      "@id": "d3f:UserBehaviorAnalysis",
+      "@type": [
+        "d3f:UserBehaviorAnalysis"
+      ],
+      "rdfs:label": "User Behavior Analysis",
+      "d3f:d3fend-id": "D3-UBA"
+    },
+    {
+      "@id": "d3f:UserDataTransferAnalysis",
+      "@type": [
+        "d3f:UserDataTransferAnalysis"
+      ],
+      "rdfs:label": "User Data Transfer Analysis",
+      "d3f:d3fend-id": "D3-UDTA"
+    },
+    {
+      "@id": "d3f:UserGeolocationLogonPatternAnalysis",
+      "@type": [
+        "d3f:UserGeolocationLogonPatternAnalysis"
+      ],
+      "rdfs:label": "User Geolocation Logon Pattern Analysis",
+      "d3f:d3fend-id": "D3-UGLPA"
+    },
+    {
+      "@id": "d3f:UserGroupPermissions",
+      "@type": [
+        "d3f:UserGroupPermissions"
+      ],
+      "rdfs:label": "User Group Permissions",
+      "d3f:d3fend-id": "D3-UGPH"
+    },
+    {
+      "@id": "d3f:UserSessionInitConfigAnalysis",
+      "@type": [
+        "d3f:UserSessionInitConfigAnalysis"
+      ],
+      "rdfs:label": "User Session Init Config Analysis",
+      "d3f:d3fend-id": "D3-USICA"
+    },
+    {
+      "@id": "d3f:VariableInitialization",
+      "@type": [
+        "owl:Class"
+      ],
+      "rdfs:label": "Variable Initialization",
+      "d3f:d3fend-id": "D3-VI"
+    },
+    {
+      "@id": "d3f:VariableTypeValidation",
+      "@type": [
+        "owl:Class"
+      ],
+      "rdfs:label": "Variable Type Validation",
+      "d3f:d3fend-id": "D3-VTV"
+    },
+    {
+      "@id": "d3f:VideoSurveillance",
+      "@type": [
+        "d3f:VideoSurveillance"
+      ],
+      "rdfs:label": "Video Surveillance",
+      "d3f:d3fend-id": "D3-VS"
+    },
+    {
+      "@id": "d3f:WebSessionAccessMediation",
+      "@type": [
+        "d3f:WebSessionAccessMediation"
+      ],
+      "rdfs:label": "Web Session Access Mediation",
+      "d3f:d3fend-id": "D3-WSAM"
+    },
+    {
+      "@id": "d3f:WebSessionActivityAnalysis",
+      "@type": [
+        "d3f:WebSessionActivityAnalysis"
+      ],
+      "rdfs:label": "Web Session Activity Analysis",
+      "d3f:d3fend-id": "D3-WSAA"
+    }
+  ],
+  "x_sigmafin_note": "Reduced extract for pySigma's offline loader (sigma.data.mitre_d3fend.set_url). Source: https://d3fend.mitre.org/ontologies/d3fend.json version 1.6.0, saved 2026-11-23. Keeps the ontology version, defensive tactics and technique ids and labels. Digital artifacts are omitted because no SigmaFin rule uses a d3fend tag. sigma check still loads this dataset for every tag, so the file is pinned to avoid a download. Refresh with scripts/refresh_mitre_data.py. See docs/attack-data.md."
+}

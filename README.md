@@ -37,12 +37,14 @@ Generic rule sets tend to miss these for structural reasons, not because they ar
 The table is generated from the rule files by `scripts/gen_docs.py`. Do not edit it by hand: CI fails if it is out
 of date. Per-rule SigmaHQ overlap decisions are in [docs/rule-catalog.md](docs/rule-catalog.md) and the technique
 table is in [docs/attack-coverage.md](docs/attack-coverage.md). "Fraud, no technique" means no clean ATT&CK mapping
-exists, and the rule's description says so.
+exists, and the rule's description says so. Correlations with no generated SPL or KQL have hand-written queries in
+[docs/handwritten/](docs/handwritten/). The index is
+[docs/handwritten-correlations.md](docs/handwritten-correlations.md).
 
 <!-- RULES:START -->
 | Rule | Theme | ATT&CK technique | Log source | Level | Notes |
 |---|---|---|---|---|---|
-| Finance Anonymous Sign-in Followed by Inbox Rule Change (`entra_anonymous_signin_then_inbox_rule`) | 1. BEC and payment fraud | T1078.004 Cloud Accounts, T1564.008 Email Hiding Rules | azure/signinlogs + m365/audit | high | Sigma + SQLite tested, no SPL (Splunk backend lacks temporal_ordered); no KQL (Kusto backend has no correlation support) |
+| Finance Anonymous Sign-in Followed by Inbox Rule Change (`entra_anonymous_signin_then_inbox_rule`) | 1. BEC and payment fraud | T1078.004 Cloud Accounts, T1564.008 Email Hiding Rules | azure/signinlogs + m365/audit | high | Sigma + SQLite tested, no generated SPL (Splunk backend lacks temporal_ordered; docs/handwritten/); no generated KQL (Kusto backend has no correlation support; docs/handwritten/) |
 | Finance Anonymous Sign-in Correlation Input (`entra_finance_anonymous_signin_event`) | 1. BEC and payment fraud | none (support rule) | azure/signinlogs | informational | Support rule, not deployed alone |
 | Finance Account Signs In From Anonymous IP Address (`entra_finance_signin_anonymous_ip`) | 1. BEC and payment fraud | T1078.004 Cloud Accounts, T1090.003 Multi-hop Proxy | azure/signinlogs | medium |  |
 | Finance Account Sign-in From Country Outside Allowed List (`entra_finance_signin_unlisted_country`) | 1. BEC and payment fraud | T1078.004 Cloud Accounts | azure/signinlogs | medium |  |
@@ -51,15 +53,15 @@ exists, and the rule's description says so.
 | Finance Mailbox Inbox Rule Hides or Deletes Finance Keyword Mail (`m365_inbox_rule_hides_finance_mail`) | 1. BEC and payment fraud | T1564.008 Email Hiding Rules | m365/audit | medium |  |
 | Finance Mailbox Forwarding Set to External Address (`m365_mailbox_forwarding_external_finance`) | 1. BEC and payment fraud | T1114.003 Email Forwarding Rule | m365/audit | high |  |
 | Vendor Created (Correlation Input) (`erp_new_vendor_created_event`) | 2. Vendor and payment manipulation (ERP) | none (support rule) | erp/vendor_master | informational | Support rule, not deployed alone |
-| New Vendor Created Then Paid Within Three Days (`erp_new_vendor_paid_quickly`) | 2. Vendor and payment manipulation (ERP) | fraud, no technique | erp/vendor_master + erp/payments | medium | Sigma + SQLite tested, no SPL (Splunk backend lacks temporal_ordered); no KQL (Kusto backend has no correlation support) |
+| New Vendor Created Then Paid Within Three Days (`erp_new_vendor_paid_quickly`) | 2. Vendor and payment manipulation (ERP) | fraud, no technique | erp/vendor_master + erp/payments | medium | Sigma + SQLite tested, no generated SPL (Splunk backend lacks temporal_ordered; docs/handwritten/); no generated KQL (Kusto backend has no correlation support; docs/handwritten/) |
 | Vendor Payment Released (New Vendor Correlation Input) (`erp_new_vendor_payment_released_event`) | 2. Vendor and payment manipulation (ERP) | none (support rule) | erp/payments | informational | Support rule, not deployed alone |
 | Payment Run Modified Outside Business Hours (`erp_payment_run_modified_outside_hours`) | 2. Vendor and payment manipulation (ERP) | fraud, no technique | erp/payments | medium |  |
 | Vendor Payment Approved (Correlation Input) (`erp_sod_payment_approved_event`) | 2. Vendor and payment manipulation (ERP) | none (support rule) | erp/payments | informational | Support rule, not deployed alone |
 | Vendor Created (Segregation of Duties Correlation Input) (`erp_sod_vendor_created_event`) | 2. Vendor and payment manipulation (ERP) | none (support rule) | erp/vendor_master | informational | Support rule, not deployed alone |
 | Vendor Bank Details Changed (Correlation Input) (`erp_vendor_bank_change_event`) | 2. Vendor and payment manipulation (ERP) | none (support rule) | erp/vendor_master | informational | Support rule, not deployed alone |
-| Vendor Bank Details Changed Then Payment Released (`erp_vendor_bank_change_then_payment`) | 2. Vendor and payment manipulation (ERP) | T1657 Financial Theft | erp/vendor_master + erp/payments | high | Sigma + SQLite tested, no SPL (Splunk backend lacks temporal_ordered); no KQL (Kusto backend has no correlation support) |
+| Vendor Bank Details Changed Then Payment Released (`erp_vendor_bank_change_then_payment`) | 2. Vendor and payment manipulation (ERP) | T1657 Financial Theft | erp/vendor_master + erp/payments | high | Sigma + SQLite tested, no generated SPL (Splunk backend lacks temporal_ordered; docs/handwritten/); no generated KQL (Kusto backend has no correlation support; docs/handwritten/) |
 | Vendor Master Bank Details Changed (`erp_vendor_bank_details_changed`) | 2. Vendor and payment manipulation (ERP) | T1657 Financial Theft | erp/vendor_master | medium |  |
-| Same User Created a Vendor and Approved a Payment to It (`erp_vendor_created_and_payment_approved_by_same_user`) | 2. Vendor and payment manipulation (ERP) | fraud, no technique | erp/vendor_master + erp/payments | high | Sigma + SQLite tested, no KQL (Kusto backend has no correlation support) |
+| Same User Created a Vendor and Approved a Payment to It (`erp_vendor_created_and_payment_approved_by_same_user`) | 2. Vendor and payment manipulation (ERP) | fraud, no technique | erp/vendor_master + erp/payments | high | Sigma + SQLite tested, no generated KQL (Kusto backend has no correlation support; docs/handwritten/) |
 | Vendor Payment Released (`erp_vendor_payment_released`) | 2. Vendor and payment manipulation (ERP) | none (support rule) | erp/payments | informational | Support rule, not deployed alone |
 | ERP Emergency Access Started (`erp_emergency_access_started`) | 3. Privileged ERP and finance app abuse | T1078 Valid Accounts | erp/user_admin | medium |  |
 | ERP Privileged Role Assigned Without Approval (`erp_privileged_role_assigned_without_approval`) | 3. Privileged ERP and finance app abuse | T1098 Account Manipulation | erp/user_admin | high |  |
@@ -87,11 +89,13 @@ python3 -m venv .venv
 . .venv/bin/activate
 pip install -r requirements.txt
 
+python scripts/attack_data.py                       # pinned ATT&CK and D3FEND, no download
 sigma check --fail-on-issues --fail-on-error rules   # Sigma validation
 python scripts/check_metadata.py                     # references, tags, ids, samples, mirrors
 python -m pytest -q tests                            # sample tests, harness and gate self-tests
 python scripts/build_spl.py                          # Splunk SPL into build/spl/
 python scripts/build_kql.py                          # KQL into build/kql/
+python scripts/check_sap_pipeline.py                 # vendor bank change rule through the SAP pipeline
 ```
 
 Other commands:
@@ -165,10 +169,11 @@ workstations, and the reserved ERP services `user_admin`, `system_audit` and `re
 
 **ERP logsource.** Sigma has almost no ERP coverage, so SigmaFin defines its own logsource and field schema in
 [docs/erp-log-schema.md](docs/erp-log-schema.md). It is shaped like field-level change records (object, field, old
-value, new value) plus payment records. You map your ERP audit data into it. No ERP product has been tested, and
-SigmaFin makes no vendor-specific support claim. `pipelines/sigmafin_splunk.yml` maps the logsources to Splunk
-sourcetypes. `pipelines/sigmafin_kusto.yml` maps them to KQL tables. The ERP names in both files are placeholders
-you should change.
+value, new value) plus payment records. You map your ERP audit data into it. `pipelines/sap_erp.yml` is a mapping
+onto SAP ECC and S/4HANA for the fields that have a real source, documented with the gaps in
+[docs/sap-mapping.md](docs/sap-mapping.md). It has not been run on a live SAP system. The fixtures are local.
+`pipelines/sigmafin_splunk.yml` maps the logsources to Splunk sourcetypes. `pipelines/sigmafin_kusto.yml` maps them
+to KQL tables. The ERP names in both files are placeholders you should change.
 
 **Business hours field.** Sigma has no time-of-day condition. Rules that need one read a precomputed
 `outside_business_hours` field (`true` or `false`) that your ingestion or enrichment step must populate from the
@@ -226,9 +231,10 @@ Tests convert the real rule files, not a copy of their logic.
 - **Known gaps.** `tests/known_gaps/` holds events a rule should flag but currently misses.
   `tests/test_known_gaps.py` asserts the miss, so a gap stays visible and the test fails when the rule is fixed.
 
-What the tests do not do: they apply only `finance_scope.yml`, so the logsource mapping in `sigmafin_splunk.yml` and
-the table mapping in `sigmafin_kusto.yml` are not exercised, and nothing checks sample field names against the schema
-documents.
+What the tests do not do: the sample tests apply only `finance_scope.yml`, so the logsource mapping in
+`sigmafin_splunk.yml` and the table mapping in `sigmafin_kusto.yml` are not exercised by those tests, and nothing
+checks sample field names against the schema documents. `tests/test_sap_pipeline.py` does apply `sap_erp.yml` to the
+vendor bank change rule and to local SAP-shaped fixtures.
 
 ## CI gates
 
@@ -237,6 +243,7 @@ permission is `contents: read`. Actions are pinned to commit SHAs. The steps:
 
 | Gate | Fails on | Self-tested |
 |---|---|---|
+| `attack_data.py` | Pinned ATT&CK or D3FEND file parses as a different version than the constants in the script | Partly: versions are asserted, and a blocked `urlopen` must still load the files |
 | `check_no_em_dash.py` | Any em dash in a tracked or untracked non-ignored text file | Yes, on a file with and without one |
 | `check_metadata.py` | Missing required fields, bad UUID, non-HTTPS or missing references, duplicate id or name, missing technique tag (unless listed in `scripts/policy.yml`), missing tactic tag, unresolved correlation reference, missing positive or negative sample, support rule drift | Partly: missing references, technique tag, tactic tag, negative sample, duplicate id and support rule drift are tested. The other checks are not |
 | `sigma check --fail-on-issues --fail-on-error` | Parse errors and any validator issue, including unknown ATT&CK techniques and tactics | Partly: unknown technique and unknown tactic are tested |
@@ -244,6 +251,7 @@ permission is `contents: read`. Actions are pinned to commit SHAs. The steps:
 | `gen_docs.py --check` | README table or generated docs out of date | Yes |
 | `build_spl.py` | A rule fails to convert and is not listed as unsupported, or a listed rule now converts | Yes, both directions |
 | `build_kql.py` | A rule fails to convert and is not listed as unsupported, or a listed rule now converts | Yes, both directions |
+| `check_sap_pipeline.py` | Vendor bank change rule does not convert through `pipelines/sap_erp.yml`, or the query still uses SigmaFin bank-field names | Partly: query text is asserted and local fixtures must match. A deliberately broken pipeline is not its own test |
 | Artifact upload | Not a gate. Publishes `build/spl` as `splunk-spl` and `build/kql` as `kusto-kql` from the 3.12 job | No |
 
 Rule metadata is also covered only as far as these checks go. References are checked for presence and HTTPS, not for
@@ -260,19 +268,23 @@ whether the URL resolves or supports the rule. That was done by hand when each r
 - **Some SPL is expected to behave differently from SQLite.** The Splunk conversion of an unordered `temporal`
   correlation bins time in fixed windows, so one sample is predicted to match on SQLite and miss on Splunk. The
   prediction and its sample are in [docs/splunk-expectations.md](docs/splunk-expectations.md). It is not a test result.
-- **`temporal_ordered` rules have no SPL output.** The pySigma Splunk backend 2.1.0 cannot convert that correlation
-  type. These rules keep strict event ordering, are tested on SQLite only and are marked in the table. They are listed
-  in `scripts/policy.yml`, and CI fails if the list goes stale.
-- **Correlation rules have no KQL output.** The pySigma Kusto backend 1.0.1 does not implement Sigma correlation
-  rules, so both `temporal` and `temporal_ordered` rules are omitted. The `temporal` rule still converts to SPL.
-  The gaps are listed under `kusto_unsupported` in `scripts/policy.yml`, and CI fails if the list goes stale.
+- **`temporal_ordered` rules have no generated SPL output.** The pySigma Splunk backend 2.1.0 cannot convert that
+  correlation type. These rules keep strict event ordering, are tested on SQLite, and have hand-written SPL in
+  [docs/handwritten/](docs/handwritten/). They are listed in `scripts/policy.yml`, and CI fails if the list goes stale
+  or if the hand-written file is missing.
+- **Correlation rules have no generated KQL output.** The pySigma Kusto backend 1.0.1 does not implement Sigma
+  correlation rules, so both `temporal` and `temporal_ordered` rules are omitted. The `temporal` rule still converts
+  to SPL. Hand-written KQL for each of them is in [docs/handwritten/](docs/handwritten/). The gaps are listed under
+  `kusto_unsupported` in `scripts/policy.yml`, and CI fails if the list goes stale or if the hand-written file is
+  missing.
 - **Shipped KQL uses Sentinel table names.** `OfficeActivity` and `SigninLogs` follow the field names in the rules.
   Defender XDR advanced hunting uses other tables and columns. ERP tables are placeholders (`sigmafin_erp_*`).
   Change `pipelines/sigmafin_kusto.yml` before you deploy a query.
 - **Samples are synthetic.** Every event is made up. Passing tests show the rule logic does what the author intended
   on those events, not that it fits real telemetry or finds real attacks.
-- **The ERP schema is generic.** You must map your ERP audit data into it, and no vendor-specific mapping or support
-  has been tested.
+- **The ERP schema is generic.** You must map your ERP audit data into it. The SAP mapping in
+  [docs/sap-mapping.md](docs/sap-mapping.md) names real ECC and S/4HANA columns and says which rules are only partly
+  mappable. It has not been run against an SAP system.
 - **Allowlist-based rules cannot find "new" behaviour without tuning.** Rules scoped by lists (finance accounts,
   internal domains, allowed countries) only know what the lists say. Detecting a first-seen country or an unusual
   user needs a baseline that Sigma cannot express.
@@ -322,10 +334,15 @@ opened against SigmaHQ.
 | pysigma-backend-kusto | 1.0.1 |
 | sigma-cli | 3.1.0 |
 
-sigma-cli 3.1.0 requires pySigma below 2.0, and the newer SQLite backend (2.1.x) requires pySigma 2.0.1 or newer, so
-the two cannot be installed together. pysigma-backend-kusto 1.0.1 is the newest Kusto release that still accepts
-pySigma 1.x. The set above was verified to install and pass every gate. Revisit the pins when a sigma-cli release
-supports pySigma 2.x.
+sigma-cli 3.1.0 requires pySigma below 2.0 (`pysigma>=1.3.0,<2.0.0`). sigma-cli 4.0.0 and 4.0.1 require pySigma 2.x
+(`pysigma>=2.0.0,<3.0.0`). pysigma-backend-sqlite 2.1.1 requires pySigma >=2.0.1 and 2.2.0 requires pySigma >=2.1.0.
+pysigma-backend-splunk 3.0.1 requires pySigma >=2.0.1. Those cannot be installed next to sigma-cli 3.1.0.
+pysigma-backend-kusto 1.0.1 is the newest Kusto release and it still requires pySigma below 2. That Kusto pin is what
+still blocks moving the whole toolchain to pySigma 2 once sigma-cli is no longer the package that forces 1.x. The
+set above was verified to install and pass every gate.
+
+ATT&CK and D3FEND data are pinned under `data/mitre/` so `sigma check` and `scripts/gen_docs.py` do not download
+them. See [docs/attack-data.md](docs/attack-data.md).
 
 ## Roadmap
 
@@ -378,4 +395,4 @@ Every rule is checked by the automated tests and CI gates described above.
 
 Released under the [MIT License](LICENSE).
 
-Author: Herman Kaufman. GitHub: [github.com/finsecguy](https://github.com/finsecguy). Blog: [FinSecGuy blog](https://substack.com/@finsecguy).
+Author: Herman K. (finsecguy). GitHub: [github.com/finsecguy](https://github.com/finsecguy). Blog: [FinSecGuy blog](https://substack.com/@finsecguy).

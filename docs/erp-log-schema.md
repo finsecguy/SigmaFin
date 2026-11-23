@@ -8,8 +8,11 @@ logsource:
     service: vendor_master   # or payments, user_admin, and later system_audit, reporting
 ```
 
-This schema is something you map your ERP audit data into. It is not the native format of any ERP product, and no
-vendor-specific parser or mapping has been tested. All sample events in `tests/` are synthetic.
+This schema is something you map your ERP audit data into. It is not the native format of any ERP product.
+`pipelines/sap_erp.yml` is a mapping onto SAP ECC and S/4HANA change documents, payment tables and role
+assignments. It is documented in [sap-mapping.md](sap-mapping.md), including the fields that do not map.
+That pipeline has not been run against a live SAP system. Its tests use local fixtures only. All sample
+events in `tests/` are synthetic.
 
 ## Common fields (every service)
 
@@ -94,7 +97,8 @@ samples, but no rule reads them.
 
 Real ERPs usually record master data changes as field-level change records (an object, a field, an old value and a
 new value) and payments in separate transaction tables. The schema follows that shape on purpose, so a mapping layer
-can be thin. That is a design intent, not tested support: SigmaFin has not been run against any ERP's audit data.
+can be thin. The SAP mapping in [sap-mapping.md](sap-mapping.md) is that layer for ECC and S/4HANA. It has been
+checked only against local fixtures, not against an SAP system.
 
 ## Using the schema with a backend
 

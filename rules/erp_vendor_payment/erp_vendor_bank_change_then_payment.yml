@@ -11,7 +11,7 @@ description: |
     carries it.
 references:
     - https://attack.mitre.org/techniques/T1657/
-author: SigmaFin Contributors
+author: Herman K. (finsecguy)
 date: 2026-10-20
 logsource:
     product: erp
@@ -43,7 +43,7 @@ description: |
     No ATT&CK technique applies to a payment release by itself, so no technique tag is set.
 references:
     - https://www.ic3.gov/PSA/2020/PSA200406
-author: SigmaFin Contributors
+author: Herman K. (finsecguy)
 date: 2026-10-20
 logsource:
     product: erp
@@ -78,7 +78,7 @@ references:
     - https://attack.mitre.org/techniques/T1657/
     - https://www.ic3.gov/PSA/2017/PSA170504
     - https://www.ic3.gov/PSA/2020/PSA200406
-author: SigmaFin Contributors
+author: Herman K. (finsecguy)
 date: 2026-10-20
 tags:
     - attack.impact
