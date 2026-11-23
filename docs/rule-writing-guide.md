@@ -7,8 +7,8 @@
    regulator or FBI IC3 advisory, or DFIR write-up. If you cannot find one, drop the idea.
 3. **Metadata.** `title`, `id` (UUID), `name` (unique snake_case, used by correlations and for the test folder),
    `status`, `description`, `author`, `date`, `references`, `level`, `falsepositives`, `logsource`.
-4. **Tags.** Add `attack.<tactic>` and `attack.tNNNN`. Tactic names must exist in the ATT&CK data bundled with
-   the installed pySigma (this version uses `stealth`, not `defense-evasion`). For business-process fraud with no
+4. **Tags.** Add `attack.<tactic>` and `attack.tNNNN`. Tactic names must exist in the pinned ATT&CK file
+   `data/mitre/enterprise-attack.json` (this pin uses `stealth`, not `defense-evasion`). For business-process fraud with no
    technique, list the rule in `scripts/policy.yml` with a reason, and write "No ATT&CK technique applies" in the
    description.
 5. **Scoping.** Use `|expand` placeholders from `pipelines/finance_scope.yml` for finance account lists. Do not imply

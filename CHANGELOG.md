@@ -5,6 +5,22 @@ All notable changes to SigmaFin are documented in this file.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Version numbers follow semantic
 versioning. This file is the version record. It is not a GitHub release, and this repository has no release tags.
 
+## [Unreleased]
+
+### Added
+
+- `pipelines/sap_erp.yml` maps the vendor-neutral ERP schema onto SAP ECC and S/4HANA change documents,
+  payment-run tables and role assignments. Gaps are written down in `docs/sap-mapping.md`. The vendor bank
+  change rule is converted in CI and matched against local fixtures.
+- Hand-written Splunk SPL and Sentinel KQL for correlation rules the pySigma backends cannot convert
+  (`docs/handwritten/`, index in `docs/handwritten-correlations.md`).
+- Pinned MITRE ATT&CK 20.1 and D3FEND 1.6.0 under `data/mitre/`, loaded through pySigma's `set_url()` hook so
+  CI does not download them. Refresh steps are in `docs/attack-data.md`.
+
+### Changed
+
+- Rule `author` values and the LICENSE copyright holder are Herman K. (finsecguy).
+
 ## [0.1.0] - 2026-11-22
 
 ### Added

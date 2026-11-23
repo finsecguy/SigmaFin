@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-03-02T11:00:00Z",
+  "OBJECTCLAS": "KRED",
+  "OBJECTID": "0000100042",
+  "USERNAME": "AP_CLERK",
+  "TCODE": "BP",
+  "CHANGE_IND": "U",
+  "TABNAME": "LFBK",
+  "FNAME": "BANKS",
+  "CHNGIND": "U"
+}

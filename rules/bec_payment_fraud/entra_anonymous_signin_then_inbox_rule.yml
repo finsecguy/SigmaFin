@@ -11,7 +11,7 @@ description: |
     standalone rule carries it.
 references:
     - https://learn.microsoft.com/en-us/entra/id-protection/concept-identity-protection-risks
-author: SigmaFin Contributors
+author: Herman K. (finsecguy)
 date: 2026-10-20
 logsource:
     product: azure
@@ -41,7 +41,7 @@ description: |
     joins both sides on the same user, so only an account that had an anonymous sign-in can produce a match.
 references:
     - https://learn.microsoft.com/en-us/defender-office-365/responding-to-a-compromised-email-account
-author: SigmaFin Contributors
+author: Herman K. (finsecguy)
 date: 2026-10-20
 logsource:
     product: m365
@@ -80,7 +80,7 @@ references:
     - https://learn.microsoft.com/en-us/defender-office-365/responding-to-a-compromised-email-account
     - https://attack.mitre.org/techniques/T1564/008/
     - https://attack.mitre.org/techniques/T1078/004/
-author: SigmaFin Contributors
+author: Herman K. (finsecguy)
 date: 2026-10-20
 tags:
     - attack.initial-access

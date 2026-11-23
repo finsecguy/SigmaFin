@@ -1,0 +1,191 @@
+# Maps the vendor-neutral ERP schema (docs/erp-log-schema.md) onto SAP ECC and
+# S/4HANA sources. Field-level rationale, gaps and the ingestion path are in
+# docs/sap-mapping.md. This file has not been run against a live SAP system.
+#
+# Pass it after pipelines/finance_scope.yml so |expand placeholders are filled
+# first. Do not pass it when converting a correlation: pySigma treats a
+# correlation as matching a logsource when any referenced rule matches, so one
+# rename would be applied to both sides of a vendor_id join (OBJECTID on change
+# documents, LIFNR on REGUH/REGUP). Correlations stay on the SigmaFin field
+# names; hand-written SPL and KQL are in docs/handwritten/.
+#
+# vendor_id and user are not renamed here for that reason. Alias them in the
+# SIEM (see the mapping table in the doc).
+name: SAP ERP field mapping
+priority: 40
+transformations:
+  # Vendor master, existing vendor updated (FK02 / XK02 / MK02 / BP).
+  # CDHDR.CHANGE_IND = U is the header indicator. A new LFBK row on that
+  # change can still be CDPOS.CHNGIND = I. See the doc.
+  - id: vendor_updated_header
+    type: add_condition
+    conditions:
+      OBJECTCLAS: KRED
+      TABNAME: LFBK
+      CHANGE_IND: U
+    rule_conditions:
+      - type: logsource
+        product: erp
+        service: vendor_master
+      - type: contains_detection_item
+        field: action
+        value: vendor_updated
+  # Vendor created (FK01 / XK01 / MK01 / BP). LFA1 is general data, LFB1 is
+  # company-code data. Both are part of change-document object KRED.
+  - id: vendor_created_header
+    type: add_condition
+    conditions:
+      OBJECTCLAS: KRED
+      TABNAME:
+        - LFA1
+        - LFB1
+      CHANGE_IND: I
+    rule_conditions:
+      - type: logsource
+        product: erp
+        service: vendor_master
+      - type: contains_detection_item
+        field: action
+        value: vendor_created
+  # Executed F110 payment run. REGUH/REGUP-XVORL = X is a proposal only.
+  # Blank VBLNR (exceptions) is not filtered here; see the doc.
+  - id: payment_released_not_proposal
+    type: add_condition
+    negated: true
+    conditions:
+      XVORL: X
+    rule_conditions:
+      - type: logsource
+        product: erp
+        service: payments
+      - type: contains_detection_item
+        field: action
+        value: payment_released
+  # Role assignment change documents. OBJECTCLAS PFCG is the class
+  # practitioners use for AGR_USERS; confirm it in the customer system.
+  - id: role_assigned_header
+    type: add_condition
+    conditions:
+      OBJECTCLAS: PFCG
+      TABNAME: AGR_USERS
+    rule_conditions:
+      - type: logsource
+        product: erp
+        service: user_admin
+      - type: contains_detection_item
+        field: action
+        value: role_assigned
+  - id: vendor_updated_tcode
+    type: field_name_mapping
+    mapping:
+      action: TCODE
+    rule_conditions:
+      - type: logsource
+        product: erp
+        service: vendor_master
+      - type: contains_detection_item
+        field: action
+        value: vendor_updated
+  - id: vendor_created_tcode
+    type: field_name_mapping
+    mapping:
+      action: TCODE
+    rule_conditions:
+      - type: logsource
+        product: erp
+        service: vendor_master
+      - type: contains_detection_item
+        field: action
+        value: vendor_created
+  - id: payment_released_tcode
+    type: field_name_mapping
+    mapping:
+      action: TCODE
+    rule_conditions:
+      - type: logsource
+        product: erp
+        service: payments
+      - type: contains_detection_item
+        field: action
+        value: payment_released
+  - id: role_assigned_tcode
+    type: field_name_mapping
+    mapping:
+      action: TCODE
+    rule_conditions:
+      - type: logsource
+        product: erp
+        service: user_admin
+      - type: contains_detection_item
+        field: action
+        value: role_assigned
+  - id: map_tcode_values
+    type: map_string
+    mapping:
+      vendor_updated:
+        - FK02
+        - XK02
+        - MK02
+        - BP
+      vendor_created:
+        - FK01
+        - XK01
+        - MK01
+        - BP
+      payment_released: F110
+      role_assigned:
+        - SU01
+        - PFCG
+    field_name_conditions:
+      - type: include_fields
+        fields:
+          - TCODE
+    rule_conditions:
+      - type: logsource
+        product: erp
+  # LFBK columns. IBAN, SWIFT and bank name are not LFBK fields; mapping them
+  # to an empty list drops them from the query. The doc says where they live.
+  - id: map_bank_field_names
+    type: map_string
+    mapping:
+      bank_account_number: BANKN
+      bank_routing_number: BANKL
+      bank_country: BANKS
+      iban: []
+      swift_bic: []
+      bank_name: []
+    field_name_conditions:
+      - type: include_fields
+        fields:
+          - field_changed
+    rule_conditions:
+      - type: logsource
+        product: erp
+        service: vendor_master
+  - id: field_changed_to_fname
+    type: field_name_mapping
+    mapping:
+      field_changed: FNAME
+    rule_conditions:
+      - type: logsource
+        product: erp
+        service: vendor_master
+  - id: role_name_to_agr_name
+    type: field_name_mapping
+    mapping:
+      role_name: AGR_NAME
+    rule_conditions:
+      - type: logsource
+        product: erp
+        service: user_admin
+  # Change documents and REGUH rows exist only after a commit. There is no
+  # status column. Dropping status avoids a predicate no SAP extract has.
+  - id: drop_status
+    type: drop_detection_item
+    field_name_conditions:
+      - type: include_fields
+        fields:
+          - status
+    rule_conditions:
+      - type: logsource
+        product: erp

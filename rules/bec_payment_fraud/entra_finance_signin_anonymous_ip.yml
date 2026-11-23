@@ -23,7 +23,7 @@ references:
     - https://attack.mitre.org/techniques/T1078/004/
     - https://learn.microsoft.com/en-us/entra/id-protection/concept-identity-protection-risks
     - https://learn.microsoft.com/en-us/azure/azure-monitor/reference/tables/signinlogs
-author: SigmaFin Contributors
+author: Herman K. (finsecguy)
 date: 2026-10-20
 tags:
     - attack.initial-access

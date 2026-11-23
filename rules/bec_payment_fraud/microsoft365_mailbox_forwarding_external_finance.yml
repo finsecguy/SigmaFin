@@ -23,7 +23,7 @@ references:
     - https://learn.microsoft.com/en-us/defender-office-365/responding-to-a-compromised-email-account
     - https://learn.microsoft.com/en-us/exchange/recipients-in-exchange-online/manage-user-mailboxes/configure-email-forwarding
     - https://www.ic3.gov/PSA/2020/PSA200406
-author: SigmaFin Contributors
+author: Herman K. (finsecguy)
 date: 2026-10-20
 modified: 2026-11-22
 tags:

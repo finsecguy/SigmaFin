@@ -16,7 +16,7 @@ description: |
 references:
     - https://attack.mitre.org/techniques/T1078/
     - https://csf.tools/reference/nist-sp-800-53/r5/ac/ac-2/ac-2-2/
-author: SigmaFin Contributors
+author: Herman K. (finsecguy)
 date: 2026-10-20
 tags:
     - attack.privilege-escalation
